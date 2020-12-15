@@ -8,6 +8,6 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Run Tests
-      run: xcodebuild -project ios/Strada.xcodeproj -scheme Strada test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12'
+      run: xcodebuild -project Strada.xcodeproj -scheme Strada test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12'
       env:
         DEVELOPER_DIR: /Applications/Xcode_12.2.app
