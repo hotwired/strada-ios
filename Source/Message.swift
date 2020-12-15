@@ -61,7 +61,7 @@ extension Message {
             let component = message["component"] as? String,
             let event = message["event"] as? String,
             let data = message["data"] as? MessageData else {
-                debugLog("[Strata] *** error parsing script message: \(scriptMessage.body)")
+                debugLog("Error parsing script message: \(scriptMessage.body)")
                 return nil
         }
         

@@ -28,7 +28,7 @@ public final class Bridge {
     private let bridgeGlobal = "window.nativeBridge"
     
     /// The webkit.messageHandlers name
-    private let scriptHandlerName = "strata"
+    private let scriptHandlerName = "strada"
     
     deinit {
         webView?.configuration.userContentController.removeScriptMessageHandler(forName: scriptHandlerName)
@@ -97,7 +97,7 @@ public final class Bridge {
     }
 
     private func makeUserScript() -> WKUserScript? {
-        guard let url = Bundle(for: Self.self).url(forResource: "strata", withExtension: "js"),
+        guard let url = Bundle(for: Self.self).url(forResource: "strada", withExtension: "js"),
             let source = try? String(contentsOf: url, encoding: .utf8) else {
                 return nil
         }
@@ -115,7 +115,7 @@ public final class Bridge {
         
         webView.evaluateJavaScript(javaScript) { result, error in
             if let error = error {
-                debugLog("[Strata] *** Error evaluating JavaScript: \(error)")
+                debugLog("Error evaluating JavaScript: \(error)")
             }
             
             completion?(result, error)

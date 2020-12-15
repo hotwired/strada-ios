@@ -55,7 +55,7 @@
     // Native handler
 
     postMessage(message) {
-      webkit.messageHandlers.strata.postMessage(message)
+      webkit.messageHandlers.strada.postMessage(message)
     }
   }
 

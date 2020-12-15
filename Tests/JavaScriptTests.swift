@@ -33,8 +33,8 @@ class JavaScriptTests: XCTestCase {
     }
     
     func testToStringWithNestedObject() throws {
-        let javaScript = JavaScript(object: "window.strata", functionName: "test")
-        XCTAssertEqual(try javaScript.toString(), "window.strata.test()")
+        let javaScript = JavaScript(object: "window.strada", functionName: "test")
+        XCTAssertEqual(try javaScript.toString(), "window.strada.test()")
     }
     
     func testToStringWithInvalidArgumentTypeThrowsError() {

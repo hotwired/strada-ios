@@ -8,8 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9274F1EF2229963B003E85F4 /* Strada.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9274F1E52229963B003E85F4 /* Strada.framework */; };
-		9274F1F62229963B003E85F4 /* Strata.h in Headers */ = {isa = PBXBuildFile; fileRef = 9274F1E82229963B003E85F4 /* Strata.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9274F2002229970D003E85F4 /* strata.js in Resources */ = {isa = PBXBuildFile; fileRef = 9274F1FF2229970D003E85F4 /* strata.js */; };
+		9274F2002229970D003E85F4 /* strada.js in Resources */ = {isa = PBXBuildFile; fileRef = 9274F1FF2229970D003E85F4 /* strada.js */; };
 		9274F20222299715003E85F4 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274F20122299715003E85F4 /* Bridge.swift */; };
 		9274F20422299738003E85F4 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274F20322299738003E85F4 /* Message.swift */; };
 		C11349A62587EFFB000A6E56 /* ScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11349A52587EFFB000A6E56 /* ScriptMessageHandler.swift */; };
@@ -32,11 +31,10 @@
 
 /* Begin PBXFileReference section */
 		9274F1E52229963B003E85F4 /* Strada.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Strada.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9274F1E82229963B003E85F4 /* Strata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Strata.h; sourceTree = "<group>"; };
 		9274F1E92229963B003E85F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9274F1EE2229963B003E85F4 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9274F1F52229963B003E85F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9274F1FF2229970D003E85F4 /* strata.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = strata.js; sourceTree = "<group>"; };
+		9274F1FF2229970D003E85F4 /* strada.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = strada.js; sourceTree = "<group>"; };
 		9274F20122299715003E85F4 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
 		9274F20322299738003E85F4 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		C11349A52587EFFB000A6E56 /* ScriptMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptMessageHandler.swift; sourceTree = "<group>"; };
@@ -92,8 +90,7 @@
 				C11349A52587EFFB000A6E56 /* ScriptMessageHandler.swift */,
 				C11349B12587F31E000A6E56 /* JavaScript.swift */,
 				C11349A92587F013000A6E56 /* Logging.swift */,
-				9274F1FF2229970D003E85F4 /* strata.js */,
-				9274F1E82229963B003E85F4 /* Strata.h */,
+				9274F1FF2229970D003E85F4 /* strada.js */,
 				9274F1E92229963B003E85F4 /* Info.plist */,
 			);
 			path = Source;
@@ -117,7 +114,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9274F1F62229963B003E85F4 /* Strata.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +200,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9274F2002229970D003E85F4 /* strata.js in Resources */,
+				9274F2002229970D003E85F4 /* strada.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
