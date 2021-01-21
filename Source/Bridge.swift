@@ -107,6 +107,7 @@ public final class Bridge {
 
     // MARK: - JavaScript Evaluation
 
+    /// Evaluates javaScript string directly as passed in sending through the web view
     public func evaluate(javaScript: String, completion: CompletionHandler? = nil) {
         guard let webView = webView else {
             completion?(nil, BridgeError.missingWebView)
@@ -122,8 +123,11 @@ public final class Bridge {
         }
     }
     
+    /// Evaluates a JavaScript function with optional arguments by encoding the arguments
+    /// Function should not include the parens
+    /// Usage: evaluate(function: "console.log", arguments: ["test"])
     public func evaluate(function: String, arguments: [Any] = [], completion: CompletionHandler? = nil) {
-        evaluate(javaScript: JavaScript(functionName: function, arguments: arguments))
+        evaluate(javaScript: JavaScript(functionName: function, arguments: arguments), completion: completion)
     }
     
     private func evaluate(javaScript: JavaScript, completion: CompletionHandler? = nil) {

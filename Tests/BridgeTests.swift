@@ -58,6 +58,49 @@ class BridgeTests: XCTestCase {
         bridge.send(message)
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.send({\"component\":\"test\",\"event\":\"send\",\"data\":{\"title\":\"testing\"},\"id\":\"1\"})")
     }
+    
+    func testEvaluateJavaScript() {
+        let webView = TestWebView()
+        let bridge = Bridge(webView: webView)
+        XCTAssertNil(webView.lastEvaluatedJavaScript)
+        
+        bridge.evaluate(javaScript: "test(1,2,3)")
+        XCTAssertEqual(webView.lastEvaluatedJavaScript, "test(1,2,3)")
+    }
+    
+    func testEvaluateJavaScriptReturnsErrorForNoWebView() {
+        let bridge = Bridge()
+        let expectation = self.expectation(description: "error handler")
+        
+        bridge.evaluate(function: "test", arguments: []) { (result, error) in
+            XCTAssertEqual(error! as! BridgeError, BridgeError.missingWebView)
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testEvaluateFunction() {
+        let webView = TestWebView()
+        let bridge = Bridge(webView: webView)
+        XCTAssertNil(webView.lastEvaluatedJavaScript)
+        
+        bridge.evaluate(function: "test", arguments: [1, 2, 3])
+        XCTAssertEqual(webView.lastEvaluatedJavaScript, "test(1,2,3)")
+    }
+    
+    func testEvaluateFunctionCallsCompletionHandler() {
+        let webView = TestWebView()
+        let bridge = Bridge(webView: webView)
+        
+        let expectation = self.expectation(description: "completion handler")
+        
+        bridge.evaluate(function: "test", arguments: []) { (result, error) in
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 0.1)
+    }
 }
 
 private final class TestWebView: WKWebView {

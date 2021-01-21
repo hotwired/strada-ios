@@ -9,7 +9,12 @@ enum JavaScriptError: Error, Equatable {
 struct JavaScript {
     /// The object to call the function on, nil by default
     var object: String? = nil
+    
+    /// The function name without parens
     let functionName: String
+    
+    /// An array representing arguments. Arguments will passed to function like so:
+    /// functionName(args[0], args[1], ...)
     var arguments: [Any] = []
 
     /// Final string that can be passed to `webView.evaluateJavaScript()` method
