@@ -97,7 +97,9 @@ public final class Bridge {
     }
 
     private func makeUserScript() -> WKUserScript? {
-        guard let url = Bundle(for: Self.self).url(forResource: "strada", withExtension: "js"),
+        guard
+            let path = PathLoader().pathFor(name: "strada", fileType: "js"),
+            let url = URL(string: path),
             let source = try? String(contentsOf: url, encoding: .utf8) else {
                 return nil
         }

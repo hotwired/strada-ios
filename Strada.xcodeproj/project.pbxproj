@@ -17,6 +17,7 @@
 		C11349C2258801F6000A6E56 /* JavaScriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11349C1258801F6000A6E56 /* JavaScriptTests.swift */; };
 		C1EB05262588133D00933244 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB05252588133D00933244 /* MessageTests.swift */; };
 		C1EB052E2588201600933244 /* BridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB052D2588201600933244 /* BridgeTests.swift */; };
+		CBAFC52926F9863900C6662E /* PathLoaderXcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		C11349C1258801F6000A6E56 /* JavaScriptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptTests.swift; sourceTree = "<group>"; };
 		C1EB05252588133D00933244 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		C1EB052D2588201600933244 /* BridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeTests.swift; sourceTree = "<group>"; };
+		CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathLoaderXcode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 		9274F1E72229963B003E85F4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */,
 				9274F20122299715003E85F4 /* Bridge.swift */,
 				9274F20322299738003E85F4 /* Message.swift */,
 				C11349A52587EFFB000A6E56 /* ScriptMessageHandler.swift */,
@@ -223,6 +226,7 @@
 				9274F20222299715003E85F4 /* Bridge.swift in Sources */,
 				9274F20422299738003E85F4 /* Message.swift in Sources */,
 				C11349AA2587F013000A6E56 /* Logging.swift in Sources */,
+				CBAFC52926F9863900C6662E /* PathLoaderXcode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
