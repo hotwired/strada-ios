@@ -97,12 +97,18 @@ public final class Bridge {
     }
 
     private func makeUserScript() -> WKUserScript? {
-        guard let url = Bundle(for: Self.self).url(forResource: "strada", withExtension: "js"),
-            let source = try? String(contentsOf: url, encoding: .utf8) else {
+        guard
+            let path = PathLoader().pathFor(name: "strada", fileType: "js") else {
                 return nil
         }
-
-        return WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        
+        do {
+            let source = try String(contentsOfFile: path)
+            return WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        } catch {
+            assertionFailure("Could not open strada.js: \(error)")
+            return nil
+        }
     }
 
     // MARK: - JavaScript Evaluation

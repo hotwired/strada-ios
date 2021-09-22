@@ -18,7 +18,7 @@ let package = Package(
             name: "Strada",
             dependencies: [],
             path: "Source",
-            exclude: ["Info.plist"],
+            exclude: ["Info.plist", "PathLoaderXcode.swift"],
             resources: [
                 .copy("strada.js")
             ])
