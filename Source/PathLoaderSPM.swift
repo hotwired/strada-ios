@@ -8,7 +8,7 @@
 import Foundation
 
 class PathLoader {
-    func pathFor(name: String, fileType: String, directory: String = "JavaScript") -> String? {
+    func pathFor(name: String, fileType: String, directory: String? = nil) -> String? {
         return Bundle.module.path(forResource: name, ofType: fileType, inDirectory: directory)
     }
 }
