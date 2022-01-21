@@ -5,7 +5,7 @@
   class NativeBridge {
     constructor() {
       this.supportedComponents = []
-      document.addEventListener("web-bridge:ready", () => window.webBridge.setAdapter(this))
+      document.addEventListener("web-bridge:ready", () => this.webBridge.setAdapter(this))
     }
 
     register(component) {
@@ -27,8 +27,8 @@
     }
 
     notifyBridgeOfSupportedComponentsUpdate() {
-      if (window.webBridge) {
-        window.webBridge.adapterDidUpdateSupportedComponents()
+      if (this.isStradaAvailable) {
+        this.webBridge.adapterDidUpdateSupportedComponents()
       }
     }
 
@@ -38,8 +38,8 @@
 
     // Send message to web
     send(message) {
-      if (window.webBridge) {
-        window.webBridge.receive(message)
+      if (this.isStradaAvailable) {
+        this.webBridge.receive(message)
       }
     }
 
@@ -56,6 +56,14 @@
 
     postMessage(message) {
       webkit.messageHandlers.strada.postMessage(message)
+    }
+      
+    get isStradaAvailable() {
+      return window.Strada
+    }
+      
+    get webBridge() {
+      return window.Strada.web
     }
   }
 
