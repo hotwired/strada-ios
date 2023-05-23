@@ -69,3 +69,10 @@ extension Message {
     }
 }
 
+extension Message {
+    public func transformData<T: Decodable>() throws -> T {
+        let serializedMessageData = try JSONSerialization.data(withJSONObject: data)
+        let jsonDecoder = JSONDecoder()
+        return try jsonDecoder.decode(T.self, from: serializedMessageData)
+    }
+}
