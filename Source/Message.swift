@@ -1,5 +1,4 @@
 import Foundation
-import WebKit
 
 public typealias MessageData = [String: AnyHashable]
 
@@ -16,56 +15,36 @@ public struct Message: Equatable {
     /// The event that this message is about: "submit", "display", "send"
     public let event: String
     
+    /// The metadata associated with the message, which includes its url.
+    public let metadata: Metadata?
+    
     /// Any data to send along with the message, for a "page" component, this might be the ["title": "Page Title"]
     public let data: MessageData
     
-    public init(id: String, component: String, event: String, data: MessageData) {
+    public init(id: String,
+                component: String,
+                event: String,
+                metadata: Metadata?,
+                data: MessageData) {
         self.id = id
         self.component = component
         self.event = event
+        self.metadata = metadata
         self.data = data
     }
     
     /// Returns a new Message, replacing the existing data with passed-in data and event
     /// If event is omitted, the existing event is used
-    public func replacing(event updatedEvent: String? = nil, data updatedData: MessageData) -> Message {
-        Message(id: id, component: component, event: updatedEvent ?? event, data: updatedData)
-    }
-    
-    /// Returns a new `Message` merging the passed-in data with the existing data
-    /// The passed-in data will overwrite any data with the same keys in the receiver
-    public func merging(data updatedData: MessageData) -> Message {
-        var mergedData = data
-        updatedData.forEach { mergedData[$0] = $1 }
-        
-        return Message(id: id, component: component, event: event, data: mergedData)
-    }
-    
-    // MARK: JSON
-    
-    /// Used internally for converting the message into a JSON-friendly format for sending over the bridge
-    func toJSON() -> [String: AnyHashable] {
-        [
-            "id": id,
-            "component": component,
-            "event": event,
-            "data": data
-        ]
+    public func replacing(event updatedEvent: String? = nil,
+                          data updatedData: MessageData) -> Message {
+        Message(id: id,
+                component: component,
+                event: updatedEvent ?? event,
+                metadata: metadata,
+                data: updatedData)
     }
 }
 
-extension Message {
-    init?(scriptMessage: WKScriptMessage) {
-        guard let message = scriptMessage.body as? [String: Any],
-            let id = message["id"] as? String,
-            let component = message["component"] as? String,
-            let event = message["event"] as? String,
-            let data = message["data"] as? MessageData else {
-                debugLog("Error parsing script message: \(scriptMessage.body)")
-                return nil
-        }
-        
-        self.init(id: id, component: component, event: event, data: data)
-    }
+public struct Metadata: Equatable {
+    public let url: String
 }
-
