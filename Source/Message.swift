@@ -1,7 +1,5 @@
 import Foundation
 
-public typealias MessageData = [String: AnyHashable]
-
 /// A `Message` is the structure sent back and forth over the bridge
 /// to enable communication between native and web apps
 public struct Message: Equatable {
@@ -18,33 +16,36 @@ public struct Message: Equatable {
     /// The metadata associated with the message, which includes its url.
     public let metadata: Metadata?
     
-    /// Any data to send along with the message, for a "page" component, this might be the ["title": "Page Title"]
-    public let data: MessageData
+    /// Data, represented in a json object string, to send along with the message.
+    /// For a "page" component, this might be `{"title": "Page Title"}`.
+    public let jsonData: String?
     
     public init(id: String,
                 component: String,
                 event: String,
                 metadata: Metadata?,
-                data: MessageData) {
+                jsonData: String?) {
         self.id = id
         self.component = component
         self.event = event
         self.metadata = metadata
-        self.data = data
+        self.jsonData = jsonData
     }
     
-    /// Returns a new Message, replacing the existing data with passed-in data and event
+    /// Returns a new Message, replacing the existing data with passed-in data and event.
     /// If event is omitted, the existing event is used
     public func replacing(event updatedEvent: String? = nil,
-                          data updatedData: MessageData) -> Message {
+                          jsonData updatedData: String) -> Message {
         Message(id: id,
                 component: component,
                 event: updatedEvent ?? event,
                 metadata: metadata,
-                data: updatedData)
+                jsonData: updatedData)
     }
 }
 
-public struct Metadata: Equatable {
-    public let url: String
+extension Message {
+    public struct Metadata: Equatable {
+        public let url: String
+    }
 }
