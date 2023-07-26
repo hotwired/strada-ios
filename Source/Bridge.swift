@@ -1,7 +1,7 @@
 import Foundation
 import WebKit
 
-public protocol BridgeDelegate: class {
+public protocol BridgeDelegate: AnyObject {
     func bridgeDidInitialize()
     func bridgeDidReceiveMessage(_ message: Message)
 }
