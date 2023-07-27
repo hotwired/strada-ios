@@ -18,13 +18,13 @@ public struct Message: Equatable {
     
     /// Data, represented in a json object string, to send along with the message.
     /// For a "page" component, this might be `{"title": "Page Title"}`.
-    public let jsonData: String?
+    public let jsonData: String
     
     public init(id: String,
                 component: String,
                 event: String,
                 metadata: Metadata?,
-                jsonData: String?) {
+                jsonData: String) {
         self.id = id
         self.component = component
         self.event = event

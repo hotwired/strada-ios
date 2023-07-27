@@ -53,7 +53,7 @@ class InternalMessageTests: XCTestCase {
         XCTAssertEqual(message.metadata?.url, "https://37signals.com")
         
         let originalJSONObject = messageJsonData.jsonObject() as? [String : AnyHashable]
-        let messageJSONObject = message.jsonData?.jsonObject() as? [String: AnyHashable]
+        let messageJSONObject = message.jsonData.jsonObject() as? [String: AnyHashable]
         XCTAssertEqual(originalJSONObject, messageJSONObject)
     }
     
@@ -77,7 +77,7 @@ class InternalMessageTests: XCTestCase {
         XCTAssertEqual(message?.component, "page")
         XCTAssertEqual(message?.event, "connect")
         
-        let page: Page? = try? message?.data?.jsonData()?.decoded()
+        let page: Page? = try? message?.data.jsonData()?.decoded()
         XCTAssertEqual(page?.title, "Page-title")
         XCTAssertEqual(page?.subtitle, "Page-subtitle")
         XCTAssertEqual(page?.actions[0], "one")
@@ -97,7 +97,7 @@ class InternalMessageTests: XCTestCase {
         let message = InternalMessage(jsonObject: jsonObject)
         
         XCTAssertEqual(message?.id, "1")
-        XCTAssertEqual(message?.data, nil)
+        XCTAssertEqual(message?.data, [:])
     }
     
     private func createPage() -> Page {

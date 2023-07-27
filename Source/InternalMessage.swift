@@ -7,12 +7,12 @@ struct InternalMessage {
     let id: String
     let component: String
     let event: String
-    let data: InternalMessageData?
+    let data: InternalMessageData
     
     init(id: String,
          component: String,
          event: String,
-         data: InternalMessageData?) {
+         data: InternalMessageData) {
         self.id = id
         self.component = component
         self.event = event
@@ -20,10 +20,11 @@ struct InternalMessage {
     }
     
     init(from message: Message) {
+        let data = (message.jsonData.jsonObject() as? InternalMessageData) ?? [:]
         self.init(id: message.id,
                   component: message.component,
                   event: message.event,
-                  data: message.jsonData?.jsonObject() as? InternalMessageData)
+                  data: data)
     }
     
     init?(scriptMessage: WKScriptMessage) {
@@ -43,7 +44,7 @@ struct InternalMessage {
             return nil
         }
         
-        let data = jsonObject[CodingKeys.data.rawValue] as? InternalMessageData
+        let data = (jsonObject[CodingKeys.data.rawValue] as? InternalMessageData) ?? [:]
         
         self.init(id: id,
                   component: component,
@@ -58,7 +59,7 @@ struct InternalMessage {
                        component: component,
                        event: event,
                        metadata: metadata(),
-                       jsonData: dataAsJSONString())
+                       jsonData: dataAsJSONString() ?? "{}")
     }
     
     /// Used internally for converting the message into a JSON-friendly format for sending over the bridge
@@ -74,14 +75,14 @@ struct InternalMessage {
     // MARK: Private
     
     private func metadata() -> Message.Metadata? {
-        guard let jsonData = data?.jsonData(),
+        guard let jsonData = data.jsonData(),
               let internalMetadata: InternalMessage.DataMetadata = try? jsonData.decoded() else { return nil }
         
         return Message.Metadata(url: internalMetadata.metadata.url)
     }
     
     private func dataAsJSONString() -> String? {
-        guard let jsonData = data?.jsonData() else { return nil }
+        guard let jsonData = data.jsonData() else { return nil }
         
         return String(data: jsonData, encoding: .utf8)
     }
