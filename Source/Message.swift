@@ -32,15 +32,18 @@ public struct Message: Equatable {
         self.jsonData = jsonData
     }
     
-    /// Returns a new Message, replacing the existing data with passed-in data and event.
-    /// If event is omitted, the existing event is used
+    /// Replaces the existing `Message`'s data with passed-in data and event.
+    /// - Parameters:
+    ///   - updatedEvent: The updated event of this message. If omitted, the existing event is used.
+    ///   - updatedData: The updated data of this message. If omitted, the existing data is used.
+    /// - Returns: A new `Message` with the provided data.
     public func replacing(event updatedEvent: String? = nil,
-                          jsonData updatedData: String) -> Message {
+                          jsonData updatedData: String? = nil) -> Message {
         Message(id: id,
                 component: component,
                 event: updatedEvent ?? event,
                 metadata: metadata,
-                jsonData: updatedData)
+                jsonData: updatedData ?? jsonData)
     }
 }
 

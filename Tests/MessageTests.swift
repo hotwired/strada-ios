@@ -2,27 +2,29 @@ import XCTest
 @testable import Strada
 
 class MessageTests: XCTestCase {
-    func testReplacingWithNewEvent() {
+    func testReplacingWithNewEventAndData() {
         let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
         {"title":"Page-title","subtitle":"Page-subtitle"}
         """
+        let newEvent = "disconnect"
+        let newData = "{}"
         let message = Message(id: "1",
                               component: "page",
                               event: "connect",
                               metadata: metadata,
                               jsonData: jsonData)
         
-        let newMessage = message.replacing(event: "disconnect", jsonData: "{}")
+        let newMessage = message.replacing(event: newEvent, jsonData: newData)
         
         XCTAssertEqual(newMessage.id, "1")
         XCTAssertEqual(newMessage.component, "page")
-        XCTAssertEqual(newMessage.event, "disconnect")
+        XCTAssertEqual(newMessage.event, newEvent)
         XCTAssertEqual(newMessage.metadata, metadata)
-        XCTAssertEqual(newMessage.jsonData, "{}")
+        XCTAssertEqual(newMessage.jsonData, newData)
     }
     
-    func testReplacingWithoutChangingEvent() {
+    func testReplacingByChangingDataWithoutChangingEvent() {
         let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
         {"title":"Page-title","subtitle":"Page-subtitle"}
@@ -42,5 +44,45 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(newMessage.event, "connect")
         XCTAssertEqual(newMessage.metadata, metadata)
         XCTAssertEqual(newMessage.jsonData, newData)
+    }
+    
+    func testReplacingByChangingEventWithoutChangingData() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        let newEvent = "disconnect"
+        let newMessage = message.replacing(event: newEvent)
+        
+        XCTAssertEqual(newMessage.id, "1")
+        XCTAssertEqual(newMessage.component, "page")
+        XCTAssertEqual(newMessage.event, newEvent)
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, jsonData)
+    }
+    
+    func testReplacingWithoutChangingEventAndData() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        
+        let newMessage = message.replacing()
+        
+        XCTAssertEqual(newMessage.id, "1")
+        XCTAssertEqual(newMessage.component, "page")
+        XCTAssertEqual(newMessage.event, "connect")
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, jsonData)
     }
 }
