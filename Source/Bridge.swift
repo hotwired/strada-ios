@@ -1,18 +1,20 @@
 import Foundation
 import WebKit
 
-public protocol BridgeDelegate: AnyObject {
-    func bridgeDidInitialize()
-    func bridgeDidReceiveMessage(_ message: Message)
-}
-
 public enum BridgeError: Error {
     case missingWebView
 }
 
+public protocol Bridgable: AnyObject {
+    func register(component: String)
+    func register(components: [String])
+    func unregister(component: String)
+    func send(_ message: Message)
+}
+
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
-public final class Bridge {
+public final class Bridge: Bridgable {
     public typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
     
     public var webView: WKWebView? {
@@ -22,7 +24,7 @@ public final class Bridge {
         }
     }
     
-    public weak var delegate: BridgeDelegate?
+    public weak var delegate: BridgeDelegate? = nil
 
     /// This needs to match whatever the JavaScript file uses
     private let bridgeGlobal = "window.nativeBridge"
@@ -149,12 +151,17 @@ public final class Bridge {
 
 extension Bridge: ScriptMessageHandlerDelegate {
     func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) {
-        if let event = scriptMessage.body as? String, event == "ready" {
+        if let event = scriptMessage.body as? String,
+            event == "ready" {
             delegate?.bridgeDidInitialize()
-        } else if let message = InternalMessage(scriptMessage: scriptMessage) {
-            delegate?.bridgeDidReceiveMessage(message.toMessage())
-        } else {
-            debugLog("Unhandled message received: \(scriptMessage.body)")
+            return
         }
+        
+        if let message = InternalMessage(scriptMessage: scriptMessage) {
+            delegate?.bridgeDidReceiveMessage(message.toMessage())
+            return
+        }
+        
+        debugLog("Unhandled message received: \(scriptMessage.body)")
     }
 }

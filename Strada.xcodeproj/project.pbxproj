@@ -24,6 +24,9 @@
 		E20978492A71366B00CDEEE5 /* Data+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978482A71366B00CDEEE5 /* Data+Utils.swift */; };
 		E209784B2A714D4E00CDEEE5 /* String+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E209784A2A714D4E00CDEEE5 /* String+JSON.swift */; };
 		E209784D2A714F1900CDEEE5 /* Dictionary+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */; };
+		E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */; };
+		E2DB15932A7282CF001EE08C /* BridgeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15922A7282CF001EE08C /* BridgeComponent.swift */; };
+		E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +60,9 @@
 		E20978482A71366B00CDEEE5 /* Data+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Utils.swift"; sourceTree = "<group>"; };
 		E209784A2A714D4E00CDEEE5 /* String+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+JSON.swift"; sourceTree = "<group>"; };
 		E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JSON.swift"; sourceTree = "<group>"; };
+		E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegate.swift; sourceTree = "<group>"; };
+		E2DB15922A7282CF001EE08C /* BridgeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponent.swift; sourceTree = "<group>"; };
+		E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegateTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +115,8 @@
 				9274F1FF2229970D003E85F4 /* strada.js */,
 				9274F1E92229963B003E85F4 /* Info.plist */,
 				E20978412A6E9E6B00CDEEE5 /* InternalMessage.swift */,
+				E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */,
+				E2DB15922A7282CF001EE08C /* BridgeComponent.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -121,6 +129,7 @@
 				C1EB05252588133D00933244 /* MessageTests.swift */,
 				9274F1F52229963B003E85F4 /* Info.plist */,
 				E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */,
+				E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -250,8 +259,10 @@
 				E209784B2A714D4E00CDEEE5 /* String+JSON.swift in Sources */,
 				C11349A62587EFFB000A6E56 /* ScriptMessageHandler.swift in Sources */,
 				E20978472A7135E700CDEEE5 /* Encodable+Utils.swift in Sources */,
+				E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */,
 				C11349B22587F31E000A6E56 /* JavaScript.swift in Sources */,
 				9274F20222299715003E85F4 /* Bridge.swift in Sources */,
+				E2DB15932A7282CF001EE08C /* BridgeComponent.swift in Sources */,
 				E20978492A71366B00CDEEE5 /* Data+Utils.swift in Sources */,
 				9274F20422299738003E85F4 /* Message.swift in Sources */,
 				E20978422A6E9E6B00CDEEE5 /* InternalMessage.swift in Sources */,
@@ -265,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */,
 				C11349C2258801F6000A6E56 /* JavaScriptTests.swift in Sources */,
 				C1EB052E2588201600933244 /* BridgeTests.swift in Sources */,
 				E20978442A6EAF3600CDEEE5 /* InternalMessageTests.swift in Sources */,
