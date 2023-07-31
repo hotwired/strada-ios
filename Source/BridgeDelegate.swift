@@ -83,7 +83,7 @@ public final class BridgeDelegate {
     
     // MARK: Retrieve component(s) by type
     
-    func component<C: BridgeComponent>() -> C? {
+    public func component<C: BridgeComponent>() -> C? {
         return activeComponents.compactMap { $0 as? C }.first
     }
     
