@@ -14,11 +14,12 @@ class BridgeDelegateTests: XCTestCase {
     override func setUp() async throws {
         destination = BridgeDestinationSpy()
         delegate = BridgeDelegate(location: "https://37signals.com",
-                                  destination: destination)
+                                  destination: destination,
+                                  componentTypes: [OneBridgeComponent.self, TwoBridgeComponent.self])
         
         bridge = BridgeSpy()
         delegate.bridge = bridge
-        delegate.onStart()
+        delegate.onViewDidLoad()
     }
     
     func testBridgeDidInitialize() {
@@ -83,7 +84,7 @@ class BridgeDelegateTests: XCTestCase {
         var component: OneBridgeComponent? = delegate.component()
         XCTAssertNotNil(component)
         
-        delegate.onStop()
+        delegate.onViewWillDisappear()
         XCTAssertFalse(delegate.bridgeDidReceiveMessage(message))
         component = delegate.component()
         XCTAssertNil(component)
@@ -94,8 +95,6 @@ private class BridgeDestinationSpy: BridgeDestination {
     func bridgeWebViewIsReady() -> Bool {
         return true
     }
-    
-    var supportedComponents: [Strada.BridgeComponent.Type] = [OneBridgeComponent.self, TwoBridgeComponent.self]
 }
 
 private class OneBridgeComponent: BridgeComponent {

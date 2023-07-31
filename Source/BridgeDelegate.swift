@@ -3,7 +3,6 @@ import WebKit
 
 public protocol BridgeDestination: AnyObject {
     func bridgeWebViewIsReady() -> Bool
-    var supportedComponents: [BridgeComponent.Type] { get }
 }
 
 public final class BridgeDelegate {
@@ -12,9 +11,11 @@ public final class BridgeDelegate {
     weak var bridge: Bridgable?
     
     public init(location: String,
-                destination: BridgeDestination) {
+                destination: BridgeDestination,
+                componentTypes: [BridgeComponent.Type]) {
         self.location = location
         self.destination = destination
+        self.componentTypes = componentTypes
     }
     //
     //    func onColdBootPageCompleted() {
@@ -44,7 +45,7 @@ public final class BridgeDelegate {
     //    }
     //
     func bridgeDidInitialize() {
-        let componentNames = destination.supportedComponents.map { $0.name }
+        let componentNames = componentTypes.map { $0.name }
         bridge?.register(components: componentNames)
     }
     
@@ -64,21 +65,22 @@ public final class BridgeDelegate {
     
     // MARK: - Destination lifecycle
     
-    public func onStart() {
-        debugLog("bridgeDestinationDidStart: \(location)")
+    public func onViewDidLoad() {
+        debugLog("bridgeDestinationViewDidLoad: \(location)")
         destinationIsActive = true
-        activeComponents.forEach { $0.onStart() }
+        activeComponents.forEach { $0.onViewDidLoad() }
     }
     
-    public func onStop() {
-        activeComponents.forEach { $0.onStop() }
-        destinationIsActive = false
-        debugLog("bridgeDestinationDidStop: \(location)")
+    public func onViewWillAppear() {
+        debugLog("bridgeDestinationViewWillAppear: \(location)")
+        destinationIsActive = true
+        activeComponents.forEach { $0.onViewWillAppear() }
     }
     
-    public func onDestroy() {
+    public func onViewWillDisappear() {
+        activeComponents.forEach { $0.onViewWillDisappear() }
         destinationIsActive = false
-        debugLog("bridgeDestinationDidDestroy: \(location)")
+        debugLog("bridgeDestinationViewWillDisappear: \(location)")
     }
     
     // MARK: Retrieve component(s) by type
@@ -95,6 +97,7 @@ public final class BridgeDelegate {
     
     private var initializedComponents: [String: BridgeComponent] = [:]
     private var destinationIsActive = false
+    private let componentTypes: [BridgeComponent.Type]
     
     private var activeComponents: [BridgeComponent] {
         return initializedComponents.values.filter { _ in destinationIsActive }
@@ -105,7 +108,7 @@ public final class BridgeDelegate {
             return component
         }
         
-        guard let componentType = destination.supportedComponents.first(where: { $0.name == name }) else {
+        guard let componentType = componentTypes.first(where: { $0.name == name }) else {
             return nil
         }
         

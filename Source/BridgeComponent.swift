@@ -6,8 +6,10 @@ public protocol BridgeComponent: AnyObject {
     
     init()
     func handle(message: Message)
-    func onStart()
-    func onStop()
+    
+    func onViewDidLoad()
+    func onViewWillAppear()
+    func onViewWillDisappear()
 }
 
 public extension BridgeComponent {
@@ -20,6 +22,7 @@ public extension BridgeComponent {
         bridge.send(message)
     }
     
-    func onStart() {}
-    func onStop() {}
+    func onViewDidLoad() {}
+    func onViewWillAppear() {}
+    func onViewWillDisappear() {}
 }
