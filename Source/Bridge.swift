@@ -24,7 +24,11 @@ public final class Bridge: Bridgable {
         }
     }
     
-    public weak var delegate: BridgeDelegate? = nil
+    public weak var delegate: BridgeDelegate? = nil {
+        didSet {
+            delegate?.bridge = self
+        }
+    }
 
     /// This needs to match whatever the JavaScript file uses
     private let bridgeGlobal = "window.nativeBridge"
