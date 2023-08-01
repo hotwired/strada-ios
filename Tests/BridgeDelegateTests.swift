@@ -99,25 +99,21 @@ private class BridgeDestinationSpy: BridgeDestination {
 
 private class OneBridgeComponent: BridgeComponent {
     static var name: String = "one"
-    
-    required init() {}
-    
     weak var delegate: Strada.BridgeDelegate?
     
-    func handle(message: Strada.Message) {
-        
-    }
+    required init(destination: Strada.BridgeDestination) {}
+    
+    func handle(message: Strada.Message) {}
 }
 
 private class TwoBridgeComponent: BridgeComponent {
     static var name: String = "two"
+    weak var delegate: Strada.BridgeDelegate?
     
     var handleMessageWasCalled = false
     var handleMessageArg: Message?
     
-    required init() {}
-    
-    weak var delegate: Strada.BridgeDelegate?
+    required init(destination: Strada.BridgeDestination) {}
     
     func handle(message: Strada.Message) {
         handleMessageWasCalled = true

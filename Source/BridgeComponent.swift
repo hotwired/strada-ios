@@ -4,7 +4,7 @@ public protocol BridgeComponent: AnyObject {
     static var name: String { get }
     var delegate: BridgeDelegate? { get set }
     
-    init()
+    init(destination: BridgeDestination)
     func handle(message: Message)
     
     func onViewDidLoad()

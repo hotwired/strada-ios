@@ -112,7 +112,7 @@ public final class BridgeDelegate {
             return nil
         }
         
-        let component = componentType.init()
+        let component = componentType.init(destination: destination)
         component.delegate = self
         
         initializedComponents[name] = component
