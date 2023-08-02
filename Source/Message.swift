@@ -1,7 +1,4 @@
 import Foundation
-import WebKit
-
-public typealias MessageData = [String: AnyHashable]
 
 /// A `Message` is the structure sent back and forth over the bridge
 /// to enable communication between native and web apps
@@ -16,56 +13,42 @@ public struct Message: Equatable {
     /// The event that this message is about: "submit", "display", "send"
     public let event: String
     
-    /// Any data to send along with the message, for a "page" component, this might be the ["title": "Page Title"]
-    public let data: MessageData
+    /// The metadata associated with the message, which includes its url.
+    public let metadata: Metadata?
     
-    public init(id: String, component: String, event: String, data: MessageData) {
+    /// Data, represented in a json object string, to send along with the message.
+    /// For a "page" component, this might be `{"title": "Page Title"}`.
+    public let jsonData: String
+    
+    public init(id: String,
+                component: String,
+                event: String,
+                metadata: Metadata?,
+                jsonData: String) {
         self.id = id
         self.component = component
         self.event = event
-        self.data = data
+        self.metadata = metadata
+        self.jsonData = jsonData
     }
     
-    /// Returns a new Message, replacing the existing data with passed-in data and event
-    /// If event is omitted, the existing event is used
-    public func replacing(event updatedEvent: String? = nil, data updatedData: MessageData) -> Message {
-        Message(id: id, component: component, event: updatedEvent ?? event, data: updatedData)
-    }
-    
-    /// Returns a new `Message` merging the passed-in data with the existing data
-    /// The passed-in data will overwrite any data with the same keys in the receiver
-    public func merging(data updatedData: MessageData) -> Message {
-        var mergedData = data
-        updatedData.forEach { mergedData[$0] = $1 }
-        
-        return Message(id: id, component: component, event: event, data: mergedData)
-    }
-    
-    // MARK: JSON
-    
-    /// Used internally for converting the message into a JSON-friendly format for sending over the bridge
-    func toJSON() -> [String: AnyHashable] {
-        [
-            "id": id,
-            "component": component,
-            "event": event,
-            "data": data
-        ]
+    /// Replaces the existing `Message`'s data with passed-in data and event.
+    /// - Parameters:
+    ///   - updatedEvent: The updated event of this message. If omitted, the existing event is used.
+    ///   - updatedData: The updated data of this message. If omitted, the existing data is used.
+    /// - Returns: A new `Message` with the provided data.
+    public func replacing(event updatedEvent: String? = nil,
+                          jsonData updatedData: String? = nil) -> Message {
+        Message(id: id,
+                component: component,
+                event: updatedEvent ?? event,
+                metadata: metadata,
+                jsonData: updatedData ?? jsonData)
     }
 }
 
 extension Message {
-    init?(scriptMessage: WKScriptMessage) {
-        guard let message = scriptMessage.body as? [String: Any],
-            let id = message["id"] as? String,
-            let component = message["component"] as? String,
-            let event = message["event"] as? String,
-            let data = message["data"] as? MessageData else {
-                debugLog("Error parsing script message: \(scriptMessage.body)")
-                return nil
-        }
-        
-        self.init(id: id, component: component, event: event, data: data)
+    public struct Metadata: Equatable {
+        public let url: String
     }
 }
-

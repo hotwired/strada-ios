@@ -54,9 +54,19 @@ class BridgeTests: XCTestCase {
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        let message = Message(id: "1", component: "test", event: "send", data: ["title": "testing"])
+        let data = """
+        {"title":"Page-title"}
+        """
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: data)
+
+        
         bridge.send(message)
-        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.send({\"component\":\"test\",\"event\":\"send\",\"data\":{\"title\":\"testing\"},\"id\":\"1\"})")
+        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.send({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
     }
     
     func testEvaluateJavaScript() {

@@ -1,7 +1,7 @@
 import Foundation
 import WebKit
 
-public protocol BridgeDelegate: class {
+public protocol BridgeDelegate: AnyObject {
     func bridgeDidInitialize()
     func bridgeDidReceiveMessage(_ message: Message)
 }
@@ -65,17 +65,18 @@ public final class Bridge {
     /// Send a message through the bridge to the web application
     /// - Parameter message: Message to send
     public func send(_ message: Message) {
-        callBridgeFunction("send", arguments: [message.toJSON()])
+        let internalMessage = InternalMessage(from: message)
+        callBridgeFunction("send", arguments: [internalMessage.toJSON()])
     }
     
-    /// Convenience method to reply to a previously received message. Data will be replaced,
-    /// while id, component, and event will remain the same
-    /// - Parameter message: Message to reply to
-    /// - Parameter data: Data to send with reply
-    public func reply(to message: Message, with data: MessageData) {
-        let replyMessage = message.replacing(data: data)
-        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
-    }
+//    /// Convenience method to reply to a previously received message. Data will be replaced,
+//    /// while id, component, and event will remain the same
+//    /// - Parameter message: Message to reply to
+//    /// - Parameter data: Data to send with reply
+//    public func reply(to message: Message, with data: MessageData) {
+//        let replyMessage = message.replacing(data: data)
+//        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
+//    }
     
     private func callBridgeFunction(_ function: String, arguments: [Any]) {
         let js = JavaScript(object: bridgeGlobal, functionName: function, arguments: arguments)
@@ -150,8 +151,8 @@ extension Bridge: ScriptMessageHandlerDelegate {
     func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) {
         if let event = scriptMessage.body as? String, event == "ready" {
             delegate?.bridgeDidInitialize()
-        } else if let message = Message(scriptMessage: scriptMessage) {
-            delegate?.bridgeDidReceiveMessage(message)
+        } else if let message = InternalMessage(scriptMessage: scriptMessage) {
+            delegate?.bridgeDidReceiveMessage(message.toMessage())
         } else {
             debugLog("Unhandled message received: \(scriptMessage.body)")
         }

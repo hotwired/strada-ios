@@ -2,47 +2,87 @@ import XCTest
 @testable import Strada
 
 class MessageTests: XCTestCase {
-    func testReplacingData() {
-        let message = Message(id: "1", component: "test", event: "connect", data: ["title": "test title", "subtitle": "testing"])
-        let newMessage = message.replacing(data: ["title": "updated title", "foo": "bar"])
+    func testReplacingWithNewEventAndData() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle"}
+        """
+        let newEvent = "disconnect"
+        let newData = "{}"
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        
+        let newMessage = message.replacing(event: newEvent, jsonData: newData)
         
         XCTAssertEqual(newMessage.id, "1")
-        XCTAssertEqual(newMessage.component, "test")
+        XCTAssertEqual(newMessage.component, "page")
+        XCTAssertEqual(newMessage.event, newEvent)
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, newData)
+    }
+    
+    func testReplacingByChangingDataWithoutChangingEvent() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        let newData = """
+        {"title":"Page-title""}
+        """
+        let newMessage = message.replacing(jsonData: newData)
+        
+        XCTAssertEqual(newMessage.id, "1")
+        XCTAssertEqual(newMessage.component, "page")
         XCTAssertEqual(newMessage.event, "connect")
-        XCTAssertEqual(newMessage.data, ["title": "updated title", "foo": "bar"])
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, newData)
     }
     
-    func testReplacingEventAndData() {
-        let message = Message(id: "1", component: "test", event: "connect", data: ["title": "test title", "subtitle": "testing"])
-        let newMessage = message.replacing(event: "other-event", data: ["title": "updated title", "foo": "bar"])
+    func testReplacingByChangingEventWithoutChangingData() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        let newEvent = "disconnect"
+        let newMessage = message.replacing(event: newEvent)
         
         XCTAssertEqual(newMessage.id, "1")
-        XCTAssertEqual(newMessage.component, "test")
-        XCTAssertEqual(newMessage.event, "other-event")
-        XCTAssertEqual(newMessage.data, ["title": "updated title", "foo": "bar"])
+        XCTAssertEqual(newMessage.component, "page")
+        XCTAssertEqual(newMessage.event, newEvent)
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, jsonData)
     }
     
-    func testMergingData() {
-        let message = Message(id: "1", component: "test", event: "connect", data: ["title": "test title", "subtitle": "testing"])
-        let newMessage = message.merging(data: ["title": "updated title"])
+    func testReplacingWithoutChangingEventAndData() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        
+        let newMessage = message.replacing()
         
         XCTAssertEqual(newMessage.id, "1")
-        XCTAssertEqual(newMessage.component, "test")
+        XCTAssertEqual(newMessage.component, "page")
         XCTAssertEqual(newMessage.event, "connect")
-        XCTAssertEqual(newMessage.data, ["title": "updated title", "subtitle": "testing"])
-    }
-    
-    func testToJSON() {
-        let message = Message(id: "1", component: "test", event: "connect", data: ["title": "test"])
-        let json = message.toJSON()
-        
-        XCTAssertEqual(json, [
-            "id": "1",
-            "component": "test",
-            "event": "connect",
-            "data": [
-                "title": "test"
-            ]
-        ])
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, jsonData)
     }
 }
