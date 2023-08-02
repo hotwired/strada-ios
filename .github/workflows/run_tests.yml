@@ -1,0 +1,33 @@
+name: Run tests
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on: 
+  push:
+    branches:
+    - main
+  pull_request:
+
+env:
+  XCODEBUILD_DESTINATION_IOS: 'platform=iOS Simulator,name=iPhone 14 Pro'
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_14.3.app && /usr/bin/xcodebuild -version
+
+      - name: Run Tests
+        run: xcodebuild \
+            clean \
+            test \
+            -project Strada.xcodeproj \
+            -scheme Strada \
+            -destination "${{ env.XCODEBUILD_DESTINATION_IOS }}" \
+            -resultBundlePath TestResults
