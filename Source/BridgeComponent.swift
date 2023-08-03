@@ -9,7 +9,9 @@ public protocol BridgeComponent: AnyObject {
     
     func onViewDidLoad()
     func onViewWillAppear()
+    func onViewDidAppear()
     func onViewWillDisappear()
+    func onViewDidDisappear()
 }
 
 public extension BridgeComponent {
@@ -24,5 +26,7 @@ public extension BridgeComponent {
     
     func onViewDidLoad() {}
     func onViewWillAppear() {}
+    func onViewDidAppear() {}
     func onViewWillDisappear() {}
+    func onViewDidDisappear() {}
 }
