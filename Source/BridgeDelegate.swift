@@ -7,7 +7,7 @@ public protocol BridgeDestination: AnyObject {
 
 public final class BridgeDelegate {
     public let location: String
-    public let destination: BridgeDestination
+    public unowned let destination: BridgeDestination
     public weak var webView: WKWebView?
     
     weak var bridge: Bridgable?
