@@ -24,10 +24,4 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app && /usr/bin/xcodebuild -version
 
       - name: Run Tests
-        run: xcodebuild \
-            clean \
-            test \
-            -project Strada.xcodeproj \
-            -scheme Strada \
-            -destination "${{ env.XCODEBUILD_DESTINATION_IOS }}" \
-            -resultBundlePath TestResults
+        run: xcodebuild test -project Strada.xcodeproj -scheme Strada -destination "${{ env.XCODEBUILD_DESTINATION_IOS }}" -resultBundlePath TestResults
