@@ -8,6 +8,8 @@ public protocol BridgeDestination: AnyObject {
 public final class BridgeDelegate {
     public let location: String
     public let destination: BridgeDestination
+    public weak var webView: WKWebView?
+    
     weak var bridge: Bridgable?
     
     public init(location: String,
@@ -17,50 +19,23 @@ public final class BridgeDelegate {
         self.destination = destination
         self.componentTypes = componentTypes
     }
-    //
-    //    func onColdBootPageCompleted() {
-    //        bridge?.load()
-    //    }
-    //
-    //    func onColdBootPageStarted() {
-    //        bridge?.reset()
-    //    }
-    //
-    //    func onWebViewAttached(_ webView: WKWebView) {
-    //        bridge = Bridge.getBridgeFor(webView)
-    //        bridge?.delegate = self
-    //
-    //        if bridge != nil {
-    //            if shouldReloadBridge() {
-    //                bridge?.load()
-    //            }
-    //        } else {
-    //            logEvent("bridgeNotInitializedForWebView", location)
-    //        }
-    //    }
-    //
-    //    func onWebViewDetached() {
-    //        bridge?.delegate = nil
-    //        bridge = nil
-    //    }
-    //
-    func bridgeDidInitialize() {
-        let componentNames = componentTypes.map { $0.name }
-        bridge?.register(components: componentNames)
-    }
     
-    @discardableResult
-    func bridgeDidReceiveMessage(_ message: Message) -> Bool {
-        guard destinationIsActive,
-              location == message.metadata?.url else {
-            debugLog("bridgeDidIgnoreMessage: \(message)")
-            return false
+    public func onWebViewAttached(_ webView: WKWebView) {
+        bridge = Bridge.getBridgeFor(webView)
+        bridge?.delegate = self
+        
+        guard bridge != nil else {
+            debugLog("bridgeNotInitializedForWebView")
+            return
         }
         
-        debugLog("bridgeDidReceiveMessage: \(message)")
-        getOrCreateComponent(name: message.component)?.handle(message: message)
-        
-        return true
+        self.webView = webView
+    }
+    
+    public func onWebViewDetached() {
+        bridge?.delegate = nil
+        bridge = nil
+        webView = nil
     }
     
     // MARK: - Destination lifecycle
@@ -83,14 +58,31 @@ public final class BridgeDelegate {
         debugLog("bridgeDestinationViewWillDisappear: \(location)")
     }
     
-    // MARK: Retrieve component(s) by type
+    // MARK: Retrieve component by type
     
     public func component<C: BridgeComponent>() -> C? {
         return activeComponents.compactMap { $0 as? C }.first
     }
     
-    func forEachComponent<C: BridgeComponent>(action: (C) -> Void) {
-        activeComponents.compactMap { $0 as? C }.forEach { action($0) }
+    // MARK: Internal
+    
+    func bridgeDidInitialize() {
+        let componentNames = componentTypes.map { $0.name }
+        bridge?.register(components: componentNames)
+    }
+    
+    @discardableResult
+    func bridgeDidReceiveMessage(_ message: Message) -> Bool {
+        guard destinationIsActive,
+              location == message.metadata?.url else {
+            debugLog("bridgeDidIgnoreMessage: \(message)")
+            return false
+        }
+        
+        debugLog("bridgeDidReceiveMessage: \(message)")
+        getOrCreateComponent(name: message.component)?.handle(message: message)
+        
+        return true
     }
     
     // MARK: Private

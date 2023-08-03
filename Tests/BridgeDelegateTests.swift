@@ -122,6 +122,8 @@ private class TwoBridgeComponent: BridgeComponent {
 }
 
 private class BridgeSpy: Bridgable {
+    var delegate: Strada.BridgeDelegate? = nil
+    
     var registerComponentWasCalled = false
     var registerComponentArg: String? = nil
     
