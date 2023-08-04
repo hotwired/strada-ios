@@ -72,7 +72,7 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertFalse(delegate.bridgeDidReceiveMessage(message))
     }
     
-    func testInactiveDestinationIgnoresMessage() {
+    func testBridgeIgnoresMessageForInactiveDestination() {
         let message = Message(id: "1",
                               component: "one",
                               event: "connect",
@@ -91,7 +91,7 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertNil(component)
     }
     
-    func testDestinationForwardsViewWillAppearToComponents() {
+    func testBridgeForwardsViewWillAppearToComponents() {
         delegate.bridgeDidReceiveMessage(testMessage())
         
         let component: BridgeComponentSpy? = delegate.component()
@@ -101,7 +101,7 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertTrue(component!.onViewWillAppearWasCalled)
     }
     
-    func testDestinationForwardsViewDidAppearToComponents() {
+    func testBridgeForwardsViewDidAppearToComponents() {
         delegate.bridgeDidReceiveMessage(testMessage())
         
         let component: BridgeComponentSpy? = delegate.component()
@@ -111,7 +111,7 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertTrue(component!.onViewDidAppearWasCalled)
     }
     
-    func testDestinationForwardsViewWillDisappearToComponents() {
+    func testBridgeForwardsViewWillDisappearToComponents() {
         delegate.bridgeDidReceiveMessage(testMessage())
         
         let component: BridgeComponentSpy? = delegate.component()
@@ -121,7 +121,7 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertTrue(component!.onViewWillDisappearWasCalled)
     }
     
-    func testDestinationForwardsViewDidDisappearToComponents() {
+    func testBridgeForwardsViewDidDisappearToComponents() {
         delegate.bridgeDidReceiveMessage(testMessage())
         
         let component: BridgeComponentSpy? = delegate.component()
