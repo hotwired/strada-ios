@@ -8,7 +8,9 @@ public protocol BridgeDestination: AnyObject {
 public final class BridgeDelegate {
     public let location: String
     public unowned let destination: BridgeDestination
-    public weak var webView: WKWebView?
+    public var webView: WKWebView? {
+        bridge?.webView
+    }
     
     weak var bridge: Bridgable?
     
@@ -24,18 +26,14 @@ public final class BridgeDelegate {
         bridge = Bridge.getBridgeFor(webView)
         bridge?.delegate = self
         
-        guard bridge != nil else {
+        if bridge == nil {
             debugLog("bridgeNotInitializedForWebView")
-            return
         }
-        
-        self.webView = webView
     }
     
     public func webViewDidBecomeDeactivated() {
         bridge?.delegate = nil
         bridge = nil
-        webView = nil
     }
     
     // MARK: - Destination lifecycle

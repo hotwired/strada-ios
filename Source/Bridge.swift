@@ -7,6 +7,7 @@ public enum BridgeError: Error {
 
 protocol Bridgable: AnyObject {
     var delegate: BridgeDelegate? { get set }
+    var webView: WKWebView? { get }
     
     func register(component: String)
     func register(components: [String])
