@@ -84,7 +84,7 @@ class BridgeDelegateTests: XCTestCase {
         var component: OneBridgeComponent? = delegate.component()
         XCTAssertNotNil(component)
         
-        delegate.onViewWillDisappear()
+        delegate.onViewDidDisappear()
         XCTAssertFalse(delegate.bridgeDidReceiveMessage(message))
         
         component = delegate.component()
@@ -129,6 +129,16 @@ class BridgeDelegateTests: XCTestCase {
         
         delegate.onViewDidDisappear()
         XCTAssertTrue(component!.onViewDidDisappearWasCalled)
+    }
+    
+    func testBridgeDestinationIsActiveAfterViewWillDisappearIsCalled() {
+        delegate.bridgeDidReceiveMessage(testMessage())
+        
+        let component: BridgeComponentSpy? = delegate.component()
+        XCTAssertNotNil(component)
+        
+        delegate.onViewWillDisappear()
+        XCTAssertTrue(delegate.bridgeDidReceiveMessage(testMessage()))
     }
     
     private func testMessage() -> Message {

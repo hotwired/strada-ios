@@ -56,7 +56,6 @@ public final class BridgeDelegate {
     
     public func onViewWillDisappear() {
         activeComponents.forEach { $0.onViewWillDisappear() }
-        destinationIsActive = false
         debugLog("bridgeDestinationViewWillDisappear: \(location)")
     }
     
