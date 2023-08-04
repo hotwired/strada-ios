@@ -16,11 +16,11 @@ protocol BridgingComponent: AnyObject {
 }
 
 open class BridgeComponent: BridgingComponent {
-    class var name: String {
+    public class var name: String {
         fatalError("BridgeComponent subclass must provide a unique 'name'")
     }
     
-    unowned var delegate: BridgeDelegate
+    public unowned let delegate: BridgeDelegate
     
     required public init(destination: BridgeDestination, delegate: BridgeDelegate) {
         self.delegate = delegate
@@ -38,7 +38,7 @@ open class BridgeComponent: BridgingComponent {
 }
 
 extension BridgingComponent {
-    func send(message: Message) {
+    public func send(message: Message) {
         guard let bridge = delegate.bridge else {
             debugLog("bridgeMessageFailedToSend: bridge is not available")
             return
