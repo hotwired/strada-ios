@@ -143,17 +143,17 @@ class BridgeDelegateTests: XCTestCase {
 private class BridgeDestinationSpy: BridgeDestination {}
 
 private class OneBridgeComponent: BridgeComponent {
-    static var name: String = "one"
-    weak var delegate: Strada.BridgeDelegate?
+    static override var name: String { "one" }
     
-    required init(destination: Strada.BridgeDestination) {}
+    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
+        super.init(destination: destination, delegate: delegate)
+    }
     
-    func handle(message: Strada.Message) {}
+    override func handle(message: Strada.Message) {}
 }
 
 private class BridgeComponentSpy: BridgeComponent {
-    static var name: String = "two"
-    weak var delegate: Strada.BridgeDelegate?
+    static override var name: String { "two" }
     
     var handleMessageWasCalled = false
     var handleMessageArg: Message?
@@ -164,30 +164,32 @@ private class BridgeComponentSpy: BridgeComponent {
     var onViewWillDisappearWasCalled = false
     var onViewDidDisappearWasCalled = false
     
-    required init(destination: Strada.BridgeDestination) {}
+    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
+        super.init(destination: destination, delegate: delegate)
+    }
     
-    func handle(message: Strada.Message) {
+    override func handle(message: Strada.Message) {
         handleMessageWasCalled = true
         handleMessageArg = message
     }
     
-    func onViewDidLoad() {
+    override func onViewDidLoad() {
         onViewDidLoadWasCalled = true
     }
     
-    func onViewWillAppear() {
+    override func onViewWillAppear() {
         onViewWillAppearWasCalled = true
     }
     
-    func onViewDidAppear() {
+    override func onViewDidAppear() {
         onViewDidAppearWasCalled = true
     }
     
-    func onViewWillDisappear() {
+    override func onViewWillDisappear() {
         onViewWillDisappearWasCalled = true
     }
     
-    func onViewDidDisappear() {
+    override func onViewDidDisappear() {
         onViewDidDisappearWasCalled = true
     }
 }
