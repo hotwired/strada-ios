@@ -50,10 +50,22 @@ public final class BridgeDelegate {
         activeComponents.forEach { $0.onViewWillAppear() }
     }
     
+    public func onViewDidAppear() {
+        debugLog("bridgeDestinationViewDidAppear: \(location)")
+        destinationIsActive = true
+        activeComponents.forEach { $0.onViewDidAppear() }
+    }
+    
     public func onViewWillDisappear() {
         activeComponents.forEach { $0.onViewWillDisappear() }
         destinationIsActive = false
         debugLog("bridgeDestinationViewWillDisappear: \(location)")
+    }
+    
+    public func onViewDidDisappear() {
+        activeComponents.forEach { $0.onViewDidDisappear() }
+        destinationIsActive = false
+        debugLog("bridgeDestinationViewDidDisappear: \(location)")
     }
     
     // MARK: Retrieve component by type

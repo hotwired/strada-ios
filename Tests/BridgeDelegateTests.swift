@@ -15,7 +15,7 @@ class BridgeDelegateTests: XCTestCase {
         destination = BridgeDestinationSpy()
         delegate = BridgeDelegate(location: "https://37signals.com",
                                   destination: destination,
-                                  componentTypes: [OneBridgeComponent.self, TwoBridgeComponent.self])
+                                  componentTypes: [OneBridgeComponent.self, BridgeComponentSpy.self])
         
         bridge = BridgeSpy()
         delegate.bridge = bridge
@@ -29,8 +29,8 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertEqual(bridge.registerComponentsArg, ["one", "two"])
      
         // Registered components are lazy initialized.
-        let componentOne: TwoBridgeComponent? = delegate.component()
-        let componentTwo: TwoBridgeComponent? = delegate.component()
+        let componentOne: BridgeComponentSpy? = delegate.component()
+        let componentTwo: BridgeComponentSpy? = delegate.component()
         XCTAssertNil(componentOne)
         XCTAssertNil(componentTwo)
     }
@@ -45,7 +45,7 @@ class BridgeDelegateTests: XCTestCase {
                               metadata: .init(url: "https://37signals.com"),
                               jsonData: json)
         
-        var component: TwoBridgeComponent? = delegate.component()
+        var component: BridgeComponentSpy? = delegate.component()
         
         XCTAssertNil(component)
         XCTAssertTrue(delegate.bridgeDidReceiveMessage(message))
@@ -59,7 +59,7 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertNotNil(component?.delegate)
     }
     
-    func testBridgeDidReceiveMessageIgnored() {
+    func testBridgeIgnoresMessageForUnknownComponent() {
         let json = """
             {"title":"Page-title","subtitle":"Page-subtitle"}
         """
@@ -72,7 +72,7 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertFalse(delegate.bridgeDidReceiveMessage(message))
     }
     
-    func testDestinationIsInactive() {
+    func testInactiveDestinationIgnoresMessage() {
         let message = Message(id: "1",
                               component: "one",
                               event: "connect",
@@ -86,8 +86,57 @@ class BridgeDelegateTests: XCTestCase {
         
         delegate.onViewWillDisappear()
         XCTAssertFalse(delegate.bridgeDidReceiveMessage(message))
+        
         component = delegate.component()
         XCTAssertNil(component)
+    }
+    
+    func testDestinationForwardsViewWillAppearToComponents() {
+        delegate.bridgeDidReceiveMessage(testMessage())
+        
+        let component: BridgeComponentSpy? = delegate.component()
+        XCTAssertNotNil(component)
+        
+        delegate.onViewWillAppear()
+        XCTAssertTrue(component!.onViewWillAppearWasCalled)
+    }
+    
+    func testDestinationForwardsViewDidAppearToComponents() {
+        delegate.bridgeDidReceiveMessage(testMessage())
+        
+        let component: BridgeComponentSpy? = delegate.component()
+        XCTAssertNotNil(component)
+
+        delegate.onViewDidAppear()
+        XCTAssertTrue(component!.onViewDidAppearWasCalled)
+    }
+    
+    func testDestinationForwardsViewWillDisappearToComponents() {
+        delegate.bridgeDidReceiveMessage(testMessage())
+        
+        let component: BridgeComponentSpy? = delegate.component()
+        XCTAssertNotNil(component)
+        
+        delegate.onViewWillDisappear()
+        XCTAssertTrue(component!.onViewWillDisappearWasCalled)
+    }
+    
+    func testDestinationForwardsViewDidDisappearToComponents() {
+        delegate.bridgeDidReceiveMessage(testMessage())
+        
+        let component: BridgeComponentSpy? = delegate.component()
+        XCTAssertNotNil(component)
+        
+        delegate.onViewDidDisappear()
+        XCTAssertTrue(component!.onViewDidDisappearWasCalled)
+    }
+    
+    private func testMessage() -> Message {
+        return Message(id: "1",
+                       component: "two",
+                       event: "connect",
+                       metadata: .init(url: "https://37signals.com"),
+                       jsonData: json)
     }
 }
 
@@ -106,18 +155,44 @@ private class OneBridgeComponent: BridgeComponent {
     func handle(message: Strada.Message) {}
 }
 
-private class TwoBridgeComponent: BridgeComponent {
+private class BridgeComponentSpy: BridgeComponent {
     static var name: String = "two"
     weak var delegate: Strada.BridgeDelegate?
     
     var handleMessageWasCalled = false
     var handleMessageArg: Message?
     
+    var onViewDidLoadWasCalled = false
+    var onViewWillAppearWasCalled = false
+    var onViewDidAppearWasCalled = false
+    var onViewWillDisappearWasCalled = false
+    var onViewDidDisappearWasCalled = false
+    
     required init(destination: Strada.BridgeDestination) {}
     
     func handle(message: Strada.Message) {
         handleMessageWasCalled = true
         handleMessageArg = message
+    }
+    
+    func onViewDidLoad() {
+        onViewDidLoadWasCalled = true
+    }
+    
+    func onViewWillAppear() {
+        onViewWillAppearWasCalled = true
+    }
+    
+    func onViewDidAppear() {
+        onViewDidAppearWasCalled = true
+    }
+    
+    func onViewWillDisappear() {
+        onViewWillDisappearWasCalled = true
+    }
+    
+    func onViewDidDisappear() {
+        onViewDidDisappearWasCalled = true
     }
 }
 
