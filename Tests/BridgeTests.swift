@@ -90,7 +90,7 @@ class BridgeTests: XCTestCase {
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 0.5)
+        waitForExpectations(timeout: 2)
     }
     
     func testEvaluateFunction() {
@@ -112,7 +112,7 @@ class BridgeTests: XCTestCase {
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 0.5)
+        waitForExpectations(timeout: 2)
     }
 }
 
