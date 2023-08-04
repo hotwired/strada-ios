@@ -140,11 +140,7 @@ class BridgeDelegateTests: XCTestCase {
     }
 }
 
-private class BridgeDestinationSpy: BridgeDestination {
-    func bridgeWebViewIsReady() -> Bool {
-        return true
-    }
-}
+private class BridgeDestinationSpy: BridgeDestination {}
 
 private class OneBridgeComponent: BridgeComponent {
     static var name: String = "one"

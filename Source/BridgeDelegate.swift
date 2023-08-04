@@ -1,9 +1,7 @@
 import Foundation
 import WebKit
 
-public protocol BridgeDestination: AnyObject {
-    func bridgeWebViewIsReady() -> Bool
-}
+public protocol BridgeDestination: AnyObject {}
 
 public final class BridgeDelegate {
     public let location: String
