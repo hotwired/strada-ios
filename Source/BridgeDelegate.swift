@@ -20,7 +20,7 @@ public final class BridgeDelegate {
         self.componentTypes = componentTypes
     }
     
-    public func onWebViewAttached(_ webView: WKWebView) {
+    public func webViewDidBecomeActive(_ webView: WKWebView) {
         bridge = Bridge.getBridgeFor(webView)
         bridge?.delegate = self
         
@@ -32,7 +32,7 @@ public final class BridgeDelegate {
         self.webView = webView
     }
     
-    public func onWebViewDetached() {
+    public func webViewDidBecomeDeactivated() {
         bridge?.delegate = nil
         bridge = nil
         webView = nil
