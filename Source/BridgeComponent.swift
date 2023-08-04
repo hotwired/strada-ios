@@ -16,7 +16,7 @@ protocol BridgingComponent: AnyObject {
 }
 
 open class BridgeComponent: BridgingComponent {
-    public class var name: String {
+    open class var name: String {
         fatalError("BridgeComponent subclass must provide a unique 'name'")
     }
     
@@ -26,18 +26,10 @@ open class BridgeComponent: BridgingComponent {
         self.delegate = delegate
     }
     
-    public func handle(message: Message) {
+    open func handle(message: Message) {
         fatalError("BridgeComponent subclass must handle incoming messages")
     }
     
-    public func onViewDidLoad() {}
-    public func onViewWillAppear() {}
-    public func onViewDidAppear() {}
-    public func onViewWillDisappear() {}
-    public func onViewDidDisappear() {}
-}
-
-extension BridgingComponent {
     public func send(message: Message) {
         guard let bridge = delegate.bridge else {
             debugLog("bridgeMessageFailedToSend: bridge is not available")
@@ -46,4 +38,10 @@ extension BridgingComponent {
         
         bridge.send(message)
     }
+    
+    open func onViewDidLoad() {}
+    open func onViewWillAppear() {}
+    open func onViewDidAppear() {}
+    open func onViewWillDisappear() {}
+    open func onViewDidDisappear() {}
 }
