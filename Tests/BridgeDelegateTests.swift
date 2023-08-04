@@ -123,6 +123,7 @@ private class TwoBridgeComponent: BridgeComponent {
 
 private class BridgeSpy: Bridgable {
     var delegate: Strada.BridgeDelegate? = nil
+    var webView: WKWebView? = nil
     
     var registerComponentWasCalled = false
     var registerComponentArg: String? = nil

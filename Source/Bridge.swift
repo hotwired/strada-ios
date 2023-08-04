@@ -18,14 +18,10 @@ protocol Bridgable: AnyObject {
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
 public final class Bridge: Bridgable {
-    public typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
+    typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
     
     weak var delegate: BridgeDelegate?
     weak var webView: WKWebView?
-    
-    deinit {
-        webView?.configuration.userContentController.removeScriptMessageHandler(forName: scriptHandlerName)
-    }
     
     public static func initialize(_ webView: WKWebView) {
         if getBridgeFor(webView) == nil {
@@ -36,6 +32,10 @@ public final class Bridge: Bridgable {
     init(webView: WKWebView) {
         self.webView = webView
         loadIntoWebView()
+    }
+    
+    deinit {
+        webView?.configuration.userContentController.removeScriptMessageHandler(forName: scriptHandlerName)
     }
 
     // MARK: - Internal API
@@ -73,6 +73,29 @@ public final class Bridge: Bridgable {
 //        let replyMessage = message.replacing(data: data)
 //        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
 //    }
+
+    /// Evaluates javaScript string directly as passed in sending through the web view
+    func evaluate(javaScript: String, completion: CompletionHandler? = nil) {
+        guard let webView = webView else {
+            completion?(nil, BridgeError.missingWebView)
+            return
+        }
+        
+        webView.evaluateJavaScript(javaScript) { result, error in
+            if let error = error {
+                debugLog("Error evaluating JavaScript: \(error)")
+            }
+            
+            completion?(result, error)
+        }
+    }
+    
+    /// Evaluates a JavaScript function with optional arguments by encoding the arguments
+    /// Function should not include the parens
+    /// Usage: evaluate(function: "console.log", arguments: ["test"])
+    func evaluate(function: String, arguments: [Any] = [], completion: CompletionHandler? = nil) {
+        evaluate(javaScript: JavaScript(functionName: function, arguments: arguments), completion: completion)
+    }
 
     static func initialize(_ bridge: Bridge) {
         instances.append(bridge)
@@ -126,31 +149,8 @@ public final class Bridge: Bridgable {
             return nil
         }
     }
-
-    // MARK: - JavaScript Evaluation
-
-    /// Evaluates javaScript string directly as passed in sending through the web view
-    public func evaluate(javaScript: String, completion: CompletionHandler? = nil) {
-        guard let webView = webView else {
-            completion?(nil, BridgeError.missingWebView)
-            return
-        }
-        
-        webView.evaluateJavaScript(javaScript) { result, error in
-            if let error = error {
-                debugLog("Error evaluating JavaScript: \(error)")
-            }
-            
-            completion?(result, error)
-        }
-    }
     
-    /// Evaluates a JavaScript function with optional arguments by encoding the arguments
-    /// Function should not include the parens
-    /// Usage: evaluate(function: "console.log", arguments: ["test"])
-    public func evaluate(function: String, arguments: [Any] = [], completion: CompletionHandler? = nil) {
-        evaluate(javaScript: JavaScript(functionName: function, arguments: arguments), completion: completion)
-    }
+    // MARK: - JavaScript Evaluation
     
     private func evaluate(javaScript: JavaScript, completion: CompletionHandler? = nil) {
         do {
