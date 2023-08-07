@@ -1,70 +1,66 @@
 import Foundation
 import WebKit
 
-public protocol BridgeDelegate: AnyObject {
-    func bridgeDidInitialize()
-    func bridgeDidReceiveMessage(_ message: Message)
-}
-
 public enum BridgeError: Error {
     case missingWebView
 }
 
+protocol Bridgable: AnyObject {
+    var delegate: BridgeDelegate? { get set }
+    var webView: WKWebView? { get }
+    
+    func register(component: String)
+    func register(components: [String])
+    func unregister(component: String)
+    func send(_ message: Message)
+}
+
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
-public final class Bridge {
-    public typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
+public final class Bridge: Bridgable {
+    typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
     
-    public var webView: WKWebView? {
-        didSet {
-            guard webView != oldValue else { return }
-            loadIntoWebView()
+    weak var delegate: BridgeDelegate?
+    weak var webView: WKWebView?
+    
+    public static func initialize(_ webView: WKWebView) {
+        if getBridgeFor(webView) == nil {
+            initialize(Bridge(webView: webView))
         }
     }
     
-    public weak var delegate: BridgeDelegate?
-
-    /// This needs to match whatever the JavaScript file uses
-    private let bridgeGlobal = "window.nativeBridge"
-    
-    /// The webkit.messageHandlers name
-    private let scriptHandlerName = "strada"
+    init(webView: WKWebView) {
+        self.webView = webView
+        loadIntoWebView()
+    }
     
     deinit {
         webView?.configuration.userContentController.removeScriptMessageHandler(forName: scriptHandlerName)
     }
-    
-    /// Create a new Bridge object for calling methods on this web view with a delegate
-    /// for receiving messages
-    public init(webView: WKWebView? = nil, delegate: BridgeDelegate? = nil) {
-        self.webView = webView
-        self.delegate = delegate
-        loadIntoWebView()
-    }
 
-    // MARK: - API
+    // MARK: - Internal API
     
     /// Register a single component
     /// - Parameter component: Name of a component to register support for
-    public func register(component: String) {
+    func register(component: String) {
         callBridgeFunction("register", arguments: [component])
     }
     
     /// Register multiple components
     /// - Parameter components: Array of component names to register
-    public func register(components: [String]) {
+    func register(components: [String]) {
         callBridgeFunction("register", arguments: [components])
     }
     
     /// Unregister support for a single component
     /// - Parameter component: Component name
-    public func unregister(component: String) {
+    func unregister(component: String) {
         callBridgeFunction("unregister", arguments: [component])
     }
     
     /// Send a message through the bridge to the web application
     /// - Parameter message: Message to send
-    public func send(_ message: Message) {
+    func send(_ message: Message) {
         let internalMessage = InternalMessage(from: message)
         callBridgeFunction("send", arguments: [internalMessage.toJSON()])
     }
@@ -77,45 +73,9 @@ public final class Bridge {
 //        let replyMessage = message.replacing(data: data)
 //        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
 //    }
-    
-    private func callBridgeFunction(_ function: String, arguments: [Any]) {
-        let js = JavaScript(object: bridgeGlobal, functionName: function, arguments: arguments)
-        evaluate(javaScript: js)
-    }
-
-    // MARK: - Configuration
-    
-    /// Configure the bridge in the provided web view
-    private func loadIntoWebView() {
-        guard let configuration = webView?.configuration else { return }
-
-        // Install user script and message handlers in web view
-        if let userScript = makeUserScript() {
-            configuration.userContentController.addUserScript(userScript)
-        }
-        
-        configuration.userContentController.add(ScriptMessageHandler(delegate: self), name: scriptHandlerName)
-    }
-
-    private func makeUserScript() -> WKUserScript? {
-        guard
-            let path = PathLoader().pathFor(name: "strada", fileType: "js") else {
-                return nil
-        }
-        
-        do {
-            let source = try String(contentsOfFile: path)
-            return WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-        } catch {
-            assertionFailure("Could not open strada.js: \(error)")
-            return nil
-        }
-    }
-
-    // MARK: - JavaScript Evaluation
 
     /// Evaluates javaScript string directly as passed in sending through the web view
-    public func evaluate(javaScript: String, completion: CompletionHandler? = nil) {
+    func evaluate(javaScript: String, completion: CompletionHandler? = nil) {
         guard let webView = webView else {
             completion?(nil, BridgeError.missingWebView)
             return
@@ -133,9 +93,64 @@ public final class Bridge {
     /// Evaluates a JavaScript function with optional arguments by encoding the arguments
     /// Function should not include the parens
     /// Usage: evaluate(function: "console.log", arguments: ["test"])
-    public func evaluate(function: String, arguments: [Any] = [], completion: CompletionHandler? = nil) {
+    func evaluate(function: String, arguments: [Any] = [], completion: CompletionHandler? = nil) {
         evaluate(javaScript: JavaScript(functionName: function, arguments: arguments), completion: completion)
     }
+
+    static func initialize(_ bridge: Bridge) {
+        instances.append(bridge)
+        instances.removeAll { $0.webView == nil }
+    }
+
+    static func getBridgeFor(_ webView: WKWebView) -> Bridge? {
+        return instances.first { $0.webView == webView }
+    }
+    
+    // MARK: Private
+
+    private static var instances: [Bridge] = []
+    /// This needs to match whatever the JavaScript file uses
+    private let bridgeGlobal = "window.nativeBridge"
+    
+    /// The webkit.messageHandlers name
+    private let scriptHandlerName = "strada"
+    
+    private func callBridgeFunction(_ function: String, arguments: [Any]) {
+        let js = JavaScript(object: bridgeGlobal, functionName: function, arguments: arguments)
+        evaluate(javaScript: js)
+    }
+
+    // MARK: - Configuration
+    
+    /// Configure the bridge in the provided web view
+    private func loadIntoWebView() {
+        guard let configuration = webView?.configuration else { return }
+
+        // Install user script and message handlers in web view
+        if let userScript = makeUserScript() {
+            configuration.userContentController.addUserScript(userScript)
+        }
+        
+        let scriptMessageHandler = ScriptMessageHandler(delegate: self)
+        configuration.userContentController.add(scriptMessageHandler, name: scriptHandlerName)
+    }
+
+    private func makeUserScript() -> WKUserScript? {
+        guard
+            let path = PathLoader().pathFor(name: "strada", fileType: "js") else {
+                return nil
+        }
+        
+        do {
+            let source = try String(contentsOfFile: path)
+            return WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        } catch {
+            assertionFailure("Could not open strada.js: \(error)")
+            return nil
+        }
+    }
+    
+    // MARK: - JavaScript Evaluation
     
     private func evaluate(javaScript: JavaScript, completion: CompletionHandler? = nil) {
         do {
@@ -149,12 +164,17 @@ public final class Bridge {
 
 extension Bridge: ScriptMessageHandlerDelegate {
     func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) {
-        if let event = scriptMessage.body as? String, event == "ready" {
+        if let event = scriptMessage.body as? String,
+            event == "ready" {
             delegate?.bridgeDidInitialize()
-        } else if let message = InternalMessage(scriptMessage: scriptMessage) {
-            delegate?.bridgeDidReceiveMessage(message.toMessage())
-        } else {
-            debugLog("Unhandled message received: \(scriptMessage.body)")
+            return
         }
+        
+        if let message = InternalMessage(scriptMessage: scriptMessage) {
+            delegate?.bridgeDidReceiveMessage(message.toMessage())
+            return
+        }
+        
+        debugLog("Unhandled message received: \(scriptMessage.body)")
     }
 }
