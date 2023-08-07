@@ -29,6 +29,11 @@ public final class Bridge: Bridgable {
         }
     }
     
+    public static func userAgentSubstring(for componentTypes: [BridgeComponent.Type]) -> String {
+        let components = componentTypes.map { $0.name }.joined(separator: " ")
+        return "bridge-components: [\(components)]"
+    }
+    
     init(webView: WKWebView) {
         self.webView = webView
         loadIntoWebView()
@@ -37,7 +42,7 @@ public final class Bridge: Bridgable {
     deinit {
         webView?.configuration.userContentController.removeScriptMessageHandler(forName: scriptHandlerName)
     }
-
+    
     // MARK: - Internal API
     
     /// Register a single component
