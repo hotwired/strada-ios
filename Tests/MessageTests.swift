@@ -85,4 +85,16 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(newMessage.metadata, metadata)
         XCTAssertEqual(newMessage.jsonData, jsonData)
     }
+    
+    func testDecodingWithDefaultDecoder() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+    }
 }
