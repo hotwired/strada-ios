@@ -52,3 +52,20 @@ extension Message {
         public let url: String
     }
 }
+
+extension Message {
+    public func decodedJsonData<T: Decodable>() -> T? {
+        guard let data = jsonData.data(using: .utf8) else {
+            debugLog("Error converting json string to data: \(jsonData)")
+            return nil
+        }
+        
+        do {
+            let decoder = JsonDataDecoder.appDecoder
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            debugLog("Error decoding json: \(jsonData) -> \(error)")
+            return nil
+        }
+    }
+}
