@@ -28,6 +28,10 @@
 		E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */; };
 		E2DB15932A7282CF001EE08C /* BridgeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15922A7282CF001EE08C /* BridgeComponent.swift */; };
 		E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */; };
+		E2FDCF982A8297DA003D27AE /* BridgeComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */; };
+		E2FDCF9B2A829AEE003D27AE /* BridgeSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */; };
+		E2FDCF9D2A829C6F003D27AE /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9C2A829C6F003D27AE /* TestData.swift */; };
+		E2FDCF9F2A829CA0003D27AE /* BridgeComponentSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9E2A829CA0003D27AE /* BridgeComponentSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +69,10 @@
 		E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegate.swift; sourceTree = "<group>"; };
 		E2DB15922A7282CF001EE08C /* BridgeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponent.swift; sourceTree = "<group>"; };
 		E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegateTests.swift; sourceTree = "<group>"; };
+		E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponentTests.swift; sourceTree = "<group>"; };
+		E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeSpy.swift; sourceTree = "<group>"; };
+		E2FDCF9C2A829C6F003D27AE /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		E2FDCF9E2A829CA0003D27AE /* BridgeComponentSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponentSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,12 +135,15 @@
 		9274F1F22229963B003E85F4 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E2FDCF9C2A829C6F003D27AE /* TestData.swift */,
+				E2FDCF992A829AD5003D27AE /* Spies */,
 				C1EB052D2588201600933244 /* BridgeTests.swift */,
 				C11349C1258801F6000A6E56 /* JavaScriptTests.swift */,
 				C1EB05252588133D00933244 /* MessageTests.swift */,
 				9274F1F52229963B003E85F4 /* Info.plist */,
 				E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */,
 				E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */,
+				E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -146,6 +157,15 @@
 				E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E2FDCF992A829AD5003D27AE /* Spies */ = {
+			isa = PBXGroup;
+			children = (
+				E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */,
+				E2FDCF9E2A829CA0003D27AE /* BridgeComponentSpy.swift */,
+			);
+			path = Spies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,9 +303,13 @@
 			files = (
 				E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */,
 				C11349C2258801F6000A6E56 /* JavaScriptTests.swift in Sources */,
+				E2FDCF982A8297DA003D27AE /* BridgeComponentTests.swift in Sources */,
+				E2FDCF9D2A829C6F003D27AE /* TestData.swift in Sources */,
+				E2FDCF9B2A829AEE003D27AE /* BridgeSpy.swift in Sources */,
 				C1EB052E2588201600933244 /* BridgeTests.swift in Sources */,
 				E20978442A6EAF3600CDEEE5 /* InternalMessageTests.swift in Sources */,
 				C1EB05262588133D00933244 /* MessageTests.swift in Sources */,
+				E2FDCF9F2A829CA0003D27AE /* BridgeComponentSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

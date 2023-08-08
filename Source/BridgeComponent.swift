@@ -83,6 +83,13 @@ open class BridgeComponent: BridgingComponent {
         return reply(with: messageReply)
     }
     
+    /// Returns the last received message for a given `event`, if available.
+    /// - Parameter event: The event name.
+    /// - Returns: The last received message, or nil.
+    public func receivedMessage(for event: String) -> Message? {
+        return receivedMessages[event]
+    }
+    
     /// Called when a message is received from the web bridge.
     /// Handle the message for its `event` type for the custom component's behavior.
     /// - Parameter message: The `message` received from the web bridge.
@@ -145,11 +152,4 @@ open class BridgeComponent: BridgingComponent {
     // MARK: Private
     
     private var receivedMessages = [String: Message]()
-    
-    /// Returns the last received message for a given `event`, if available.
-    /// - Parameter event: The event name.
-    /// - Returns: The last received message, or nil.
-    private func receivedMessage(for event: String) -> Message? {
-        return receivedMessages[event]
-    }
 }
