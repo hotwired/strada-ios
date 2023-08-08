@@ -114,6 +114,16 @@ class BridgeTests: XCTestCase {
         
         waitForExpectations(timeout: 2)
     }
+    
+    func testUserAgentSubstringWithTwoComponents() {
+        let userAgentSubstring = Bridge.userAgentSubstring(for: [OneBridgeComponent.self, TwoBridgeComponent.self])
+        XCTAssertEqual(userAgentSubstring, "bridge-components: [one two]")
+    }
+    
+    func testUserAgentSubstringWithNoComponents() {
+        let userAgentSubstring = Bridge.userAgentSubstring(for: [])
+        XCTAssertEqual(userAgentSubstring, "bridge-components: []")
+    }
 }
 
 private final class TestWebView: WKWebView {
@@ -123,4 +133,24 @@ private final class TestWebView: WKWebView {
         lastEvaluatedJavaScript = javaScriptString
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
+}
+
+private class OneBridgeComponent: BridgeComponent {
+    static override var name: String { "one" }
+    
+    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
+        super.init(destination: destination, delegate: delegate)
+    }
+    
+    override func handle(message: Strada.Message) {}
+}
+
+private class TwoBridgeComponent: BridgeComponent {
+    static override var name: String { "two" }
+    
+    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
+        super.init(destination: destination, delegate: delegate)
+    }
+    
+    override func handle(message: Strada.Message) {}
 }
