@@ -18,6 +18,7 @@
 		C1EB05262588133D00933244 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB05252588133D00933244 /* MessageTests.swift */; };
 		C1EB052E2588201600933244 /* BridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB052D2588201600933244 /* BridgeTests.swift */; };
 		CBAFC52926F9863900C6662E /* PathLoaderXcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */; };
+		E200E7D12A814D4500E41FA9 /* JsonDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E200E7D02A814D4500E41FA9 /* JsonDataDecoder.swift */; };
 		E20978422A6E9E6B00CDEEE5 /* InternalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978412A6E9E6B00CDEEE5 /* InternalMessage.swift */; };
 		E20978442A6EAF3600CDEEE5 /* InternalMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */; };
 		E20978472A7135E700CDEEE5 /* Encodable+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978462A7135E700CDEEE5 /* Encodable+Utils.swift */; };
@@ -54,6 +55,7 @@
 		C1EB05252588133D00933244 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		C1EB052D2588201600933244 /* BridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeTests.swift; sourceTree = "<group>"; };
 		CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathLoaderXcode.swift; sourceTree = "<group>"; };
+		E200E7D02A814D4500E41FA9 /* JsonDataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonDataDecoder.swift; sourceTree = "<group>"; };
 		E20978412A6E9E6B00CDEEE5 /* InternalMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalMessage.swift; sourceTree = "<group>"; };
 		E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalMessageTests.swift; sourceTree = "<group>"; };
 		E20978462A7135E700CDEEE5 /* Encodable+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Utils.swift"; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				E20978412A6E9E6B00CDEEE5 /* InternalMessage.swift */,
 				E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */,
 				E2DB15922A7282CF001EE08C /* BridgeComponent.swift */,
+				E200E7D02A814D4500E41FA9 /* JsonDataDecoder.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 			files = (
 				E209784B2A714D4E00CDEEE5 /* String+JSON.swift in Sources */,
 				C11349A62587EFFB000A6E56 /* ScriptMessageHandler.swift in Sources */,
+				E200E7D12A814D4500E41FA9 /* JsonDataDecoder.swift in Sources */,
 				E20978472A7135E700CDEEE5 /* Encodable+Utils.swift in Sources */,
 				E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */,
 				C11349B22587F31E000A6E56 /* JavaScript.swift in Sources */,
