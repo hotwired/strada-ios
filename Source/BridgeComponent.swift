@@ -16,6 +16,11 @@ protocol BridgingComponent: AnyObject {
 }
 
 open class BridgeComponent: BridgingComponent {
+    /// A unique name representing the `BridgeComponent` type.
+    ///
+    /// Subclasses must provide their own implementation of this property.
+    ///
+    /// - Note: This property is used for identifying the component.
     open class var name: String {
         fatalError("BridgeComponent subclass must provide a unique 'name'")
     }
@@ -26,17 +31,63 @@ open class BridgeComponent: BridgingComponent {
         self.delegate = delegate
     }
     
-    open func onReceive(message: Message) {
-        fatalError("BridgeComponent subclass must handle incoming messages")
-    }
-    
-    public func reply(with message: Message) {
+    @discardableResult
+    /// Replies to the web with a received message, optionally replacing its `event` or `jsonData`.
+    ///
+    /// - Parameter message: The message to be replied with.
+    /// - Returns: `true` if the reply was successful, `false` if the bridge is not available.
+    public func reply(with message: Message) -> Bool {
         guard let bridge = delegate.bridge else {
             debugLog("bridgeMessageFailedToReply: bridge is not available")
-            return
+            return false
         }
         
         bridge.reply(with: message)
+        return true
+    }
+    
+    @discardableResult
+    /// Replies to the web with the last received message for a given `event` with its original `jsonData`.
+    ///
+    /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
+    ///
+    /// - Parameter event: The `event` for which a reply should be sent.
+    /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
+    public func reply(to event: String) -> Bool {
+        guard let message = receivedMessage(for: event) else {
+            debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
+            return false
+        }
+        
+        return reply(with: message)
+    }
+    
+    
+    @discardableResult
+    /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`.
+    ///
+    /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
+    ///
+    /// - Parameters:
+    ///   - event: The `event` for which a reply should be sent.
+    ///   - jsonData: The `jsonData` to be included in the reply message.
+    /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
+    public func reply(to event: String, jsonData: String) -> Bool {
+        guard let message = receivedMessage(for: event) else {
+            debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
+            return false
+        }
+        
+        let messageReply = message.replacing(jsonData: jsonData)
+        
+        return reply(with: messageReply)
+    }
+    
+    /// Called when a message is received from the web bridge.
+    /// Handle the message for its `event` type for the custom component's behavior.
+    /// - Parameter message: The `message` received from the web bridge.
+    open func onReceive(message: Message) {
+        fatalError("BridgeComponent subclass must handle incoming messages")
     }
     
     /// Called when the component's destination view is loaded into memory
@@ -94,4 +145,11 @@ open class BridgeComponent: BridgingComponent {
     // MARK: Private
     
     private var receivedMessages = [String: Message]()
+    
+    /// Returns the last received message for a given `event`, if available.
+    /// - Parameter event: The event name.
+    /// - Returns: The last received message, or nil.
+    private func receivedMessage(for event: String) -> Message? {
+        return receivedMessages[event]
+    }
 }
