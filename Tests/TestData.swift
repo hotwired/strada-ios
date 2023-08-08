@@ -22,3 +22,16 @@ final class TwoBridgeComponent: BridgeComponent {
     
     override func onReceive(message: Message) {}
 }
+
+struct PageData: Codable {
+    let metadata: InternalMessage.Metadata
+    let title: String
+    let subtitle: String
+    let actions: [String]
+}
+
+struct MessageData: Codable, Equatable {
+    let title: String
+    let subtitle: String
+    let actionName: String
+}

@@ -89,7 +89,7 @@ class MessageTests: XCTestCase {
     func test_decodingWithDefaultDecoder() {
         let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
-        {"title":"Page-title","subtitle":"Page-subtitle", "eventName": "test"}
+        {"title":"Page-title","subtitle":"Page-subtitle", "actionName": "go"}
         """
         let message = Message(id: "1",
                               component: "page",
@@ -97,13 +97,13 @@ class MessageTests: XCTestCase {
                               metadata: metadata,
                               jsonData: jsonData)
         
-        let dataObject = TestEvent(title: "Page-title",
+        let pageData = MessageData(title: "Page-title",
                                    subtitle: "Page-subtitle",
-                                   eventName: "test")
+                                   actionName: "go")
         
-        let event: TestEvent? = message.decodedJsonData()
+        let decodedMessageData: MessageData? = message.decodedJsonData()
         
-        XCTAssertEqual(dataObject, event)
+        XCTAssertEqual(decodedMessageData, pageData)
     }
     
     func test_decodingWithCustomDecoder() {
@@ -113,7 +113,7 @@ class MessageTests: XCTestCase {
         
         let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
-        {"title":"Page-title","subtitle":"Page-subtitle", "event_name": "test"}
+        {"title":"Page-title","subtitle":"Page-subtitle", "action_name": "go"}
         """
         let message = Message(id: "1",
                               component: "page",
@@ -121,18 +121,12 @@ class MessageTests: XCTestCase {
                               metadata: metadata,
                               jsonData: jsonData)
         
-        let dataObject = TestEvent(title: "Page-title",
+        let pageData = MessageData(title: "Page-title",
                                    subtitle: "Page-subtitle",
-                                   eventName: "test")
+                                   actionName: "go")
         
-        let event: TestEvent? = message.decodedJsonData()
+        let decodedMessageData: MessageData? = message.decodedJsonData()
         
-        XCTAssertEqual(dataObject, event)
+        XCTAssertEqual(decodedMessageData, pageData)
     }
-}
-
-private struct TestEvent: Codable, Equatable {
-    let title: String
-    let subtitle: String
-    let eventName: String
 }
