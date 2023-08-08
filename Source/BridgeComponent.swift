@@ -39,9 +39,59 @@ open class BridgeComponent: BridgingComponent {
         bridge.reply(with: message)
     }
     
+    /// Called when the component's destination view is loaded into memory
+    /// (and is active) based on its lifecycle events.
+    /// You can use this as an opportunity to update the component's state/view.
     open func onViewDidLoad() {}
+    
+    /// Called when the component's destination view is about to be added to a view hierarchy
+    /// (and is active) based on its lifecycle events.
+    /// You can use this as an opportunity to update the component's state/view.
     open func onViewWillAppear() {}
+    
+    /// Called when the component's destination view was added to a view hierarchy
+    /// (and is active) based on its lifecycle events.
+    /// You can use this as an opportunity to update the component's state/view.
     open func onViewDidAppear() {}
+    
+    /// Called when the component's destination view is about to be removed from a view hierarchy
+    /// (and is inactive) based on its lifecycle events.
+    /// You can use this as an opportunity to update the component's state/view.
     open func onViewWillDisappear() {}
+    
+    /// Called when the component's destination view was removed from a view hierarchy
+    /// (and is inactive) based on its lifecycle events.
+    /// You can use this as an opportunity to update the component's state/view.
     open func onViewDidDisappear() {}
+    
+    // MARK: Internal
+    
+    func didReceive(message: Message) {
+        receivedMessages[message.event] = message
+        onReceive(message: message)
+    }
+    
+    func viewDidLoad() {
+        onViewDidLoad()
+    }
+    
+    func viewWillAppear() {
+        onViewWillAppear()
+    }
+    
+    func viewDidAppear() {
+        onViewDidAppear()
+    }
+    
+    func viewWillDisappear() {
+        onViewWillDisappear()
+    }
+    
+    func viewDidDisappear() {
+        onViewDidDisappear()
+    }
+    
+    // MARK: Private
+    
+    private var receivedMessages = [String: Message]()
 }
