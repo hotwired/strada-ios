@@ -12,7 +12,7 @@ protocol Bridgable: AnyObject {
     func register(component: String)
     func register(components: [String])
     func unregister(component: String)
-    func send(_ message: Message)
+    func reply(with message: Message)
 }
 
 /// `Bridge` is the object for configuring a web view and
@@ -65,9 +65,10 @@ public final class Bridge: Bridgable {
     
     /// Send a message through the bridge to the web application
     /// - Parameter message: Message to send
-    func send(_ message: Message) {
+    func reply(with message: Message) {
+        debugLog("bridgeWillReplyWithMessage \(message)")
         let internalMessage = InternalMessage(from: message)
-        callBridgeFunction("send", arguments: [internalMessage.toJSON()])
+        callBridgeFunction("replyWith", arguments: [internalMessage.toJSON()])
     }
     
 //    /// Convenience method to reply to a previously received message. Data will be replaced,

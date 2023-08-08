@@ -30,13 +30,13 @@ open class BridgeComponent: BridgingComponent {
         fatalError("BridgeComponent subclass must handle incoming messages")
     }
     
-    public func send(message: Message) {
+    public func reply(with message: Message) {
         guard let bridge = delegate.bridge else {
-            debugLog("bridgeMessageFailedToSend: bridge is not available")
+            debugLog("bridgeMessageFailedToReply: bridge is not available")
             return
         }
         
-        bridge.send(message)
+        bridge.reply(with: message)
     }
     
     open func onViewDidLoad() {}

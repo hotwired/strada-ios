@@ -67,8 +67,8 @@ class BridgeTests: XCTestCase {
                               jsonData: data)
 
         
-        bridge.send(message)
-        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.send({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
+        bridge.reply(with: message)
+        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.replyWith({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
     }
     
     func testEvaluateJavaScript() {

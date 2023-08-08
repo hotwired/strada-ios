@@ -217,8 +217,8 @@ private class BridgeSpy: Bridgable {
     var unregisterComponentWasCalled = false
     var unregisterComponentArg: String? = nil
     
-    var sendMessageWasCalled = false
-    var sendMessageArg: Message? = nil
+    var replyWithMessageWasCalled = false
+    var replyWithMessageArg: Message? = nil
     
     func register(component: String) {
         registerComponentWasCalled = true
@@ -235,8 +235,8 @@ private class BridgeSpy: Bridgable {
         unregisterComponentArg = component
     }
     
-    func send(_ message: Strada.Message) {
-        sendMessageWasCalled = true
-        sendMessageArg = message
+    func reply(with message: Message) {
+        replyWithMessageWasCalled = true
+        replyWithMessageArg = message
     }
 }
