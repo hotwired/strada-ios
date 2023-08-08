@@ -142,7 +142,7 @@ private class OneBridgeComponent: BridgeComponent {
         super.init(destination: destination, delegate: delegate)
     }
     
-    override func handle(message: Strada.Message) {}
+    override func onReceive(message: Message) {}
 }
 
 private class TwoBridgeComponent: BridgeComponent {
@@ -152,5 +152,5 @@ private class TwoBridgeComponent: BridgeComponent {
         super.init(destination: destination, delegate: delegate)
     }
     
-    override func handle(message: Strada.Message) {}
+    override func onReceive(message: Message) {}
 }

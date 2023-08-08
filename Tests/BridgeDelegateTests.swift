@@ -54,8 +54,8 @@ class BridgeDelegateTests: XCTestCase {
         
         XCTAssertNotNil(component)
         // Make sure the component has delegate set, and did receive the message.
-        XCTAssertTrue(component!.handleMessageWasCalled)
-        XCTAssertEqual(component?.handleMessageArg, message)
+        XCTAssertTrue(component!.onReceiveMessageWasCalled)
+        XCTAssertEqual(component?.onReceiveMessageArg, message)
         XCTAssertNotNil(component?.delegate)
     }
     
@@ -158,15 +158,15 @@ private class OneBridgeComponent: BridgeComponent {
     required init(destination: BridgeDestination, delegate: BridgeDelegate) {
         super.init(destination: destination, delegate: delegate)
     }
-    
-    override func handle(message: Strada.Message) {}
+
+    override func onReceive(message: Message) {}
 }
 
 private class BridgeComponentSpy: BridgeComponent {
     static override var name: String { "two" }
     
-    var handleMessageWasCalled = false
-    var handleMessageArg: Message?
+    var onReceiveMessageWasCalled = false
+    var onReceiveMessageArg: Message?
     
     var onViewDidLoadWasCalled = false
     var onViewWillAppearWasCalled = false
@@ -178,9 +178,9 @@ private class BridgeComponentSpy: BridgeComponent {
         super.init(destination: destination, delegate: delegate)
     }
     
-    override func handle(message: Strada.Message) {
-        handleMessageWasCalled = true
-        handleMessageArg = message
+    override func onReceive(message: Message) {
+        onReceiveMessageWasCalled = true
+        onReceiveMessageArg = message
     }
     
     override func onViewDidLoad() {

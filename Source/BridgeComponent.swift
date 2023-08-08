@@ -7,7 +7,7 @@ protocol BridgingComponent: AnyObject {
     init(destination: BridgeDestination,
          delegate: BridgeDelegate)
     
-    func handle(message: Message)
+    func onReceive(message: Message)
     func onViewDidLoad()
     func onViewWillAppear()
     func onViewDidAppear()
@@ -26,7 +26,7 @@ open class BridgeComponent: BridgingComponent {
         self.delegate = delegate
     }
     
-    open func handle(message: Message) {
+    open func onReceive(message: Message) {
         fatalError("BridgeComponent subclass must handle incoming messages")
     }
     
