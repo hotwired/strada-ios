@@ -86,15 +86,53 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(newMessage.jsonData, jsonData)
     }
     
-    func testDecodingWithDefaultDecoder() {
+    func test_decodingWithDefaultDecoder() {
         let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
-        {"title":"Page-title","subtitle":"Page-subtitle"}
+        {"title":"Page-title","subtitle":"Page-subtitle", "eventName": "test"}
         """
         let message = Message(id: "1",
                               component: "page",
                               event: "connect",
                               metadata: metadata,
                               jsonData: jsonData)
+        
+        let dataObject = TestEvent(title: "Page-title",
+                                   subtitle: "Page-subtitle",
+                                   eventName: "test")
+        
+        let event: TestEvent? = message.decodedJsonData()
+        
+        XCTAssertEqual(dataObject, event)
     }
+    
+    func test_decodingWithCustomDecoder() {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        JsonDataDecoder.appDecoder = decoder
+        
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle", "event_name": "test"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        
+        let dataObject = TestEvent(title: "Page-title",
+                                   subtitle: "Page-subtitle",
+                                   eventName: "test")
+        
+        let event: TestEvent? = message.decodedJsonData()
+        
+        XCTAssertEqual(dataObject, event)
+    }
+}
+
+private struct TestEvent: Codable, Equatable {
+    let title: String
+    let subtitle: String
+    let eventName: String
 }
