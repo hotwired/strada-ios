@@ -3,8 +3,8 @@ import Foundation
 /// A `Message` is the structure sent back and forth over the bridge
 /// to enable communication between native and web apps
 public struct Message: Equatable {
-    /// A unique identifier for this message. You can reply to messages by sending
-    /// the same message back, or creating a new message with the same id
+    /// A unique identifier for this message. When you reply to the web with
+    /// a message, this identifier is used to find its previously sent message.
     public let id: String
     
     /// The component the message is sent from (e.g. - "form", "page", etc)
@@ -20,11 +20,11 @@ public struct Message: Equatable {
     /// For a "page" component, this might be `{"title": "Page Title"}`.
     public let jsonData: String
     
-    public init(id: String,
-                component: String,
-                event: String,
-                metadata: Metadata?,
-                jsonData: String) {
+    init(id: String,
+         component: String,
+         event: String,
+         metadata: Metadata?,
+         jsonData: String) {
         self.id = id
         self.component = component
         self.event = event

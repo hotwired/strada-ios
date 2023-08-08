@@ -12,7 +12,7 @@ protocol Bridgable: AnyObject {
     func register(component: String)
     func register(components: [String])
     func unregister(component: String)
-    func send(_ message: Message)
+    func reply(with message: Message)
 }
 
 /// `Bridge` is the object for configuring a web view and
@@ -48,26 +48,27 @@ public final class Bridge: Bridgable {
     /// Register a single component
     /// - Parameter component: Name of a component to register support for
     func register(component: String) {
-        callBridgeFunction("register", arguments: [component])
+        callBridgeFunction(.register, arguments: [component])
     }
     
     /// Register multiple components
     /// - Parameter components: Array of component names to register
     func register(components: [String]) {
-        callBridgeFunction("register", arguments: [components])
+        callBridgeFunction(.register, arguments: [components])
     }
     
     /// Unregister support for a single component
     /// - Parameter component: Component name
     func unregister(component: String) {
-        callBridgeFunction("unregister", arguments: [component])
+        callBridgeFunction(.unregister, arguments: [component])
     }
     
     /// Send a message through the bridge to the web application
     /// - Parameter message: Message to send
-    func send(_ message: Message) {
+    func reply(with message: Message) {
+        debugLog("bridgeWillReplyWithMessage \(message)")
         let internalMessage = InternalMessage(from: message)
-        callBridgeFunction("send", arguments: [internalMessage.toJSON()])
+        callBridgeFunction(.replyWith, arguments: [internalMessage.toJSON()])
     }
     
 //    /// Convenience method to reply to a previously received message. Data will be replaced,
@@ -120,8 +121,8 @@ public final class Bridge: Bridgable {
     /// The webkit.messageHandlers name
     private let scriptHandlerName = "strada"
     
-    private func callBridgeFunction(_ function: String, arguments: [Any]) {
-        let js = JavaScript(object: bridgeGlobal, functionName: function, arguments: arguments)
+    private func callBridgeFunction(_ function: JavaScriptBridgeFunction, arguments: [Any]) {
+        let js = JavaScript(object: bridgeGlobal, functionName: function.rawValue, arguments: arguments)
         evaluate(javaScript: js)
     }
 
@@ -164,6 +165,12 @@ public final class Bridge: Bridgable {
             debugLog("Error evaluating JavaScript: \(javaScript), error: \(error)")
             completion?(nil, error)
         }
+    }
+    
+    private enum JavaScriptBridgeFunction: String {
+        case register
+        case unregister
+        case replyWith
     }
 }
 

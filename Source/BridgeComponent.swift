@@ -7,7 +7,7 @@ protocol BridgingComponent: AnyObject {
     init(destination: BridgeDestination,
          delegate: BridgeDelegate)
     
-    func handle(message: Message)
+    func onReceive(message: Message)
     func onViewDidLoad()
     func onViewWillAppear()
     func onViewDidAppear()
@@ -26,17 +26,17 @@ open class BridgeComponent: BridgingComponent {
         self.delegate = delegate
     }
     
-    open func handle(message: Message) {
+    open func onReceive(message: Message) {
         fatalError("BridgeComponent subclass must handle incoming messages")
     }
     
-    public func send(message: Message) {
+    public func reply(with message: Message) {
         guard let bridge = delegate.bridge else {
-            debugLog("bridgeMessageFailedToSend: bridge is not available")
+            debugLog("bridgeMessageFailedToReply: bridge is not available")
             return
         }
         
-        bridge.send(message)
+        bridge.reply(with: message)
     }
     
     open func onViewDidLoad() {}

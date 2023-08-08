@@ -87,7 +87,7 @@ public final class BridgeDelegate {
         }
         
         debugLog("bridgeDidReceiveMessage: \(message)")
-        getOrCreateComponent(name: message.component)?.handle(message: message)
+        getOrCreateComponent(name: message.component)?.onReceive(message: message)
         
         return true
     }

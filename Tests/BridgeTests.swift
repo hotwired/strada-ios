@@ -67,8 +67,8 @@ class BridgeTests: XCTestCase {
                               jsonData: data)
 
         
-        bridge.send(message)
-        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.send({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
+        bridge.reply(with: message)
+        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.replyWith({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
     }
     
     func testEvaluateJavaScript() {
@@ -142,7 +142,7 @@ private class OneBridgeComponent: BridgeComponent {
         super.init(destination: destination, delegate: delegate)
     }
     
-    override func handle(message: Strada.Message) {}
+    override func onReceive(message: Message) {}
 }
 
 private class TwoBridgeComponent: BridgeComponent {
@@ -152,5 +152,5 @@ private class TwoBridgeComponent: BridgeComponent {
         super.init(destination: destination, delegate: delegate)
     }
     
-    override func handle(message: Strada.Message) {}
+    override func onReceive(message: Message) {}
 }
