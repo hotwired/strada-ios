@@ -45,6 +45,24 @@ public struct Message: Equatable {
                 metadata: metadata,
                 jsonData: updatedData ?? jsonData)
     }
+    
+    public func replacing<T: Encodable>(event updatedEvent: String? = nil,
+                                        jsonEncodableData encodable: T? = nil) -> Message {
+        
+        let data: String?
+        if let encodable,
+           let jsonData = try? JsonDataDecoder.appEncoder.encode(encodable) {
+            data = String(data: jsonData, encoding: .utf8)
+        } else {
+            data = nil
+        }
+        
+        return Message(id: id,
+                       component: component,
+                       event: updatedEvent ?? event,
+                       metadata: metadata,
+                       jsonData: data ?? jsonData)
+    }
 }
 
 extension Message {
