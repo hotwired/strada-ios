@@ -5,14 +5,14 @@ import WebKit
 
 class BridgeDelegateTests: XCTestCase {
     private var delegate: BridgeDelegate!
-    private var destination: BridgeDestinationSpy!
+    private var destination: AppBridgeDestination!
     private var bridge: BridgeSpy!
     private let json = """
         {"title":"Page-title","subtitle":"Page-subtitle"}
     """
     
     override func setUp() async throws {
-        destination = BridgeDestinationSpy()
+        destination = AppBridgeDestination()
         delegate = BridgeDelegate(location: "https://37signals.com",
                                   destination: destination,
                                   componentTypes: [OneBridgeComponent.self, BridgeComponentSpy.self])
@@ -147,96 +147,5 @@ class BridgeDelegateTests: XCTestCase {
                        event: "connect",
                        metadata: .init(url: "https://37signals.com"),
                        jsonData: json)
-    }
-}
-
-private class BridgeDestinationSpy: BridgeDestination {}
-
-private class OneBridgeComponent: BridgeComponent {
-    static override var name: String { "one" }
-    
-    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
-        super.init(destination: destination, delegate: delegate)
-    }
-
-    override func onReceive(message: Message) {}
-}
-
-private class BridgeComponentSpy: BridgeComponent {
-    static override var name: String { "two" }
-    
-    var onReceiveMessageWasCalled = false
-    var onReceiveMessageArg: Message?
-    
-    var onViewDidLoadWasCalled = false
-    var onViewWillAppearWasCalled = false
-    var onViewDidAppearWasCalled = false
-    var onViewWillDisappearWasCalled = false
-    var onViewDidDisappearWasCalled = false
-    
-    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
-        super.init(destination: destination, delegate: delegate)
-    }
-    
-    override func onReceive(message: Message) {
-        onReceiveMessageWasCalled = true
-        onReceiveMessageArg = message
-    }
-    
-    override func onViewDidLoad() {
-        onViewDidLoadWasCalled = true
-    }
-    
-    override func onViewWillAppear() {
-        onViewWillAppearWasCalled = true
-    }
-    
-    override func onViewDidAppear() {
-        onViewDidAppearWasCalled = true
-    }
-    
-    override func onViewWillDisappear() {
-        onViewWillDisappearWasCalled = true
-    }
-    
-    override func onViewDidDisappear() {
-        onViewDidDisappearWasCalled = true
-    }
-}
-
-private class BridgeSpy: Bridgable {
-    var delegate: Strada.BridgeDelegate? = nil
-    var webView: WKWebView? = nil
-    
-    var registerComponentWasCalled = false
-    var registerComponentArg: String? = nil
-    
-    var registerComponentsWasCalled = false
-    var registerComponentsArg: [String]? = nil
-    
-    var unregisterComponentWasCalled = false
-    var unregisterComponentArg: String? = nil
-    
-    var replyWithMessageWasCalled = false
-    var replyWithMessageArg: Message? = nil
-    
-    func register(component: String) {
-        registerComponentWasCalled = true
-        registerComponentArg = component
-    }
-    
-    func register(components: [String]) {
-        registerComponentsWasCalled = true
-        registerComponentsArg = components
-    }
-    
-    func unregister(component: String) {
-        unregisterComponentWasCalled = true
-        unregisterComponentArg = component
-    }
-    
-    func reply(with message: Message) {
-        replyWithMessageWasCalled = true
-        replyWithMessageArg = message
     }
 }

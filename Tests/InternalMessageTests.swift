@@ -77,7 +77,7 @@ class InternalMessageTests: XCTestCase {
         XCTAssertEqual(message?.component, "page")
         XCTAssertEqual(message?.event, "connect")
         
-        let page: Page? = try? message?.data.jsonData()?.decoded()
+        let page: PageData? = try? message?.data.jsonData()?.decoded()
         XCTAssertEqual(page?.title, "Page-title")
         XCTAssertEqual(page?.subtitle, "Page-subtitle")
         XCTAssertEqual(page?.actions[0], "one")
@@ -100,19 +100,12 @@ class InternalMessageTests: XCTestCase {
         XCTAssertEqual(message?.data, [:])
     }
     
-    private func createPage() -> Page {
-        return Page(
+    private func createPage() -> PageData {
+        return PageData(
             metadata: InternalMessage.Metadata(url: "https://37signals.com"),
             title: "Page-title",
             subtitle: "Page-subtitle",
             actions: ["one", "two", "three"]
         )
-    }
-    
-    private struct Page: Codable {
-        let metadata: InternalMessage.Metadata
-        let title: String
-        let subtitle: String
-        let actions: [String]
     }
 }

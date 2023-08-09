@@ -39,28 +39,28 @@ public final class BridgeDelegate {
     public func onViewDidLoad() {
         debugLog("bridgeDestinationViewDidLoad: \(location)")
         destinationIsActive = true
-        activeComponents.forEach { $0.onViewDidLoad() }
+        activeComponents.forEach { $0.viewDidLoad() }
     }
     
     public func onViewWillAppear() {
         debugLog("bridgeDestinationViewWillAppear: \(location)")
         destinationIsActive = true
-        activeComponents.forEach { $0.onViewWillAppear() }
+        activeComponents.forEach { $0.viewWillAppear() }
     }
     
     public func onViewDidAppear() {
         debugLog("bridgeDestinationViewDidAppear: \(location)")
         destinationIsActive = true
-        activeComponents.forEach { $0.onViewDidAppear() }
+        activeComponents.forEach { $0.viewDidAppear() }
     }
     
     public func onViewWillDisappear() {
-        activeComponents.forEach { $0.onViewWillDisappear() }
+        activeComponents.forEach { $0.viewWillDisappear() }
         debugLog("bridgeDestinationViewWillDisappear: \(location)")
     }
     
     public func onViewDidDisappear() {
-        activeComponents.forEach { $0.onViewDidDisappear() }
+        activeComponents.forEach { $0.viewDidDisappear() }
         destinationIsActive = false
         debugLog("bridgeDestinationViewDidDisappear: \(location)")
     }
@@ -87,7 +87,7 @@ public final class BridgeDelegate {
         }
         
         debugLog("bridgeDidReceiveMessage: \(message)")
-        getOrCreateComponent(name: message.component)?.onReceive(message: message)
+        getOrCreateComponent(name: message.component)?.didReceive(message: message)
         
         return true
     }
