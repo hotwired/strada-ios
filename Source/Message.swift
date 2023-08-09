@@ -82,7 +82,7 @@ extension Message {
 }
 
 extension Message {
-    public func decodedJsonData<T: Decodable>() -> T? {
+    public func decodedDataObject<T: Decodable>() -> T? {
         guard let data = jsonData.data(using: .utf8) else {
             debugLog("Error converting json string to data: \(jsonData)")
             return nil

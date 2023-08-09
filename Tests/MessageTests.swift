@@ -194,7 +194,7 @@ class MessageTests: XCTestCase {
                                    subtitle: "Page-subtitle",
                                    actionName: "go")
         
-        let decodedMessageData: MessageData? = message.decodedJsonData()
+        let decodedMessageData: MessageData? = message.decodedDataObject()
         
         XCTAssertEqual(decodedMessageData, pageData)
     }
@@ -217,7 +217,7 @@ class MessageTests: XCTestCase {
                                    subtitle: "Page-subtitle",
                                    actionName: "go")
         
-        let decodedMessageData: MessageData? = message.decodedJsonData()
+        let decodedMessageData: MessageData? = message.decodedDataObject()
         
         XCTAssertEqual(decodedMessageData, pageData)
     }
