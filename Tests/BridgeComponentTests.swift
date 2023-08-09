@@ -71,7 +71,7 @@ class BridgeComponentTest: XCTestCase {
         let newJsonData = "{\"title\":\"hey\",\"subtitle\":\"\",\"actionName\":\"tap\"}"
         let newMessage = message.replacing(jsonData: newJsonData)
         
-        let success = component.reply(to: "connect", encodable: messageData)
+        let success = component.reply(to: "connect", with: messageData)
         
         XCTAssertTrue(success)
         XCTAssertTrue(bridge.replyWithMessageWasCalled)
@@ -81,7 +81,7 @@ class BridgeComponentTest: XCTestCase {
     func test_replyToMessageNotReceivedWithACodableObjectIgnoresTheReply() {
         let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
         
-        let success = component.reply(to: "disconnect", encodable: messageData)
+        let success = component.reply(to: "disconnect", with: messageData)
         
         XCTAssertFalse(success)
         XCTAssertFalse(bridge.replyWithMessageWasCalled)
@@ -97,7 +97,7 @@ class BridgeComponentTest: XCTestCase {
     }
     
     func test_replyToMessageNotReceivedWithJsonDataIgnoresTheReply() {
-        let success = component.reply(to: "disconnect", jsonData: "{\"title\":\"Page-title\"}")
+        let success = component.reply(to: "disconnect", with: "{\"title\":\"Page-title\"}")
         
         XCTAssertFalse(success)
         XCTAssertFalse(bridge.replyWithMessageWasCalled)

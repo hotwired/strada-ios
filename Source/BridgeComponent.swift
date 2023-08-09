@@ -72,7 +72,7 @@ open class BridgeComponent: BridgingComponent {
     ///   - event: The `event` for which a reply should be sent.
     ///   - jsonData: The `jsonData` to be included in the reply message.
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
-    public func reply(to event: String, jsonData: String) -> Bool {
+    public func reply(to event: String, with jsonData: String) -> Bool {
         guard let message = receivedMessage(for: event) else {
             debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
@@ -93,7 +93,7 @@ open class BridgeComponent: BridgingComponent {
     ///   - event: The `event` for which a reply should be sent.
     ///   - encodable: An instance conforming to `Encodable` to be included as `jsonData` in the reply message.
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
-    public func reply<T: Encodable>(to event: String, encodable: T) -> Bool {
+    public func reply<T: Encodable>(to event: String, with encodable: T) -> Bool {
         guard let message = receivedMessage(for: event) else {
             debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
