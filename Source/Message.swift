@@ -46,13 +46,23 @@ public struct Message: Equatable {
                 jsonData: updatedData ?? jsonData)
     }
     
+    /// Replaces the existing `Message`'s data with passed-in `Encodable` object and event.
+    /// - Parameters:
+    ///   - updatedEvent: The updated event of this message. If omitted, the existing event is used.
+    ///   - encodable: An instance conforming to `Encodable` to be included as data in the message.
+    ///   If omitted, the existing data is used.
+    /// - Returns: A new `Message` with the provided data.
     public func replacing<T: Encodable>(event updatedEvent: String? = nil,
-                                        jsonEncodableData encodable: T? = nil) -> Message {
-        
+                                        encodedDataObject encodable: T? = nil) -> Message {
         let data: String?
-        if let encodable,
-           let jsonData = try? JsonDataDecoder.appEncoder.encode(encodable) {
-            data = String(data: jsonData, encoding: .utf8)
+        if let encodable {
+            do {
+                let jsonData = try StradaJSONEncoder.appEncoder.encode(encodable)
+                data = String(data: jsonData, encoding: .utf8)
+            } catch {
+                debugLog("Error encoding codable object: \(encodable) -> \(error)")
+                data = nil
+            }
         } else {
             data = nil
         }
@@ -79,7 +89,7 @@ extension Message {
         }
         
         do {
-            let decoder = JsonDataDecoder.appDecoder
+            let decoder = StradaJSONDecoder.appDecoder
             return try decoder.decode(T.self, from: data)
         } catch {
             debugLog("Error decoding json: \(jsonData) -> \(error)")
