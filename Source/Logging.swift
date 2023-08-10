@@ -1,7 +1,14 @@
 import Foundation
+import os.log
 
-func debugLog(_ message: String) {
-    #if DEBUG
-    print(message)
-    #endif
+enum StradaLogger {
+    static var debugLoggingEnabled: Bool = false {
+        didSet {
+            logger = debugLoggingEnabled ? enabledLogger : disabledLogger
+        }
+    }
+    static let enabledLogger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Strada")
+    static let disabledLogger = Logger(.disabled)
 }
+
+var logger = StradaLogger.disabledLogger
