@@ -26,6 +26,7 @@
 		E209784D2A714F1900CDEEE5 /* Dictionary+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */; };
 		E22CBEFF2A84D7060024EFB8 /* StradaConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBEFE2A84D7060024EFB8 /* StradaConfig.swift */; };
 		E22CBF012A84DC380024EFB8 /* Strada.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBF002A84DC380024EFB8 /* Strada.swift */; };
+		E22CBF032A852A140024EFB8 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBF022A852A140024EFB8 /* UserAgentTests.swift */; };
 		E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */; };
 		E2DB15932A7282CF001EE08C /* BridgeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15922A7282CF001EE08C /* BridgeComponent.swift */; };
 		E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */; };
@@ -68,6 +69,7 @@
 		E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JSON.swift"; sourceTree = "<group>"; };
 		E22CBEFE2A84D7060024EFB8 /* StradaConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StradaConfig.swift; sourceTree = "<group>"; };
 		E22CBF002A84DC380024EFB8 /* Strada.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strada.swift; sourceTree = "<group>"; };
+		E22CBF022A852A140024EFB8 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
 		E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegate.swift; sourceTree = "<group>"; };
 		E2DB15922A7282CF001EE08C /* BridgeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponent.swift; sourceTree = "<group>"; };
 		E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegateTests.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */,
 				E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */,
 				E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */,
+				E22CBF022A852A140024EFB8 /* UserAgentTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 			files = (
 				E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */,
 				C11349C2258801F6000A6E56 /* JavaScriptTests.swift in Sources */,
+				E22CBF032A852A140024EFB8 /* UserAgentTests.swift in Sources */,
 				E2FDCF982A8297DA003D27AE /* BridgeComponentTests.swift in Sources */,
 				E2FDCF9D2A829C6F003D27AE /* TestData.swift in Sources */,
 				E2FDCF9B2A829AEE003D27AE /* BridgeSpy.swift in Sources */,
