@@ -2,6 +2,16 @@ import XCTest
 @testable import Strada
 
 class MessageTests: XCTestCase {
+    
+    private let metadata = Message.Metadata(url: "https://37signals.com")
+    
+    override func setUp() async throws {
+        Strada.config.jsonEncoder = JSONEncoder()
+        Strada.config.jsonDecoder = JSONDecoder()
+    }
+    
+    // MARK: replacing(event:, jsonData:)
+    
     func testReplacingWithNewEventAndData() {
         let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
@@ -86,6 +96,49 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(newMessage.jsonData, jsonData)
     }
     
+    // MARK: replacing(event:, data:)
+    
+    func testReplacingWithNewEventAndEncodable() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let newEvent = "disconnect"
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: "{}")
+        let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
+        let newJsonData = "{\"title\":\"hey\",\"subtitle\":\"\",\"actionName\":\"tap\"}"
+        
+        let newMessage = message.replacing(event: newEvent, data: messageData)
+        
+        XCTAssertEqual(newMessage.id, "1")
+        XCTAssertEqual(newMessage.component, "page")
+        XCTAssertEqual(newMessage.event, newEvent)
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, newJsonData)
+    }
+    
+    func testReplacingByChangingEncodableWithoutChangingEvent() {
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: "{\"title\":\"Page-title\"}")
+        let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
+        let newJsonData = "{\"title\":\"hey\",\"subtitle\":\"\",\"actionName\":\"tap\"}"
+        
+        let newMessage = message.replacing(data: messageData)
+
+        XCTAssertEqual(newMessage.id, "1")
+        XCTAssertEqual(newMessage.component, "page")
+        XCTAssertEqual(newMessage.event, "connect")
+        XCTAssertEqual(newMessage.metadata, metadata)
+        XCTAssertEqual(newMessage.jsonData, newJsonData)
+    }
+    
+    // MARK: Decoding
+    
     func test_decodingWithDefaultDecoder() {
         let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
@@ -101,7 +154,7 @@ class MessageTests: XCTestCase {
                                    subtitle: "Page-subtitle",
                                    actionName: "go")
         
-        let decodedMessageData: MessageData? = message.decodedJsonData()
+        let decodedMessageData: MessageData? = message.data()
         
         XCTAssertEqual(decodedMessageData, pageData)
     }
@@ -109,9 +162,8 @@ class MessageTests: XCTestCase {
     func test_decodingWithCustomDecoder() {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        JsonDataDecoder.appDecoder = decoder
+        Strada.config.jsonDecoder = decoder
         
-        let metadata = Message.Metadata(url: "https://37signals.com")
         let jsonData = """
         {"title":"Page-title","subtitle":"Page-subtitle", "action_name": "go"}
         """
@@ -125,8 +177,33 @@ class MessageTests: XCTestCase {
                                    subtitle: "Page-subtitle",
                                    actionName: "go")
         
-        let decodedMessageData: MessageData? = message.decodedJsonData()
+        let decodedMessageData: MessageData? = message.data()
         
         XCTAssertEqual(decodedMessageData, pageData)
+    }
+    
+    // MARK: Custom encoding
+    
+    func test_encodingWithCustomEncoder() {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        Strada.config.jsonEncoder = encoder
+        
+        let messageData = MessageData(title: "Page-title",
+                                   subtitle: "Page-subtitle",
+                                   actionName: "go")
+
+        let jsonData = """
+        {"title":"Page-title","subtitle":"Page-subtitle","action_name":"go"}
+        """
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: jsonData)
+        
+        let newMessage = message.replacing(data: messageData)
+        
+        XCTAssertEqual(message, newMessage)
     }
 }

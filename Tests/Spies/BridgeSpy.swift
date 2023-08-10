@@ -3,7 +3,7 @@ import WebKit
 @testable import Strada
 
 final class BridgeSpy: Bridgable {
-    var delegate: Strada.BridgeDelegate? = nil
+    var delegate: BridgeDelegate? = nil
     var webView: WKWebView? = nil
     
     var registerComponentWasCalled = false
