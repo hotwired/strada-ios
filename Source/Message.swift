@@ -45,7 +45,7 @@ extension Message {
                                         data: T) -> Message {
         let updatedData: String?
         do {
-            let jsonData = try StradaJSONEncoder.appEncoder.encode(data)
+            let jsonData = try Strada.config.jsonEncoder.encode(data)
             updatedData = String(data: jsonData, encoding: .utf8)
         } catch {
             debugLog("Error encoding codable object: \(data) -> \(error)")
@@ -64,7 +64,7 @@ extension Message {
         }
         
         do {
-            let decoder = StradaJSONDecoder.appDecoder
+            let decoder = Strada.config.jsonDecoder
             return try decoder.decode(T.self, from: data)
         } catch {
             debugLog("Error decoding json: \(jsonData) -> \(error)")
