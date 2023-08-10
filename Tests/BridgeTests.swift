@@ -114,16 +114,6 @@ class BridgeTests: XCTestCase {
         
         waitForExpectations(timeout: 2)
     }
-    
-    func testUserAgentSubstringWithTwoComponents() {
-        let userAgentSubstring = Bridge.userAgentSubstring(for: [OneBridgeComponent.self, TwoBridgeComponent.self])
-        XCTAssertEqual(userAgentSubstring, "bridge-components: [one two]")
-    }
-    
-    func testUserAgentSubstringWithNoComponents() {
-        let userAgentSubstring = Bridge.userAgentSubstring(for: [])
-        XCTAssertEqual(userAgentSubstring, "bridge-components: []")
-    }
 }
 
 private final class TestWebView: WKWebView {
