@@ -48,7 +48,7 @@ extension Message {
             let jsonData = try Strada.config.jsonEncoder.encode(data)
             updatedData = String(data: jsonData, encoding: .utf8)
         } catch {
-            debugLog("Error encoding codable object: \(data) -> \(error)")
+            logger.error("Error encoding codable object: \(String(describing: data)) -> \(error)")
             updatedData = nil
         }
         
@@ -59,7 +59,7 @@ extension Message {
     /// - Returns: A value of the specified type, if the decoder can parse the data, otherwise nil.
     public func data<T: Decodable>() -> T? {
         guard let data = jsonData.data(using: .utf8) else {
-            debugLog("Error converting json string to data: \(jsonData)")
+            logger.error("Error converting json string to data: \(jsonData)")
             return nil
         }
         
@@ -67,7 +67,7 @@ extension Message {
             let decoder = Strada.config.jsonDecoder
             return try decoder.decode(T.self, from: data)
         } catch {
-            debugLog("Error decoding json: \(jsonData) -> \(error)")
+            logger.error("Error decoding json: \(jsonData) -> \(error)")
             return nil
         }
     }

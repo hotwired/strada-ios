@@ -29,7 +29,7 @@ struct InternalMessage {
     
     init?(scriptMessage: WKScriptMessage) {
         guard let message = scriptMessage.body as? [String: AnyHashable] else {
-            debugLog("Script message is missing body: \(scriptMessage)")
+            logger.warning("Script message is missing body: \(scriptMessage)")
             return nil
         }
         
@@ -40,7 +40,7 @@ struct InternalMessage {
         guard let id = jsonObject[CodingKeys.id.rawValue] as? String,
               let component = jsonObject[CodingKeys.component.rawValue] as? String,
               let event = jsonObject[CodingKeys.event.rawValue] as? String else {
-            debugLog("Error parsing script message: \(jsonObject)")
+            logger.error("Error parsing script message: \(jsonObject)")
             return nil
         }
         

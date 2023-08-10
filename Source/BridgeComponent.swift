@@ -38,7 +38,7 @@ open class BridgeComponent: BridgingComponent {
     /// - Returns: `true` if the reply was successful, `false` if the bridge is not available.
     public func reply(with message: Message) -> Bool {
         guard let bridge = delegate.bridge else {
-            debugLog("bridgeMessageFailedToReply: bridge is not available")
+            logger.warning("bridgeMessageFailedToReply: bridge is not available")
             return false
         }
         
@@ -55,7 +55,7 @@ open class BridgeComponent: BridgingComponent {
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
     public func reply(to event: String) -> Bool {
         guard let message = receivedMessage(for: event) else {
-            debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
+            logger.warning("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
         }
         
@@ -74,7 +74,7 @@ open class BridgeComponent: BridgingComponent {
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
     public func reply(to event: String, with jsonData: String) -> Bool {
         guard let message = receivedMessage(for: event) else {
-            debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
+            logger.warning("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
         }
         
@@ -95,7 +95,7 @@ open class BridgeComponent: BridgingComponent {
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
     public func reply<T: Encodable>(to event: String, with data: T) -> Bool {
         guard let message = receivedMessage(for: event) else {
-            debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
+            logger.warning("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
         }
         

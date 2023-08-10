@@ -25,7 +25,7 @@ public final class BridgeDelegate {
         bridge?.delegate = self
         
         if bridge == nil {
-            debugLog("bridgeNotInitializedForWebView")
+            logger.warning("bridgeNotInitializedForWebView")
         }
     }
     
@@ -37,32 +37,32 @@ public final class BridgeDelegate {
     // MARK: - Destination lifecycle
     
     public func onViewDidLoad() {
-        debugLog("bridgeDestinationViewDidLoad: \(location)")
+        logger.debug("bridgeDestinationViewDidLoad: \(self.location)")
         destinationIsActive = true
         activeComponents.forEach { $0.viewDidLoad() }
     }
     
     public func onViewWillAppear() {
-        debugLog("bridgeDestinationViewWillAppear: \(location)")
+        logger.debug("bridgeDestinationViewWillAppear: \(self.location)")
         destinationIsActive = true
         activeComponents.forEach { $0.viewWillAppear() }
     }
     
     public func onViewDidAppear() {
-        debugLog("bridgeDestinationViewDidAppear: \(location)")
+        logger.debug("bridgeDestinationViewDidAppear: \(self.location)")
         destinationIsActive = true
         activeComponents.forEach { $0.viewDidAppear() }
     }
     
     public func onViewWillDisappear() {
         activeComponents.forEach { $0.viewWillDisappear() }
-        debugLog("bridgeDestinationViewWillDisappear: \(location)")
+        logger.debug("bridgeDestinationViewWillDisappear: \(self.location)")
     }
     
     public func onViewDidDisappear() {
         activeComponents.forEach { $0.viewDidDisappear() }
         destinationIsActive = false
-        debugLog("bridgeDestinationViewDidDisappear: \(location)")
+        logger.debug("bridgeDestinationViewDidDisappear: \(self.location)")
     }
     
     // MARK: Retrieve component by type
@@ -82,11 +82,11 @@ public final class BridgeDelegate {
     func bridgeDidReceiveMessage(_ message: Message) -> Bool {
         guard destinationIsActive,
               location == message.metadata?.url else {
-            debugLog("bridgeDidIgnoreMessage: \(message)")
+            logger.warning("bridgeDidIgnoreMessage: \(String(describing: message))")
             return false
         }
         
-        debugLog("bridgeDidReceiveMessage: \(message)")
+        logger.debug("bridgeDidReceiveMessage \(String(describing: message))")
         getOrCreateComponent(name: message.component)?.didReceive(message: message)
         
         return true
