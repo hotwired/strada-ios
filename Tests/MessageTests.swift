@@ -96,7 +96,7 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(newMessage.jsonData, jsonData)
     }
     
-    // MARK: replacing(event:, encodedDataObject:)
+    // MARK: replacing(event:, data:)
     
     func testReplacingWithNewEventAndEncodable() {
         let metadata = Message.Metadata(url: "https://37signals.com")
@@ -109,7 +109,7 @@ class MessageTests: XCTestCase {
         let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
         let newJsonData = "{\"title\":\"hey\",\"subtitle\":\"\",\"actionName\":\"tap\"}"
         
-        let newMessage = message.replacing(event: newEvent, encodedDataObject: messageData)
+        let newMessage = message.replacing(event: newEvent, data: messageData)
         
         XCTAssertEqual(newMessage.id, "1")
         XCTAssertEqual(newMessage.component, "page")
@@ -128,53 +128,13 @@ class MessageTests: XCTestCase {
         let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
         let newJsonData = "{\"title\":\"hey\",\"subtitle\":\"\",\"actionName\":\"tap\"}"
         
-        let newMessage = message.replacing(encodedDataObject: messageData)
+        let newMessage = message.replacing(data: messageData)
 
         XCTAssertEqual(newMessage.id, "1")
         XCTAssertEqual(newMessage.component, "page")
         XCTAssertEqual(newMessage.event, "connect")
         XCTAssertEqual(newMessage.metadata, metadata)
         XCTAssertEqual(newMessage.jsonData, newJsonData)
-    }
-
-    func testReplacingByChangingEventWithoutChangingEncodable() {
-        let jsonData = """
-        {"title":"Page-title","subtitle":"Page-subtitle"}
-        """
-        let message = Message(id: "1",
-                              component: "page",
-                              event: "connect",
-                              metadata: metadata,
-                              jsonData: jsonData)
-        let newEvent = "disconnect"
-        let messageData: MessageData? = nil
-        let newMessage = message.replacing(event: newEvent, encodedDataObject: messageData)
-
-        XCTAssertEqual(newMessage.id, "1")
-        XCTAssertEqual(newMessage.component, "page")
-        XCTAssertEqual(newMessage.event, newEvent)
-        XCTAssertEqual(newMessage.metadata, metadata)
-        XCTAssertEqual(newMessage.jsonData, jsonData)
-    }
-
-    func testReplacingWithoutChangingEventAndEncodable() {
-        let jsonData = """
-        {"title":"Page-title","subtitle":"Page-subtitle"}
-        """
-        let message = Message(id: "1",
-                              component: "page",
-                              event: "connect",
-                              metadata: metadata,
-                              jsonData: jsonData)
-
-        let messageData: MessageData? = nil
-        let newMessage = message.replacing(event: nil, encodedDataObject: messageData)
-
-        XCTAssertEqual(newMessage.id, "1")
-        XCTAssertEqual(newMessage.component, "page")
-        XCTAssertEqual(newMessage.event, "connect")
-        XCTAssertEqual(newMessage.metadata, metadata)
-        XCTAssertEqual(newMessage.jsonData, jsonData)
     }
     
     // MARK: Decoding
@@ -194,7 +154,7 @@ class MessageTests: XCTestCase {
                                    subtitle: "Page-subtitle",
                                    actionName: "go")
         
-        let decodedMessageData: MessageData? = message.decodedDataObject()
+        let decodedMessageData: MessageData? = message.data()
         
         XCTAssertEqual(decodedMessageData, pageData)
     }
@@ -217,7 +177,7 @@ class MessageTests: XCTestCase {
                                    subtitle: "Page-subtitle",
                                    actionName: "go")
         
-        let decodedMessageData: MessageData? = message.decodedDataObject()
+        let decodedMessageData: MessageData? = message.data()
         
         XCTAssertEqual(decodedMessageData, pageData)
     }
@@ -242,7 +202,7 @@ class MessageTests: XCTestCase {
                               metadata: metadata,
                               jsonData: jsonData)
         
-        let newMessage = message.replacing(encodedDataObject: messageData)
+        let newMessage = message.replacing(data: messageData)
         
         XCTAssertEqual(message, newMessage)
     }

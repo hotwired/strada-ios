@@ -85,21 +85,21 @@ open class BridgeComponent: BridgingComponent {
     
     @discardableResult
     /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`
-    /// with the provided `Encodable` object.
+    /// with the provided `Encodable` object. 
     ///
     /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
     ///
     /// - Parameters:
     ///   - event: The `event` for which a reply should be sent.
-    ///   - encodable: An instance conforming to `Encodable` to be included as `jsonData` in the reply message.
+    ///   - data: An instance conforming to `Encodable` to be included as `jsonData` in the reply message.
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
-    public func reply<T: Encodable>(to event: String, with encodable: T) -> Bool {
+    public func reply<T: Encodable>(to event: String, with data: T) -> Bool {
         guard let message = receivedMessage(for: event) else {
             debugLog("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
         }
         
-        let messageReply = message.replacing(encodedDataObject: encodable)
+        let messageReply = message.replacing(data: data)
         
         return reply(with: messageReply)
     }

@@ -49,29 +49,20 @@ public struct Message: Equatable {
     /// Replaces the existing `Message`'s data with passed-in `Encodable` object and event.
     /// - Parameters:
     ///   - updatedEvent: The updated event of this message. If omitted, the existing event is used.
-    ///   - encodable: An instance conforming to `Encodable` to be included as data in the message.
-    ///   If omitted, the existing data is used.
+    ///   - data: An instance conforming to `Encodable` to be included as data in the message.
     /// - Returns: A new `Message` with the provided data.
     public func replacing<T: Encodable>(event updatedEvent: String? = nil,
-                                        encodedDataObject encodable: T? = nil) -> Message {
-        let data: String?
-        if let encodable {
-            do {
-                let jsonData = try StradaJSONEncoder.appEncoder.encode(encodable)
-                data = String(data: jsonData, encoding: .utf8)
-            } catch {
-                debugLog("Error encoding codable object: \(encodable) -> \(error)")
-                data = nil
-            }
-        } else {
-            data = nil
+                                        data: T) -> Message {
+        let updatedData: String?
+        do {
+            let jsonData = try StradaJSONEncoder.appEncoder.encode(data)
+            updatedData = String(data: jsonData, encoding: .utf8)
+        } catch {
+            debugLog("Error encoding codable object: \(data) -> \(error)")
+            updatedData = nil
         }
         
-        return Message(id: id,
-                       component: component,
-                       event: updatedEvent ?? event,
-                       metadata: metadata,
-                       jsonData: data ?? jsonData)
+        return replacing(event: updatedEvent, jsonData: updatedData)
     }
 }
 
@@ -82,7 +73,9 @@ extension Message {
 }
 
 extension Message {
-    public func decodedDataObject<T: Decodable>() -> T? {
+    /// Returns a value of the type you specify, decoded from the `jsonData`.
+    /// - Returns: A value of the specified type, if the decoder can parse the data, otherwise nil.
+    public func data<T: Decodable>() -> T? {
         guard let data = jsonData.data(using: .utf8) else {
             debugLog("Error converting json string to data: \(jsonData)")
             return nil
