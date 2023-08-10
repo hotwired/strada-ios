@@ -19,19 +19,9 @@ public struct Message: Equatable {
     /// Data, represented in a json object string, to send along with the message.
     /// For a "page" component, this might be `{"title": "Page Title"}`.
     public let jsonData: String
-    
-    init(id: String,
-         component: String,
-         event: String,
-         metadata: Metadata?,
-         jsonData: String) {
-        self.id = id
-        self.component = component
-        self.event = event
-        self.metadata = metadata
-        self.jsonData = jsonData
-    }
-    
+}
+
+extension Message {
     /// Replaces the existing `Message`'s data with passed-in data and event.
     /// - Parameters:
     ///   - updatedEvent: The updated event of this message. If omitted, the existing event is used.
@@ -64,15 +54,7 @@ public struct Message: Equatable {
         
         return replacing(event: updatedEvent, jsonData: updatedData)
     }
-}
-
-extension Message {
-    public struct Metadata: Equatable {
-        public let url: String
-    }
-}
-
-extension Message {
+    
     /// Returns a value of the type you specify, decoded from the `jsonData`.
     /// - Returns: A value of the specified type, if the decoder can parse the data, otherwise nil.
     public func data<T: Decodable>() -> T? {
@@ -88,5 +70,11 @@ extension Message {
             debugLog("Error decoding json: \(jsonData) -> \(error)")
             return nil
         }
+    }
+}
+
+extension Message {
+    public struct Metadata: Equatable {
+        public let url: String
     }
 }
