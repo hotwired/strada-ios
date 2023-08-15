@@ -61,7 +61,7 @@ public final class Bridge: Bridgable {
     /// Send a message through the bridge to the web application
     /// - Parameter message: Message to send
     func reply(with message: Message) {
-        debugLog("bridgeWillReplyWithMessage \(message)")
+        logger.debug("bridgeWillReplyWithMessage: \(String(describing: message))")
         let internalMessage = InternalMessage(from: message)
         callBridgeFunction(.replyWith, arguments: [internalMessage.toJSON()])
     }
@@ -84,7 +84,7 @@ public final class Bridge: Bridgable {
         
         webView.evaluateJavaScript(javaScript) { result, error in
             if let error = error {
-                debugLog("Error evaluating JavaScript: \(error)")
+                logger.error("Error evaluating JavaScript: \(error)")
             }
             
             completion?(result, error)
@@ -157,7 +157,7 @@ public final class Bridge: Bridgable {
         do {
             evaluate(javaScript: try javaScript.toString(), completion: completion)
         } catch {
-            debugLog("Error evaluating JavaScript: \(javaScript), error: \(error)")
+            logger.error("Error evaluating JavaScript: \(String(describing: javaScript)), error: \(error)")
             completion?(nil, error)
         }
     }
@@ -182,6 +182,6 @@ extension Bridge: ScriptMessageHandlerDelegate {
             return
         }
         
-        debugLog("Unhandled message received: \(scriptMessage.body)")
+        logger.warning("Unhandled message received: \(String(describing: scriptMessage.body))")
     }
 }
