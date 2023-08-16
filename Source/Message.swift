@@ -19,6 +19,18 @@ public struct Message: Equatable {
     /// Data, represented in a json object string, to send along with the message.
     /// For a "page" component, this might be `{"title": "Page Title"}`.
     public let jsonData: String
+    
+    public init(id: String,
+                component: String,
+                event: String,
+                metadata: Metadata?,
+                jsonData: String) {
+        self.id = id
+        self.component = component
+        self.event = event
+        self.metadata = metadata
+        self.jsonData = jsonData
+    }
 }
 
 extension Message {
@@ -76,5 +88,9 @@ extension Message {
 extension Message {
     public struct Metadata: Equatable {
         public let url: String
+        
+        public init(url: String) {
+            self.url = url
+        }
     }
 }
