@@ -141,6 +141,28 @@ class BridgeDelegateTests: XCTestCase {
         XCTAssertTrue(delegate.bridgeDidReceiveMessage(testMessage()))
     }
     
+    // MARK: reply(with:)
+   
+    func test_replyWithSucceedsWhenBridgeIsSet() {
+        let message = testMessage()
+        let success = delegate.reply(with: message)
+        
+        XCTAssertTrue(success)
+        XCTAssertTrue(bridge.replyWithMessageWasCalled)
+        XCTAssertEqual(bridge.replyWithMessageArg, message)
+    }
+    
+    func test_replyWithFailsWhenBridgeNotSet() {
+        delegate.bridge = nil
+
+        let message = testMessage()
+        let success = delegate.reply(with: message)
+
+        XCTAssertFalse(success)
+        XCTAssertFalse(bridge.replyWithMessageWasCalled)
+        XCTAssertNil(bridge.replyWithMessageArg)
+    }
+    
     private func testMessage() -> Message {
         return Message(id: "1",
                        component: "two",

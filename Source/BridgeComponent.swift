@@ -37,13 +37,7 @@ open class BridgeComponent: BridgingComponent {
     /// - Parameter message: The message to be replied with.
     /// - Returns: `true` if the reply was successful, `false` if the bridge is not available.
     public func reply(with message: Message) -> Bool {
-        guard let bridge = delegate.bridge else {
-            logger.warning("bridgeMessageFailedToReply: bridge is not available")
-            return false
-        }
-        
-        bridge.reply(with: message)
-        return true
+        return delegate.reply(with: message)
     }
     
     @discardableResult
