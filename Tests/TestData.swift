@@ -6,7 +6,7 @@ final class AppBridgeDestination: BridgeDestination {}
 final class OneBridgeComponent: BridgeComponent {
     static override var name: String { "one" }
     
-    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
+    required init(destination: BridgeDestination, delegate: BridgingDelegate) {
         super.init(destination: destination, delegate: delegate)
     }
     
@@ -16,7 +16,7 @@ final class OneBridgeComponent: BridgeComponent {
 final class TwoBridgeComponent: BridgeComponent {
     static override var name: String { "two" }
     
-    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
+    required init(destination: BridgeDestination, delegate: BridgingDelegate) {
         super.init(destination: destination, delegate: delegate)
     }
     

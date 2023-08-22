@@ -2,10 +2,10 @@ import Foundation
 
 protocol BridgingComponent: AnyObject {
     static var name: String { get }
-    var delegate: BridgeDelegate { get }
+    var delegate: BridgingDelegate { get }
     
     init(destination: BridgeDestination,
-         delegate: BridgeDelegate)
+         delegate: BridgingDelegate)
     
     func onReceive(message: Message)
     func onViewDidLoad()
@@ -25,9 +25,9 @@ open class BridgeComponent: BridgingComponent {
         fatalError("BridgeComponent subclass must provide a unique 'name'")
     }
     
-    public unowned let delegate: BridgeDelegate
+    public unowned let delegate: BridgingDelegate
     
-    required public init(destination: BridgeDestination, delegate: BridgeDelegate) {
+    required public init(destination: BridgeDestination, delegate: BridgingDelegate) {
         self.delegate = delegate
     }
     

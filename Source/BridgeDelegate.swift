@@ -3,7 +3,28 @@ import WebKit
 
 public protocol BridgeDestination: AnyObject {}
 
-public final class BridgeDelegate {
+public protocol BridgingDelegate: AnyObject {
+    var location: String { get }
+    var destination: BridgeDestination { get }
+    var webView: WKWebView? { get }
+    
+    func webViewDidBecomeActive(_ webView: WKWebView)
+    func webViewDidBecomeDeactivated()
+    func reply(with message: Message) -> Bool
+    
+    func onViewDidLoad()
+    func onViewWillAppear()
+    func onViewDidAppear()
+    func onViewWillDisappear()
+    func onViewDidDisappear()
+    
+    func component<C: BridgeComponent>() -> C?
+    
+    func bridgeDidInitialize()
+    func bridgeDidReceiveMessage(_ message: Message) -> Bool
+}
+
+public final class BridgeDelegate: BridgingDelegate {
     public let location: String
     public unowned let destination: BridgeDestination
     public var webView: WKWebView? {
@@ -86,15 +107,15 @@ public final class BridgeDelegate {
         return activeComponents.compactMap { $0 as? C }.first
     }
     
-    // MARK: Internal
+    // MARK: Internal use
     
-    func bridgeDidInitialize() {
+    public func bridgeDidInitialize() {
         let componentNames = componentTypes.map { $0.name }
         bridge?.register(components: componentNames)
     }
     
     @discardableResult
-    func bridgeDidReceiveMessage(_ message: Message) -> Bool {
+    public func bridgeDidReceiveMessage(_ message: Message) -> Bool {
         guard destinationIsActive,
               location == message.metadata?.url else {
             logger.warning("bridgeDidIgnoreMessage: \(String(describing: message))")
