@@ -25,6 +25,8 @@
 		E209784B2A714D4E00CDEEE5 /* String+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E209784A2A714D4E00CDEEE5 /* String+JSON.swift */; };
 		E209784D2A714F1900CDEEE5 /* Dictionary+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */; };
 		E227FAEE2A94B35900A645E4 /* BridgeDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227FAED2A94B35900A645E4 /* BridgeDelegateSpy.swift */; };
+		E227FAF02A94D34E00A645E4 /* ComposerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227FAEF2A94D34E00A645E4 /* ComposerComponent.swift */; };
+		E227FAF32A94D57300A645E4 /* ComposerComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227FAF22A94D57300A645E4 /* ComposerComponentTests.swift */; };
 		E22CBEFF2A84D7060024EFB8 /* StradaConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBEFE2A84D7060024EFB8 /* StradaConfig.swift */; };
 		E22CBF012A84DC380024EFB8 /* Strada.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBF002A84DC380024EFB8 /* Strada.swift */; };
 		E22CBF032A852A140024EFB8 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBF022A852A140024EFB8 /* UserAgentTests.swift */; };
@@ -69,6 +71,8 @@
 		E209784A2A714D4E00CDEEE5 /* String+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+JSON.swift"; sourceTree = "<group>"; };
 		E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JSON.swift"; sourceTree = "<group>"; };
 		E227FAED2A94B35900A645E4 /* BridgeDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegateSpy.swift; sourceTree = "<group>"; };
+		E227FAEF2A94D34E00A645E4 /* ComposerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerComponent.swift; sourceTree = "<group>"; };
+		E227FAF22A94D57300A645E4 /* ComposerComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerComponentTests.swift; sourceTree = "<group>"; };
 		E22CBEFE2A84D7060024EFB8 /* StradaConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StradaConfig.swift; sourceTree = "<group>"; };
 		E22CBF002A84DC380024EFB8 /* Strada.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strada.swift; sourceTree = "<group>"; };
 		E22CBF022A852A140024EFB8 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 		9274F1F22229963B003E85F4 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E227FAF12A94D48C00A645E4 /* ComponentTestExample */,
 				E2FDCF9C2A829C6F003D27AE /* TestData.swift */,
 				E2FDCF992A829AD5003D27AE /* Spies */,
 				C1EB052D2588201600933244 /* BridgeTests.swift */,
@@ -165,6 +170,15 @@
 				E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E227FAF12A94D48C00A645E4 /* ComponentTestExample */ = {
+			isa = PBXGroup;
+			children = (
+				E227FAEF2A94D34E00A645E4 /* ComposerComponent.swift */,
+				E227FAF22A94D57300A645E4 /* ComposerComponentTests.swift */,
+			);
+			path = ComponentTestExample;
 			sourceTree = "<group>";
 		};
 		E2FDCF992A829AD5003D27AE /* Spies */ = {
@@ -312,8 +326,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */,
+				E227FAF02A94D34E00A645E4 /* ComposerComponent.swift in Sources */,
 				E227FAEE2A94B35900A645E4 /* BridgeDelegateSpy.swift in Sources */,
 				C11349C2258801F6000A6E56 /* JavaScriptTests.swift in Sources */,
+				E227FAF32A94D57300A645E4 /* ComposerComponentTests.swift in Sources */,
 				E22CBF032A852A140024EFB8 /* UserAgentTests.swift in Sources */,
 				E2FDCF982A8297DA003D27AE /* BridgeComponentTests.swift in Sources */,
 				E2FDCF9D2A829C6F003D27AE /* TestData.swift in Sources */,
