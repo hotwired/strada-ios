@@ -34,6 +34,21 @@ public final class BridgeDelegate {
         bridge = nil
     }
     
+    @discardableResult
+    /// Replies to the web with a received message, optionally replacing its `event` or `jsonData`.
+    ///
+    /// - Parameter message: The message to be replied with.
+    /// - Returns: `true` if the reply was successful, `false` if the bridge is not available.
+    public func reply(with message: Message) -> Bool {
+        guard let bridge else {
+            logger.warning("bridgeMessageFailedToReply: bridge is not available")
+            return false
+        }
+        
+        bridge.reply(with: message)
+        return true
+    }
+    
     // MARK: - Destination lifecycle
     
     public func onViewDidLoad() {
