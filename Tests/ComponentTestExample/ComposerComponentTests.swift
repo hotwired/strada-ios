@@ -40,7 +40,7 @@ final class ComposerComponentTests: XCTestCase {
     // MARK: Retreive sender tests
     
     func test_connectMessageContainsSelectedSender() {
-        component.onReceive(message: connectMessage)
+        component.didReceive(message: connectMessage)
         
         XCTAssertEqual(component.selectedSender(), "user@37signals.com")
     }
@@ -48,18 +48,18 @@ final class ComposerComponentTests: XCTestCase {
     // MARK: Select sender tests
     
     func test_selectSender_emailFound_sendsTheCorrectMessageReply() {
-        component.onReceive(message: connectMessage)
+        component.didReceive(message: connectMessage)
         
         component.selectSender(emailAddress: "user1@37signals.com")
         
-        XCTAssertTrue(delegate.replyWithMessageWasCalled)
         let expectedMessage = connectMessage.replacing(event: "select-sender",
-                                                       jsonData: "{\"selectSender\":1}")
+                                                       jsonData: "{\"selectedIndex\":1}")
+        XCTAssertTrue(delegate.replyWithMessageWasCalled)
         XCTAssertEqual(delegate.replyWithMessageArg, expectedMessage)
     }
     
     func test_selectSender_emailNotFound_doesNotSendAnyMessage() {
-        component.onReceive(message: connectMessage)
+        component.didReceive(message: connectMessage)
         
         component.selectSender(emailAddress: "test@37signals.com")
         

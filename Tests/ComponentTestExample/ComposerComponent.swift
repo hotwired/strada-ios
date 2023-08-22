@@ -12,17 +12,18 @@ final class ComposerComponent: BridgeComponent {
         
         switch event {
         case .connect:
+            // Handle connect event if needed.
             break
         }
     }
     
     func selectSender(emailAddress: String) {
         guard let message = receivedMessage(for: InboundEvent.connect.rawValue),
-              let data: MessageData = message.data() else {
+              let senders: [Sender] = message.data() else {
             return
         }
         
-        guard let sender = data.senders.first(where: { $0.email == emailAddress }) else {
+        guard let sender = senders.first(where: { $0.email == emailAddress }) else {
             return
         }
         
@@ -33,11 +34,11 @@ final class ComposerComponent: BridgeComponent {
     
     func selectedSender() -> String? {
         guard let message = receivedMessage(for: InboundEvent.connect.rawValue),
-              let data: MessageData = message.data() else {
+              let senders: [Sender] = message.data() else {
             return nil
         }
         
-        guard let selected = data.senders.first(where: { $0.selected }) else {
+        guard let selected = senders.first(where: { $0.selected }) else {
             return nil
         }
         
@@ -60,10 +61,6 @@ extension ComposerComponent {
 // MARK: Message data
 
 extension ComposerComponent {
-    private struct MessageData: Decodable {
-        let senders: [Sender]
-    }
-    
     private struct Sender: Decodable {
         let email: String
         let index: Int
