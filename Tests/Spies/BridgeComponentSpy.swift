@@ -13,7 +13,7 @@ final class BridgeComponentSpy: BridgeComponent {
     var onViewWillDisappearWasCalled = false
     var onViewDidDisappearWasCalled = false
     
-    required init(destination: BridgeDestination, delegate: BridgeDelegate) {
+    required init(destination: BridgeDestination, delegate: BridgingDelegate) {
         super.init(destination: destination, delegate: delegate)
     }
     

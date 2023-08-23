@@ -2,10 +2,10 @@ import Foundation
 
 protocol BridgingComponent: AnyObject {
     static var name: String { get }
-    var delegate: BridgeDelegate { get }
+    var delegate: BridgingDelegate { get }
     
     init(destination: BridgeDestination,
-         delegate: BridgeDelegate)
+         delegate: BridgingDelegate)
     
     func onReceive(message: Message)
     func onViewDidLoad()
@@ -13,6 +13,13 @@ protocol BridgingComponent: AnyObject {
     func onViewDidAppear()
     func onViewWillDisappear()
     func onViewDidDisappear()
+    
+    func didReceive(message: Message)
+    func viewDidLoad()
+    func viewWillAppear()
+    func viewDidAppear()
+    func viewWillDisappear()
+    func viewDidDisappear()
 }
 
 open class BridgeComponent: BridgingComponent {
@@ -25,10 +32,17 @@ open class BridgeComponent: BridgingComponent {
         fatalError("BridgeComponent subclass must provide a unique 'name'")
     }
     
-    public unowned let delegate: BridgeDelegate
+    public unowned let delegate: BridgingDelegate
     
-    required public init(destination: BridgeDestination, delegate: BridgeDelegate) {
+    required public init(destination: BridgeDestination, delegate: BridgingDelegate) {
         self.delegate = delegate
+    }
+    
+    /// Called when a message is received from the web bridge.
+    /// Handle the message for its `event` type for the custom component's behavior.
+    /// - Parameter message: The `message` received from the web bridge.
+    open func onReceive(message: Message) {
+        fatalError("BridgeComponent subclass must handle incoming messages")
     }
     
     @discardableResult
@@ -55,7 +69,6 @@ open class BridgeComponent: BridgingComponent {
         
         return reply(with: message)
     }
-    
     
     @discardableResult
     /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`.
@@ -105,13 +118,6 @@ open class BridgeComponent: BridgingComponent {
         return receivedMessages[event]
     }
     
-    /// Called when a message is received from the web bridge.
-    /// Handle the message for its `event` type for the custom component's behavior.
-    /// - Parameter message: The `message` received from the web bridge.
-    open func onReceive(message: Message) {
-        fatalError("BridgeComponent subclass must handle incoming messages")
-    }
-    
     /// Called when the component's destination view is loaded into memory
     /// (and is active) based on its lifecycle events.
     /// You can use this as an opportunity to update the component's state/view.
@@ -137,30 +143,54 @@ open class BridgeComponent: BridgingComponent {
     /// You can use this as an opportunity to update the component's state/view.
     open func onViewDidDisappear() {}
     
-    // MARK: Internal
-    
-    func didReceive(message: Message) {
+    /// This passes a received message to `onReceive(message:)`, caching it
+    /// for use with `reply(to: with:)` and `receivedMessage(for:)`.
+    ///
+    /// NOTE: This should not be called directly from within a component,
+    /// but is available to use for testing.
+    /// - Parameter message: The `message` received from the web bridge.
+    public func didReceive(message: Message) {
         receivedMessages[message.event] = message
         onReceive(message: message)
     }
     
-    func viewDidLoad() {
+    /// This passes the `viewDidLoad` lifecycle event to `onViewDidLoad()`.
+    ///
+    /// NOTE: This should not be called directly from within a component,
+    /// but is available to use for testing.
+    public func viewDidLoad() {
         onViewDidLoad()
     }
     
-    func viewWillAppear() {
+    /// This passes the `viewWillAppear` lifecycle event to `onViewWillAppear()`.
+    ///
+    /// NOTE: This should not be called directly from within a component,
+    /// but is available to use for testing.
+    public func viewWillAppear() {
         onViewWillAppear()
     }
     
-    func viewDidAppear() {
+    /// This passes the `viewDidAppear` lifecycle event to `onViewDidAppear()`.
+    ///
+    /// NOTE: This should not be called directly from within a component,
+    /// but is available to use for testing.
+    public func viewDidAppear() {
         onViewDidAppear()
     }
     
-    func viewWillDisappear() {
+    /// This passes the `viewWillDisappear` lifecycle event to `onViewWillDisappear()`.
+    ///
+    /// NOTE: This should not be called directly from within a component,
+    /// but is available to use for testing.
+    public func viewWillDisappear() {
         onViewWillDisappear()
     }
     
-    func viewDidDisappear() {
+    /// This passes the `viewDidDisappear` lifecycle event to `onViewDidDisappear()`.
+    ///
+    /// NOTE: This should not be called directly from within a component,
+    /// but is available to use for testing.
+    public func viewDidDisappear() {
         onViewDidDisappear()
     }
     
