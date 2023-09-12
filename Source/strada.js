@@ -36,8 +36,8 @@
       return this.supportedComponents.includes(component)
     }
 
-    // Send message to web
-    send(message) {
+    // Reply to web with message.
+    replyWith(message) {
       if (this.isStradaAvailable) {
         this.webBridge.receive(message)
       }
@@ -57,11 +57,11 @@
     postMessage(message) {
       webkit.messageHandlers.strada.postMessage(message)
     }
-      
+
     get isStradaAvailable() {
       return window.Strada
     }
-      
+
     get webBridge() {
       return window.Strada.web
     }

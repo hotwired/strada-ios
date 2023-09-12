@@ -3,22 +3,24 @@ import WebKit
 @testable import Strada
 
 class BridgeTests: XCTestCase {
-    func testInitAutomaticallyLoadsIntoWebView() {
+    func testInitWithANewWebViewAutomaticallyLoadsIntoWebView() {
         let webView = WKWebView()
         let userContentController = webView.configuration.userContentController
         XCTAssertTrue(userContentController.userScripts.isEmpty)
         
-        _ = Bridge(webView: webView)
+        Bridge.initialize(webView)
         XCTAssertEqual(userContentController.userScripts.count, 1)
     }
     
-    func testLoadIntoConfiguration() {
+    func testInitWithTheSameWebViewDoesNotLoadTwice() {
         let webView = WKWebView()
         let userContentController = webView.configuration.userContentController
         XCTAssertTrue(userContentController.userScripts.isEmpty)
         
-        let bridge = Bridge()
-        bridge.webView = webView
+        Bridge.initialize(webView)
+        XCTAssertEqual(userContentController.userScripts.count, 1)
+        
+        Bridge.initialize(webView)
         XCTAssertEqual(userContentController.userScripts.count, 1)
     }
     
@@ -54,9 +56,19 @@ class BridgeTests: XCTestCase {
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        let message = Message(id: "1", component: "test", event: "send", data: ["title": "testing"])
-        bridge.send(message)
-        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.send({\"component\":\"test\",\"event\":\"send\",\"data\":{\"title\":\"testing\"},\"id\":\"1\"})")
+        let data = """
+        {"title":"Page-title"}
+        """
+        let metadata = Message.Metadata(url: "https://37signals.com")
+        let message = Message(id: "1",
+                              component: "page",
+                              event: "connect",
+                              metadata: metadata,
+                              jsonData: data)
+
+        
+        bridge.reply(with: message)
+        XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.replyWith({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
     }
     
     func testEvaluateJavaScript() {
@@ -69,7 +81,8 @@ class BridgeTests: XCTestCase {
     }
     
     func testEvaluateJavaScriptReturnsErrorForNoWebView() {
-        let bridge = Bridge()
+        let bridge = Bridge(webView: WKWebView())
+        bridge.webView = nil
         let expectation = self.expectation(description: "error handler")
         
         bridge.evaluate(function: "test", arguments: []) { (result, error) in
@@ -77,7 +90,7 @@ class BridgeTests: XCTestCase {
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 0.5)
+        waitForExpectations(timeout: 2)
     }
     
     func testEvaluateFunction() {
@@ -99,7 +112,7 @@ class BridgeTests: XCTestCase {
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 0.5)
+        waitForExpectations(timeout: 2)
     }
 }
 

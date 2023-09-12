@@ -53,3 +53,15 @@ In most case though, you'll be replying to an existing message, in which you can
 let message: Message = // a message received earlier through delegate
 bridge.reply(to: message, with: data)
 ```
+
+## Contributing
+
+Strada iOS is open-source software, freely distributable under the terms of an [MIT-style license](LICENSE). The [source code is hosted on GitHub](https://github.com/hotwired/strada-ios). Development is sponsored by [37signals](https://37signals.com/).
+
+We welcome contributions in the form of bug reports, pull requests, or thoughtful discussions in the [GitHub issue tracker](https://github.com/hotwired/strada-ios/issues). 
+
+Please note that this project is released with a [Contributor Code of Conduct](docs/CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+---------
+
+© 2022 37signals, LLC

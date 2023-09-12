@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,25 @@
 		C1EB05262588133D00933244 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB05252588133D00933244 /* MessageTests.swift */; };
 		C1EB052E2588201600933244 /* BridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB052D2588201600933244 /* BridgeTests.swift */; };
 		CBAFC52926F9863900C6662E /* PathLoaderXcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */; };
+		E20978422A6E9E6B00CDEEE5 /* InternalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978412A6E9E6B00CDEEE5 /* InternalMessage.swift */; };
+		E20978442A6EAF3600CDEEE5 /* InternalMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */; };
+		E20978472A7135E700CDEEE5 /* Encodable+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978462A7135E700CDEEE5 /* Encodable+Utils.swift */; };
+		E20978492A71366B00CDEEE5 /* Data+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20978482A71366B00CDEEE5 /* Data+Utils.swift */; };
+		E209784B2A714D4E00CDEEE5 /* String+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E209784A2A714D4E00CDEEE5 /* String+JSON.swift */; };
+		E209784D2A714F1900CDEEE5 /* Dictionary+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */; };
+		E227FAEE2A94B35900A645E4 /* BridgeDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227FAED2A94B35900A645E4 /* BridgeDelegateSpy.swift */; };
+		E227FAF02A94D34E00A645E4 /* ComposerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227FAEF2A94D34E00A645E4 /* ComposerComponent.swift */; };
+		E227FAF32A94D57300A645E4 /* ComposerComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227FAF22A94D57300A645E4 /* ComposerComponentTests.swift */; };
+		E22CBEFF2A84D7060024EFB8 /* StradaConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBEFE2A84D7060024EFB8 /* StradaConfig.swift */; };
+		E22CBF012A84DC380024EFB8 /* Strada.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBF002A84DC380024EFB8 /* Strada.swift */; };
+		E22CBF032A852A140024EFB8 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22CBF022A852A140024EFB8 /* UserAgentTests.swift */; };
+		E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */; };
+		E2DB15932A7282CF001EE08C /* BridgeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15922A7282CF001EE08C /* BridgeComponent.swift */; };
+		E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */; };
+		E2FDCF982A8297DA003D27AE /* BridgeComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */; };
+		E2FDCF9B2A829AEE003D27AE /* BridgeSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */; };
+		E2FDCF9D2A829C6F003D27AE /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9C2A829C6F003D27AE /* TestData.swift */; };
+		E2FDCF9F2A829CA0003D27AE /* BridgeComponentSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9E2A829CA0003D27AE /* BridgeComponentSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +64,25 @@
 		C1EB05252588133D00933244 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		C1EB052D2588201600933244 /* BridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeTests.swift; sourceTree = "<group>"; };
 		CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathLoaderXcode.swift; sourceTree = "<group>"; };
+		E20978412A6E9E6B00CDEEE5 /* InternalMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalMessage.swift; sourceTree = "<group>"; };
+		E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalMessageTests.swift; sourceTree = "<group>"; };
+		E20978462A7135E700CDEEE5 /* Encodable+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Utils.swift"; sourceTree = "<group>"; };
+		E20978482A71366B00CDEEE5 /* Data+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Utils.swift"; sourceTree = "<group>"; };
+		E209784A2A714D4E00CDEEE5 /* String+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+JSON.swift"; sourceTree = "<group>"; };
+		E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JSON.swift"; sourceTree = "<group>"; };
+		E227FAED2A94B35900A645E4 /* BridgeDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegateSpy.swift; sourceTree = "<group>"; };
+		E227FAEF2A94D34E00A645E4 /* ComposerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerComponent.swift; sourceTree = "<group>"; };
+		E227FAF22A94D57300A645E4 /* ComposerComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerComponentTests.swift; sourceTree = "<group>"; };
+		E22CBEFE2A84D7060024EFB8 /* StradaConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StradaConfig.swift; sourceTree = "<group>"; };
+		E22CBF002A84DC380024EFB8 /* Strada.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strada.swift; sourceTree = "<group>"; };
+		E22CBF022A852A140024EFB8 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
+		E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegate.swift; sourceTree = "<group>"; };
+		E2DB15922A7282CF001EE08C /* BridgeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponent.swift; sourceTree = "<group>"; };
+		E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegateTests.swift; sourceTree = "<group>"; };
+		E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponentTests.swift; sourceTree = "<group>"; };
+		E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeSpy.swift; sourceTree = "<group>"; };
+		E2FDCF9C2A829C6F003D27AE /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		E2FDCF9E2A829CA0003D27AE /* BridgeComponentSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponentSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +125,7 @@
 		9274F1E72229963B003E85F4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E20978452A7135D200CDEEE5 /* Extensions */,
 				CBAFC52826F9863900C6662E /* PathLoaderXcode.swift */,
 				9274F20122299715003E85F4 /* Bridge.swift */,
 				9274F20322299738003E85F4 /* Message.swift */,
@@ -95,6 +134,11 @@
 				C11349A92587F013000A6E56 /* Logging.swift */,
 				9274F1FF2229970D003E85F4 /* strada.js */,
 				9274F1E92229963B003E85F4 /* Info.plist */,
+				E20978412A6E9E6B00CDEEE5 /* InternalMessage.swift */,
+				E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */,
+				E2DB15922A7282CF001EE08C /* BridgeComponent.swift */,
+				E22CBEFE2A84D7060024EFB8 /* StradaConfig.swift */,
+				E22CBF002A84DC380024EFB8 /* Strada.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -102,12 +146,49 @@
 		9274F1F22229963B003E85F4 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E227FAF12A94D48C00A645E4 /* ComponentTestExample */,
+				E2FDCF9C2A829C6F003D27AE /* TestData.swift */,
+				E2FDCF992A829AD5003D27AE /* Spies */,
 				C1EB052D2588201600933244 /* BridgeTests.swift */,
 				C11349C1258801F6000A6E56 /* JavaScriptTests.swift */,
 				C1EB05252588133D00933244 /* MessageTests.swift */,
 				9274F1F52229963B003E85F4 /* Info.plist */,
+				E20978432A6EAF3600CDEEE5 /* InternalMessageTests.swift */,
+				E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */,
+				E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */,
+				E22CBF022A852A140024EFB8 /* UserAgentTests.swift */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		E20978452A7135D200CDEEE5 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E20978462A7135E700CDEEE5 /* Encodable+Utils.swift */,
+				E20978482A71366B00CDEEE5 /* Data+Utils.swift */,
+				E209784A2A714D4E00CDEEE5 /* String+JSON.swift */,
+				E209784C2A714F1900CDEEE5 /* Dictionary+JSON.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E227FAF12A94D48C00A645E4 /* ComponentTestExample */ = {
+			isa = PBXGroup;
+			children = (
+				E227FAEF2A94D34E00A645E4 /* ComposerComponent.swift */,
+				E227FAF22A94D57300A645E4 /* ComposerComponentTests.swift */,
+			);
+			path = ComponentTestExample;
+			sourceTree = "<group>";
+		};
+		E2FDCF992A829AD5003D27AE /* Spies */ = {
+			isa = PBXGroup;
+			children = (
+				E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */,
+				E2FDCF9E2A829CA0003D27AE /* BridgeComponentSpy.swift */,
+				E227FAED2A94B35900A645E4 /* BridgeDelegateSpy.swift */,
+			);
+			path = Spies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,8 +246,9 @@
 		9274F1DC2229963B003E85F4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1210;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = Basecamp;
 				TargetAttributes = {
 					9274F1E42229963B003E85F4 = {
@@ -221,12 +303,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E209784B2A714D4E00CDEEE5 /* String+JSON.swift in Sources */,
 				C11349A62587EFFB000A6E56 /* ScriptMessageHandler.swift in Sources */,
+				E22CBEFF2A84D7060024EFB8 /* StradaConfig.swift in Sources */,
+				E20978472A7135E700CDEEE5 /* Encodable+Utils.swift in Sources */,
+				E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */,
 				C11349B22587F31E000A6E56 /* JavaScript.swift in Sources */,
 				9274F20222299715003E85F4 /* Bridge.swift in Sources */,
+				E2DB15932A7282CF001EE08C /* BridgeComponent.swift in Sources */,
+				E22CBF012A84DC380024EFB8 /* Strada.swift in Sources */,
+				E20978492A71366B00CDEEE5 /* Data+Utils.swift in Sources */,
 				9274F20422299738003E85F4 /* Message.swift in Sources */,
+				E20978422A6E9E6B00CDEEE5 /* InternalMessage.swift in Sources */,
 				C11349AA2587F013000A6E56 /* Logging.swift in Sources */,
 				CBAFC52926F9863900C6662E /* PathLoaderXcode.swift in Sources */,
+				E209784D2A714F1900CDEEE5 /* Dictionary+JSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,9 +325,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */,
+				E227FAF02A94D34E00A645E4 /* ComposerComponent.swift in Sources */,
+				E227FAEE2A94B35900A645E4 /* BridgeDelegateSpy.swift in Sources */,
 				C11349C2258801F6000A6E56 /* JavaScriptTests.swift in Sources */,
+				E227FAF32A94D57300A645E4 /* ComposerComponentTests.swift in Sources */,
+				E22CBF032A852A140024EFB8 /* UserAgentTests.swift in Sources */,
+				E2FDCF982A8297DA003D27AE /* BridgeComponentTests.swift in Sources */,
+				E2FDCF9D2A829C6F003D27AE /* TestData.swift in Sources */,
+				E2FDCF9B2A829AEE003D27AE /* BridgeSpy.swift in Sources */,
 				C1EB052E2588201600933244 /* BridgeTests.swift in Sources */,
+				E20978442A6EAF3600CDEEE5 /* InternalMessageTests.swift in Sources */,
 				C1EB05262588133D00933244 /* MessageTests.swift in Sources */,
+				E2FDCF9F2A829CA0003D27AE /* BridgeComponentSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +405,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -363,7 +464,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -386,6 +487,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -393,6 +495,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.hotwired.strada;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -413,6 +517,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -420,6 +525,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.hotwired.strada;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
