@@ -7,7 +7,7 @@
 ## Features
 - **Level up** your [Turbo Native](https://turbo.hotwired.dev/handbook/native) hybrid apps with high-fidelity native components, driven by web components.
 - **Reuse web components** for your [Android](https://github.com/hotwired/strada-android) and iOS apps.
-- **Communicate with the WebView** and its web components without writing any javascript in your app.
+- **Communicate with the WebView** and its web components without writing any JavaScript in your app.
 
 ## Requirements
 
