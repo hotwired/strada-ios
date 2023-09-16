@@ -21,7 +21,7 @@ extension BridgeComponent {
 
 ## Initialize the WKWebView instance
 
-For Strada to work properly across your web and native app, you'll need to make sure each `TurboSession` `WKWebView` instance is initialized with the following:
+For Strada to work properly across your web and native app, you'll need to make sure each `Turbo.Session` `WKWebView` instance is initialized with the following:
 - An updated user agent string that includes the supported bridge components. Strada provides a utility function that builds the substring for you.
 - Initialize the `WKWebView` with the `Bridge` class, so Strada can internally manage the `WKWebView` through the app's lifecycle.
 
