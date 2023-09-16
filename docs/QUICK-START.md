@@ -25,7 +25,7 @@ For Strada to work properly across your web and native app, you'll need to make 
 - An updated user agent string that includes the supported bridge components. Strada provides a utility function that builds the substring for you.
 - Initialize the `WKWebView` with the `Bridge` class, so Strada can internally manage the `WKWebView` through the app's lifecycle.
 
-The place to update the `WKWebView` user agent string is where your `WKWebViewConfiguration` is configured:
+Update the `WKWebView` user agent string where your `WKWebViewConfiguration` is configured:
 
 **`WKWebViewConfiguration+App.swift`**
 ```swift
