@@ -67,7 +67,7 @@ final class TurboWebViewController: VisitableViewController, BridgeDestination {
 ```
 
 ## Delegate to the `BridgeDelegate` class
-You'll need to delegate the `VisitableViewController` lifecycle events to the `BridgeDelegate` class:
+You'll need to subclass `VisitableViewController` (if you're not already) and delegate its lifecycle events to the `BridgeDelegate` class:
 
 **`TurboWebViewController.swift`**
 ```swift
