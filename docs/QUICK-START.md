@@ -8,7 +8,7 @@ _NOTE: You can find the code in this guide fully implemented in the `turbo-ios` 
 
 For now, create an empty (global) list of registered component factories, so we have a reference. You'll need to populate this list with each bridge component that your app supports.
 
-**`BridgeComponent+App.swift`:**
+**`BridgeComponent+App.swift`**
 ```swift
 extension BridgeComponent {
     static var allTypes: [BridgeComponent.Type] {
@@ -25,7 +25,7 @@ For Strada to work properly across your web and native app, you'll need to make 
 - An updated user agent string that includes the supported bridge components. Strada provides a utility function that builds the substring for you.
 - Initialize the `WKWebView` with the `Bridge` class, so Strada can internally manage the `WKWebView` through the app's lifecycle.
 
-Update the `WKWebView` user agent string where your `WKWebViewConfiguration` is configured:
+Update the `WKWebView` user agent string where your `WKWebViewConfiguration` is configured. The `turbo-ios` [demo app](https://github.com/hotwired/turbo-ios/tree/main/Demo) creates an extension like this:
 
 **`WKWebViewConfiguration+App.swift`**
 ```swift
@@ -42,9 +42,16 @@ extension WKWebViewConfiguration {
 }
 ```
 
-Initialize the `Bridge` where each `TurboSession` and `WKWebView` instance is created in your app:
+The `WKWebViewConfiguration` instance with the custom user agent string must be set when creating your `WKWebView` instance:
 
-**`SceneController.swift`:**
+**`SceneController.swift`**
+```swift
+let webView = WKWebView(frame: .zero, configuration: .appConfiguration)
+```
+
+Initialize the `Bridge` where each `Turbo.Session` and `WKWebView` instance is created in your app:
+
+**`SceneController.swift`**
 ```swift
 Bridge.initialize(webView)
 ```
@@ -52,7 +59,7 @@ Bridge.initialize(webView)
 ## Implement the `BridgeDestination` protocol
 You'll need to add the `BridgeDestination` protocol for you each `VisitableViewController` in your app:
 
-**`TurboWebViewController.swift`:**
+**`TurboWebViewController.swift`**
 ```swift
 final class TurboWebViewController: VisitableViewController, BridgeDestination {
     // ...
@@ -62,7 +69,7 @@ final class TurboWebViewController: VisitableViewController, BridgeDestination {
 ## Delegate to the `BridgeDelegate` class
 You'll need to delegate the `VisitableViewController` lifecycle events to the `BridgeDelegate` class:
 
-**`TurboWebViewController.swift`:**
+**`TurboWebViewController.swift`**
 ```swift
 final class TurboWebViewController: VisitableViewController, BridgeDestination {
 

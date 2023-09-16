@@ -45,7 +45,7 @@ For convenience, there are multiple ways to reply to received messages. If you u
 
 For every component that you want to use in your app, you must register it in the list you created in the [Quick Start](QUICK-START.md) guide. This allows the web app and backend (through the `WKWebView` user-agent) know what components are natively registered for the current version of the app. To register the new `FormComponent`, it looks like this:
 
-**`BridgeComponent+App.swift`:**
+**`BridgeComponent+App.swift`**
 ```swift
 extension BridgeComponent {
     static var allTypes: [BridgeComponent.Type] {
