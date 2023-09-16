@@ -42,7 +42,7 @@ extension WKWebViewConfiguration {
 }
 ```
 
-The place to initialize the `Bridge` is where each `TurboSession` and `WKWebView` instance is created in your app:
+Initialize the `Bridge` where each `TurboSession` and `WKWebView` instance is created in your app:
 
 **`SceneController.swift`:**
 ```swift
