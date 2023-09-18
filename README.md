@@ -1,67 +1,42 @@
 # Strada iOS
 
-Strada is a light-weight library that provides a bridge for bi-directional, async communication between a native iOS/[Android](https://github.com/hotwired/strada-android) app and a [web app](https://github.com/hotwired/strada-web) embedded in a web view. The bridge allows sending/receiving messages with a standard format.
+**[Strada](https://strada.hotwired.dev)** lets you create high fidelity native features driven by your web app. It's a set of libraries that work across your [web](https://github.com/hotwired/strada-web), [Android](https://github.com/hotwired/strada-android), and iOS apps to help you build features that make your [Turbo Native](https://turbo.hotwired.dev/handbook/native) hybrid apps stand out. Turn HTML elements that exist in the WebView into native components and communicate messages across your native and web code.
 
-## Installation
-Strada iOS can be installed via Carthage:
+**Strada iOS** enables you to create native components that receive and reply to messages from web components that are present on the page. Native components receive messages to run native code, whether it's to build high fidelity native UI or call platform APIs.
 
-```
-github "hotwired/strada-ios" ~> 1.0.0
-```
+## Features
+- **Level up** your [Turbo Native](https://turbo.hotwired.dev/handbook/native) hybrid apps with high-fidelity native components, driven by web components.
+- **Reuse web components** for your [Android](https://github.com/hotwired/strada-android) and iOS apps.
+- **Communicate with the WebView** and its web components without writing any JavaScript in your app.
 
-or via Swift Package Manager, either in a Package.swift or through Xcode:
+## Requirements
 
-```
-.package(url: "https://github.com/hotwired/strada-ios", from: "1.0.0")
-```
+1. iOS 14 or higher is required for your app.
+1. This library is written entirely in [Swift](https://www.swift.org/), and your app should use Swift as well.
+1. This library supports [Turbo Native](https://turbo.hotwired.dev/handbook/native) hybrid apps.
+1. Your web app must be running [strada-web](https://github.com/hotwired/strada-web). The `window.Strada` object is automatically exposed on the loaded WebView page, which enables `strada-ios` to work.
 
-## Usage
-The primary object you interact with in Strada is the `Bridge`. You create a `Bridge` with an existing `WKWebView` from your app and set your object as the delegate:
+**Note:** You should understand how Strada works in the browser before attempting to use Strada iOS. See the [Strada documentation](https://strada.hotwired.dev) for details.
 
-```swift
-let bridge = Bridge(webView: webView, delegate: self)
-```
+## Getting Started
+The best way to get started with Strada iOS is to try out the Turbo iOS demo app first to get familiar with the framework and what it offers. The demo app provides several Strada component examples. To run the demo, clone the [turbo-ios](https://github.com/hotwired/turbo-ios) repo, and read the [instructions](https://github.com/hotwired/turbo-ios/tree/main/Demo#readme).
 
-Upon initialization, Strada automatically injects a bundled JavaScript file into the web view as a user script and sets up everything needed for communication with the web app.
+## Documentation
 
-### Receiving Messages
-You receive messages from the web app through the bridge's delegate:
-
-```swift
-extension YourObject: BridgeDelegate {
-  func bridgeDidInitialize() {
-    // Configure your supported components
-    bridge.register(components: ["nav-bar", "toast", "menu"])
-  }
-
-  func bridgeDidReceiveMessage(_ message: Message) {
-    // Inspect message and perform related actions
-  }
-}
-```
-
-### Sending Messages
-You send over the bridge by creating a `Message` and calling `send`:
-
-```swift
-bridge.send(message)
-```
-
-In most case though, you'll be replying to an existing message, in which you can use the convenience `reply` method:
-
-```swift
-let message: Message = // a message received earlier through delegate
-bridge.reply(to: message, with: data)
-```
+1. [Installation](docs/INSTALLATION.md)
+1. [Overview](docs/OVERVIEW.md)
+1. [Quick Start](docs/QUICK-START.md)
+1. [Build Components](docs/BUILD-COMPONENTS.md)
+1. [Advanced Options](docs/ADVANCED-OPTIONS.md)
 
 ## Contributing
 
 Strada iOS is open-source software, freely distributable under the terms of an [MIT-style license](LICENSE). The [source code is hosted on GitHub](https://github.com/hotwired/strada-ios). Development is sponsored by [37signals](https://37signals.com/).
 
-We welcome contributions in the form of bug reports, pull requests, or thoughtful discussions in the [GitHub issue tracker](https://github.com/hotwired/strada-ios/issues). 
+We welcome contributions in the form of bug reports, pull requests, or thoughtful discussions in the [GitHub issue tracker](https://github.com/hotwired/strada-ios/issues).
 
 Please note that this project is released with a [Contributor Code of Conduct](docs/CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ---------
 
-© 2022 37signals, LLC
+© 2023 37signals LLC
