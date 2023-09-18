@@ -12,7 +12,7 @@ During development, you may want to see what `strada-ios` is doing behind the sc
 ## Using a custom JSON encoder or decoder
 By default, `strada-ios` uses [JSONEncoder](https://developer.apple.com/documentation/foundation/jsonencoder) and [JSONDecoder](https://developer.apple.com/documentation/foundation/jsondecoder) to encode/decode `Message.data` with your own data models that implement the `Codeable`/`Decodable`/`Encodable` protocols.
 
-If you'd like to customize the encoding/decoding strategy, you can figure this in your app:
+If you'd like to customize the encoding/decoding strategy, you can configure this in your app:
 
 ```swift
 let encoder = JSONEncoder()
