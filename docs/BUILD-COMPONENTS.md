@@ -86,6 +86,8 @@ private extension FormComponent {
 
 For each `BridgeComponent` subclass that you register in your app, zero or one component instances will exist for each destination screen. A component instance will be created when its first message is received from a corresponding web component of the same `name`. If no messages are received for a particular component in the current destination, no component instance will be created.
 
+By default, `strada-ios` uses [JSONEncoder](https://developer.apple.com/documentation/foundation/jsonencoder) and [JSONDecoder](https://developer.apple.com/documentation/foundation/jsondecoder) to encode/decode `Message.data` with your own data models that implement the `Codeable`/`Decodable`/`Encodable` protocols. See the [Advanced Options](ADVANCED-OPTIONS.md) to configure your encoding/decoding strategy.
+
 ## Reply to received messages
 
 If you'd like to inform the corresponding web component that an action has occurred, such as the user tapping on a submit button, you can reply to the originally received message. For the `FormComponent` it looks like this:
