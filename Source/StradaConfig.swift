@@ -1,6 +1,14 @@
 import Foundation
 
 public struct StradaConfig {
+    
+    public static var shared: StradaConfig = StradaConfig()
+    
+    public static func userAgentSubstring(for componentTypes: [BridgeComponent.Type]) -> String {
+        let components = componentTypes.map { $0.name }.joined(separator: " ")
+        return "bridge-components: [\(components)]"
+    }
+    
     /// Allows users to set a custom JSON encoder for the library.
     /// The custom encoder can be useful when you need to apply specific
     /// encoding strategies.
@@ -15,5 +23,9 @@ public struct StradaConfig {
         didSet {
             StradaLogger.debugLoggingEnabled = debugLoggingEnabled
         }
+    }
+    
+    private init() {
+        
     }
 }
