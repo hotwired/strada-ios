@@ -6,8 +6,8 @@ class MessageTests: XCTestCase {
     private let metadata = Message.Metadata(url: "https://37signals.com")
     
     override func setUp() async throws {
-        Strada.config.jsonEncoder = JSONEncoder()
-        Strada.config.jsonDecoder = JSONDecoder()
+        StradaConfig.shared.jsonEncoder = JSONEncoder()
+        StradaConfig.shared.jsonDecoder = JSONDecoder()
     }
     
     // MARK: replacing(event:, jsonData:)
@@ -162,7 +162,7 @@ class MessageTests: XCTestCase {
     func test_decodingWithCustomDecoder() {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        Strada.config.jsonDecoder = decoder
+        StradaConfig.shared.jsonDecoder = decoder
         
         let jsonData = """
         {"title":"Page-title","subtitle":"Page-subtitle", "action_name": "go"}
@@ -187,7 +187,7 @@ class MessageTests: XCTestCase {
     func test_encodingWithCustomEncoder() {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
-        Strada.config.jsonEncoder = encoder
+        StradaConfig.shared.jsonEncoder = encoder
         
         let messageData = MessageData(title: "Page-title",
                                    subtitle: "Page-subtitle",
