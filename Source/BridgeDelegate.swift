@@ -73,32 +73,32 @@ public final class BridgeDelegate: BridgingDelegate {
     // MARK: - Destination lifecycle
     
     public func onViewDidLoad() {
-        logger.debug("bridgeDestinationViewDidLoad: \(self.location)")
+        logger.debug("bridgeDestinationViewDidLoad: \(self.resolvedLocation)")
         destinationIsActive = true
         activeComponents.forEach { $0.viewDidLoad() }
     }
     
     public func onViewWillAppear() {
-        logger.debug("bridgeDestinationViewWillAppear: \(self.location)")
+        logger.debug("bridgeDestinationViewWillAppear: \(self.resolvedLocation)")
         destinationIsActive = true
         activeComponents.forEach { $0.viewWillAppear() }
     }
     
     public func onViewDidAppear() {
-        logger.debug("bridgeDestinationViewDidAppear: \(self.location)")
+        logger.debug("bridgeDestinationViewDidAppear: \(self.resolvedLocation)")
         destinationIsActive = true
         activeComponents.forEach { $0.viewDidAppear() }
     }
     
     public func onViewWillDisappear() {
         activeComponents.forEach { $0.viewWillDisappear() }
-        logger.debug("bridgeDestinationViewWillDisappear: \(self.location)")
+        logger.debug("bridgeDestinationViewWillDisappear: \(self.resolvedLocation)")
     }
     
     public func onViewDidDisappear() {
         activeComponents.forEach { $0.viewDidDisappear() }
         destinationIsActive = false
-        logger.debug("bridgeDestinationViewDidDisappear: \(self.location)")
+        logger.debug("bridgeDestinationViewDidDisappear: \(self.resolvedLocation)")
     }
     
     // MARK: Retrieve component by type
