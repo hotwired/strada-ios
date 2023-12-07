@@ -47,29 +47,29 @@ final class ComposerComponentTests: XCTestCase {
     
     // MARK: Select sender tests
     
-    func test_selectSender_emailFound_sendsTheCorrectMessageReply() {
+    func test_selectSender_emailFound_sendsTheCorrectMessageReply() async {
         component.didReceive(message: connectMessage)
         
-        component.selectSender(emailAddress: "user1@37signals.com")
-        
+        await component.selectSender(emailAddress: "user1@37signals.com")
+
         let expectedMessage = connectMessage.replacing(event: "select-sender",
                                                        jsonData: "{\"selectedIndex\":1}")
         XCTAssertTrue(delegate.replyWithMessageWasCalled)
         XCTAssertEqual(delegate.replyWithMessageArg, expectedMessage)
     }
     
-    func test_selectSender_emailNotFound_doesNotSendAnyMessage() {
+    func test_selectSender_emailNotFound_doesNotSendAnyMessage() async {
         component.didReceive(message: connectMessage)
         
-        component.selectSender(emailAddress: "test@37signals.com")
-        
+        await component.selectSender(emailAddress: "test@37signals.com")
+
         XCTAssertFalse(delegate.replyWithMessageWasCalled)
         XCTAssertNil(delegate.replyWithMessageArg)
     }
     
-    func test_selectSender_beforeConnectMessage_doesNotSendAnyMessage() {
-        component.selectSender(emailAddress: "user1@37signals.com")
-        
+    func test_selectSender_beforeConnectMessage_doesNotSendAnyMessage() async {
+        await component.selectSender(emailAddress: "user1@37signals.com")
+
         XCTAssertFalse(delegate.replyWithMessageWasCalled)
         XCTAssertNil(delegate.replyWithMessageArg)
     }

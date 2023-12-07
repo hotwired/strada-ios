@@ -9,17 +9,17 @@ protocol Bridgable: AnyObject {
     var delegate: BridgeDelegate? { get set }
     var webView: WKWebView? { get }
     
-    func register(component: String)
-    func register(components: [String])
-    func unregister(component: String)
-    func reply(with message: Message)
+    func register(component: String) async
+    func register(components: [String]) async
+    func unregister(component: String) async
+    func reply(with message: Message) async
 }
 
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
 public final class Bridge: Bridgable {
     typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
-    
+
     weak var delegate: BridgeDelegate?
     weak var webView: WKWebView?
     
@@ -42,28 +42,28 @@ public final class Bridge: Bridgable {
     
     /// Register a single component
     /// - Parameter component: Name of a component to register support for
-    func register(component: String) {
-        callBridgeFunction(.register, arguments: [component])
+    func register(component: String) async {
+        await callBridgeFunction(.register, arguments: [component])
     }
     
     /// Register multiple components
     /// - Parameter components: Array of component names to register
-    func register(components: [String]) {
-        callBridgeFunction(.register, arguments: [components])
+    func register(components: [String]) async {
+        await callBridgeFunction(.register, arguments: [components])
     }
     
     /// Unregister support for a single component
     /// - Parameter component: Component name
-    func unregister(component: String) {
-        callBridgeFunction(.unregister, arguments: [component])
+    func unregister(component: String) async {
+        await callBridgeFunction(.unregister, arguments: [component])
     }
     
     /// Send a message through the bridge to the web application
     /// - Parameter message: Message to send
-    func reply(with message: Message) {
+    func reply(with message: Message) async {
         logger.debug("bridgeWillReplyWithMessage: \(String(describing: message))")
         let internalMessage = InternalMessage(from: message)
-        callBridgeFunction(.replyWith, arguments: [internalMessage.toJSON()])
+        await callBridgeFunction(.replyWith, arguments: [internalMessage.toJSON()])
     }
     
 //    /// Convenience method to reply to a previously received message. Data will be replaced,
@@ -75,27 +75,29 @@ public final class Bridge: Bridgable {
 //        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
 //    }
 
-    /// Evaluates javaScript string directly as passed in sending through the web view
-    func evaluate(javaScript: String, completion: CompletionHandler? = nil) {
+    @discardableResult
+    func evaluate(javaScript: String) async -> JavaScriptResult {
         guard let webView = webView else {
-            completion?(nil, BridgeError.missingWebView)
-            return
+            return JavaScriptResult(result: nil, error: BridgeError.missingWebView)
         }
-        
-        webView.evaluateJavaScript(javaScript) { result, error in
-            if let error = error {
-                logger.error("Error evaluating JavaScript: \(error)")
-            }
-            
-            completion?(result, error)
+
+        var result: Any? = nil
+        var error: Error? = nil
+        do {
+            result = try await webView.evaluateJavaScript(javaScript)
+        } catch let e {
+            logger.error("Error evaluating JavaScript: \(e)")
+            error = e
         }
+
+        return JavaScriptResult(result: result, error: error)
     }
-    
+
     /// Evaluates a JavaScript function with optional arguments by encoding the arguments
     /// Function should not include the parens
     /// Usage: evaluate(function: "console.log", arguments: ["test"])
-    func evaluate(function: String, arguments: [Any] = [], completion: CompletionHandler? = nil) {
-        evaluate(javaScript: JavaScript(functionName: function, arguments: arguments), completion: completion)
+    func evaluate(function: String, arguments: [Any] = []) async -> JavaScriptResult {
+        await evaluate(javaScript: JavaScript(functionName: function, arguments: arguments))
     }
 
     static func initialize(_ bridge: Bridge) {
@@ -116,9 +118,9 @@ public final class Bridge: Bridgable {
     /// The webkit.messageHandlers name
     private let scriptHandlerName = "strada"
     
-    private func callBridgeFunction(_ function: JavaScriptBridgeFunction, arguments: [Any]) {
+    private func callBridgeFunction(_ function: JavaScriptBridgeFunction, arguments: [Any]) async {
         let js = JavaScript(object: bridgeGlobal, functionName: function.rawValue, arguments: arguments)
-        evaluate(javaScript: js)
+        await evaluate(javaScript: js)
     }
 
     // MARK: - Configuration
@@ -153,15 +155,16 @@ public final class Bridge: Bridgable {
     
     // MARK: - JavaScript Evaluation
     
-    private func evaluate(javaScript: JavaScript, completion: CompletionHandler? = nil) {
+    @discardableResult
+    private func evaluate(javaScript: JavaScript) async -> JavaScriptResult {
         do {
-            evaluate(javaScript: try javaScript.toString(), completion: completion)
+            return await evaluate(javaScript: try javaScript.toString())
         } catch {
             logger.error("Error evaluating JavaScript: \(String(describing: javaScript)), error: \(error)")
-            completion?(nil, error)
+            return JavaScriptResult(result: nil, error: error)
         }
     }
-    
+
     private enum JavaScriptBridgeFunction: String {
         case register
         case unregister
@@ -170,10 +173,10 @@ public final class Bridge: Bridgable {
 }
 
 extension Bridge: ScriptMessageHandlerDelegate {
-    func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) {
+    func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) async {
         if let event = scriptMessage.body as? String,
             event == "ready" {
-            delegate?.bridgeDidInitialize()
+            await delegate?.bridgeDidInitialize()
             return
         }
         
@@ -183,5 +186,12 @@ extension Bridge: ScriptMessageHandlerDelegate {
         }
         
         logger.warning("Unhandled message received: \(String(describing: scriptMessage.body))")
+    }
+}
+
+extension Bridge {
+    struct JavaScriptResult {
+        let result: Any?
+        let error: Error?
     }
 }

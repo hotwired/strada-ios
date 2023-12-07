@@ -10,8 +10,8 @@ public protocol BridgingDelegate: AnyObject {
     
     func webViewDidBecomeActive(_ webView: WKWebView)
     func webViewDidBecomeDeactivated()
-    func reply(with message: Message) -> Bool
-    
+    func reply(with message: Message) async -> Bool
+
     func onViewDidLoad()
     func onViewWillAppear()
     func onViewDidAppear()
@@ -20,7 +20,7 @@ public protocol BridgingDelegate: AnyObject {
     
     func component<C: BridgeComponent>() -> C?
     
-    func bridgeDidInitialize()
+    func bridgeDidInitialize() async
     func bridgeDidReceiveMessage(_ message: Message) -> Bool
 }
 
@@ -60,13 +60,13 @@ public final class BridgeDelegate: BridgingDelegate {
     ///
     /// - Parameter message: The message to be replied with.
     /// - Returns: `true` if the reply was successful, `false` if the bridge is not available.
-    public func reply(with message: Message) -> Bool {
+    public func reply(with message: Message) async -> Bool {
         guard let bridge else {
             logger.warning("bridgeMessageFailedToReply: bridge is not available")
             return false
         }
         
-        bridge.reply(with: message)
+        await bridge.reply(with: message)
         return true
     }
     
@@ -109,9 +109,9 @@ public final class BridgeDelegate: BridgingDelegate {
     
     // MARK: Internal use
     
-    public func bridgeDidInitialize() {
+    public func bridgeDidInitialize() async {
         let componentNames = componentTypes.map { $0.name }
-        bridge?.register(components: componentNames)
+        await bridge?.register(components: componentNames)
     }
     
     @discardableResult

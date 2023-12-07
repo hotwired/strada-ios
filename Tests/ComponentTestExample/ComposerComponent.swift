@@ -17,7 +17,7 @@ final class ComposerComponent: BridgeComponent {
         }
     }
     
-    func selectSender(emailAddress: String) {
+    func selectSender(emailAddress: String) async {
         guard let message = receivedMessage(for: InboundEvent.connect.rawValue),
               let senders: [Sender] = message.data() else {
             return
@@ -29,7 +29,7 @@ final class ComposerComponent: BridgeComponent {
         
         let newMessage = message.replacing(event: OutboundEvent.selectSender.rawValue,
                                            data: SelectSenderMessageData(selectedIndex: sender.index))
-        reply(with: newMessage)
+        await reply(with: newMessage)
     }
     
     func selectedSender() -> String? {
