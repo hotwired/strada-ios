@@ -4,24 +4,23 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-on: 
+on:
   push:
     branches:
     - main
   pull_request:
 
-env:
-  XCODEBUILD_DESTINATION_IOS: 'platform=iOS Simulator,name=iPhone 15 Pro'
-
 jobs:
   build-and-test:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app && /usr/bin/xcodebuild -version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - name: Run Tests
-        run: xcodebuild test -project Strada.xcodeproj -scheme Strada -destination "${{ env.XCODEBUILD_DESTINATION_IOS }}" -resultBundlePath TestResults
+        run: xcodebuild test -scheme Strada -destination "name=iPhone 15 Pro" | xcpretty && exit ${PIPESTATUS[0]}
