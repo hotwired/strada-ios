@@ -31,9 +31,6 @@ public struct Message: Equatable {
         self.metadata = metadata
         self.jsonData = jsonData
     }
-    
-    /// Used to compare `jsonData` Strings.
-    private static let equalityJSONEncoder = JSONEncoder()
 }
 
 extension Message {
@@ -99,8 +96,8 @@ extension Message {
 }
 
 extension Message {
-    
-    /// Using `Equatable`'s default implementation is bound to give us false positives since two `Message`s may have semantically equal, but textually different, `jsonData`.
+    /// Using `Equatable`'s default implementation is bound to give us false positives
+    /// since two `Message`s may have semantically equal, but textually different, `jsonData`.
     ///
     /// For example, the following `jsonData` should be considered equal.
     ///
@@ -115,19 +112,10 @@ extension Message {
     ///   - rhs: another message
     /// - Returns: true if they're semantically equal
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        
-        if lhs.jsonData != rhs.jsonData {
-            guard let lhsJSONData = lhs.jsonData.data(using: .utf8),
-                  let rhsJSONData = rhs.jsonData.data(using: .utf8),
-                  let lhsJSONObject = try? JSONSerialization.jsonObject(with: lhsJSONData, options: []) as? NSObject,
-                  let rhsJSONObject = try? JSONSerialization.jsonObject(with: rhsJSONData, options: []) as? NSObject,
-                  lhsJSONObject == rhsJSONObject
-            else { return false }
-        }
-        
         return lhs.id == rhs.id &&
         lhs.component == rhs.component &&
         lhs.event == rhs.event &&
-        lhs.metadata == rhs.metadata
+        lhs.metadata == rhs.metadata &&
+        lhs.jsonData.jsonObject() as? [String: AnyHashable] == rhs.jsonData.jsonObject() as? [String: AnyHashable]
     }
 }
