@@ -117,7 +117,7 @@ public final class BridgeDelegate: BridgingDelegate {
     @discardableResult
     public func bridgeDidReceiveMessage(_ message: Message) -> Bool {
         guard destinationIsActive,
-              webView?.url?.absoluteString ?? location == message.metadata?.url else {
+              resolvedLocation == message.metadata?.url else {
             logger.warning("bridgeDidIgnoreMessage: \(String(describing: message))")
             return false
         }
@@ -133,6 +133,9 @@ public final class BridgeDelegate: BridgingDelegate {
     private var initializedComponents: [String: BridgeComponent] = [:]
     private var destinationIsActive = false
     private let componentTypes: [BridgeComponent.Type]
+    private var resolvedLocation: String {
+        webView?.url?.absoluteString ?? location
+    }
     
     private var activeComponents: [BridgeComponent] {
         return initializedComponents.values.filter { _ in destinationIsActive }
