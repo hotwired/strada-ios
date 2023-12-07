@@ -11,7 +11,7 @@ on:
   pull_request:
 
 env:
-  XCODEBUILD_DESTINATION_IOS: 'platform=iOS Simulator,name=iPhone 14 Pro'
+  XCODEBUILD_DESTINATION_IOS: 'platform=iOS Simulator,name=iPhone 15 Pro'
 
 jobs:
   build-and-test:
