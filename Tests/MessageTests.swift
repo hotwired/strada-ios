@@ -184,7 +184,7 @@ class MessageTests: XCTestCase {
     
     // MARK: Custom encoding
     
-    func test_encodingWithCustomEncoder() {
+    func test_encodingWithCustomEncoder() throws {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         Strada.config.jsonEncoder = encoder
@@ -204,6 +204,15 @@ class MessageTests: XCTestCase {
         
         let newMessage = message.replacing(data: messageData)
         
-        XCTAssertEqual(message, newMessage)
+        XCTAssertEqual(message.id, newMessage.id)
+        XCTAssertEqual(message.event, newMessage.event)
+        XCTAssertEqual(message.metadata, newMessage.metadata)
+
+        // JSON as a string might have keys in a different order. Parse values to ensure equality.
+        let newMessageData = try XCTUnwrap(message.jsonData.jsonObject() as? [String: String])
+        XCTAssertEqual(newMessageData.keys.count, 3)
+        XCTAssertEqual(newMessageData["title"], "Page-title")
+        XCTAssertEqual(newMessageData["subtitle"], "Page-subtitle")
+        XCTAssertEqual(newMessageData["action_name"], "go")
     }
 }
