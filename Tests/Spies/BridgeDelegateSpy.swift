@@ -1,6 +1,6 @@
 import Foundation
 import WebKit
-@testable import Strada
+import Strada
 
 final class BridgeDelegateSpy: BridgingDelegate {
     let location: String = ""

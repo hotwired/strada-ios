@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 import WebKit
-@testable import Strada
+import Strada
 
 class BridgeComponentTest: XCTestCase {
     private var delegate: BridgeDelegateSpy!

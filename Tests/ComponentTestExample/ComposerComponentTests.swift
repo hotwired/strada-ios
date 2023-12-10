@@ -1,6 +1,6 @@
 import XCTest
 import WebKit
-@testable import Strada
+import Strada
 
 final class ComposerComponentTests: XCTestCase {
     private var delegate: BridgeDelegateSpy!

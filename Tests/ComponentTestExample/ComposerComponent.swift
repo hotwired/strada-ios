@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import Strada
+import Strada
 
 final class ComposerComponent: BridgeComponent {
     static override var name: String { "composer" }

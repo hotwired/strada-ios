@@ -1,5 +1,5 @@
 import Foundation
-@testable import Strada
+import Strada
 
 final class BridgeComponentSpy: BridgeComponent {
     static override var name: String { "two" }
