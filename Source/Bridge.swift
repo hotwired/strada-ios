@@ -74,7 +74,7 @@ public final class Bridge: Bridgable {
 //        let replyMessage = message.replacing(data: data)
 //        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
 //    }
-
+    @MainActor
     @discardableResult
     func evaluate(javaScript: String) async -> JavaScriptResult {
         guard let webView = webView else {
@@ -173,6 +173,7 @@ public final class Bridge: Bridgable {
 }
 
 extension Bridge: ScriptMessageHandlerDelegate {
+    @MainActor
     func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) async {
         if let event = scriptMessage.body as? String,
             event == "ready" {
