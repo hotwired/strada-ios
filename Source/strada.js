@@ -13,7 +13,7 @@
     
     async setAdapter() {
       await this.registerCalled;
-      this.webBridge.setAdapter(this);
+      this.webBridge.setAdapter(this)
     }
 
     register(component) {
