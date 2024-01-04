@@ -12,7 +12,7 @@
     }
     
     async setAdapter() {
-      await this.registerCalled;
+      await this.registerCalled
       this.webBridge.setAdapter(this)
     }
 
