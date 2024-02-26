@@ -90,6 +90,21 @@ class BridgeComponentTest: XCTestCase {
         XCTAssertNil(delegate.replyWithMessageArg)
     }
 
+    // MARK: reply(to:) non-async
+
+    func test_replyToReceivedMessageSucceeds() {
+        component.reply(to: "connect")
+
+        wait(for: [expectation(
+            that: \.replyWithMessageWasCalled,
+            on: delegate,
+            willEqual: true
+        )], timeout: 1)
+
+        XCTAssertTrue(delegate.replyWithMessageWasCalled)
+        XCTAssertEqual(delegate.replyWithMessageArg, message)
+    }
+
     // MARK: reply(with:)
    
     func test_replyWithSucceedsWhenBridgeIsSet() async throws {
@@ -99,6 +114,24 @@ class BridgeComponentTest: XCTestCase {
         let success = try await component.reply(with: newMessage)
 
         XCTAssertTrue(success)
+        XCTAssertTrue(delegate.replyWithMessageWasCalled)
+        XCTAssertEqual(delegate.replyWithMessageArg, newMessage)
+    }
+
+    // MARK: reply(with:) non-async
+
+    func test_replyWithSucceedsWhenBridgeIsSet() {
+        let newJsonData = "{\"title\":\"Page-title\"}"
+        let newMessage = message.replacing(jsonData: newJsonData)
+
+        component.reply(with: newMessage)
+
+        wait(for: [expectation(
+            that: \.replyWithMessageWasCalled,
+            on: delegate,
+            willEqual: true
+        )], timeout: 1)
+
         XCTAssertTrue(delegate.replyWithMessageWasCalled)
         XCTAssertEqual(delegate.replyWithMessageArg, newMessage)
     }

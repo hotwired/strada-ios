@@ -53,7 +53,14 @@ open class BridgeComponent: BridgingComponent {
     public func reply(with message: Message) async throws -> Bool {
         try await delegate.reply(with: message)
     }
-    
+
+    /// Replies to the web with a received message, optionally replacing its `event` or `jsonData`.
+    ///
+    /// - Parameter message: The message to be replied with.
+    public func reply(with message: Message) {
+        Task { _ = try await delegate.reply(with: message) }
+    }
+
     @discardableResult
     /// Replies to the web with the last received message for a given `event` with its original `jsonData`.
     ///
@@ -69,7 +76,16 @@ open class BridgeComponent: BridgingComponent {
         
         return try await reply(with: message)
     }
-    
+
+    /// Replies to the web with the last received message for a given `event` with its original `jsonData`.
+    ///
+    /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
+    ///
+    /// - Parameter event: The `event` for which a reply should be sent.
+    public func reply(to event: String) {
+        Task { _ = try await reply(to: event) }
+    }
+
     @discardableResult
     /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`.
     ///

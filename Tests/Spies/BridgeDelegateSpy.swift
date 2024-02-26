@@ -2,7 +2,7 @@ import Foundation
 import WebKit
 import Strada
 
-final class BridgeDelegateSpy: BridgingDelegate {
+final class BridgeDelegateSpy: NSObject, BridgingDelegate {
     let location: String = ""
     let destination: BridgeDestination = AppBridgeDestination()
     var webView: WKWebView? = nil
