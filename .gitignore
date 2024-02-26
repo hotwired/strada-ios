@@ -4,3 +4,4 @@ node_modules
 *.xcuserstate
 *.xcbkptlist
 .swiftpm
+xcuserdata
