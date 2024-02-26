@@ -44,46 +44,46 @@ class BridgeComponentTest: XCTestCase {
     
     // MARK: reply(to:)
     
-    func test_replyToReceivedMessageSucceeds() async {
-        let success = await component.reply(to: "connect")
+    func test_replyToReceivedMessageSucceeds() async throws {
+        let success = try await component.reply(to: "connect")
 
         XCTAssertTrue(success)
         XCTAssertTrue(delegate.replyWithMessageWasCalled)
         XCTAssertEqual(delegate.replyWithMessageArg, message)
     }
     
-    func test_replyToReceivedMessageWithACodableObjectSucceeds() async {
+    func test_replyToReceivedMessageWithACodableObjectSucceeds() async throws {
         let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
         let newJsonData = "{\"title\":\"hey\",\"subtitle\":\"\",\"actionName\":\"tap\"}"
         let newMessage = message.replacing(jsonData: newJsonData)
         
-        let success = await component.reply(to: "connect", with: messageData)
+        let success = try await component.reply(to: "connect", with: messageData)
 
         XCTAssertTrue(success)
         XCTAssertTrue(delegate.replyWithMessageWasCalled)
         XCTAssertEqual(delegate.replyWithMessageArg, newMessage)
     }
     
-    func test_replyToMessageNotReceivedWithACodableObjectIgnoresTheReply() async {
+    func test_replyToMessageNotReceivedWithACodableObjectIgnoresTheReply() async throws {
         let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
         
-        let success = await component.reply(to: "disconnect", with: messageData)
+        let success = try await component.reply(to: "disconnect", with: messageData)
 
         XCTAssertFalse(success)
         XCTAssertFalse(delegate.replyWithMessageWasCalled)
         XCTAssertNil(delegate.replyWithMessageArg)
     }
     
-    func test_replyToMessageNotReceivedIgnoresTheReply() async {
-        let success = await component.reply(to: "disconnect")
+    func test_replyToMessageNotReceivedIgnoresTheReply() async throws {
+        let success = try await component.reply(to: "disconnect")
 
         XCTAssertFalse(success)
         XCTAssertFalse(delegate.replyWithMessageWasCalled)
         XCTAssertNil(delegate.replyWithMessageArg)
     }
     
-    func test_replyToMessageNotReceivedWithJsonDataIgnoresTheReply() async {
-        let success = await component.reply(to: "disconnect", with: "{\"title\":\"Page-title\"}")
+    func test_replyToMessageNotReceivedWithJsonDataIgnoresTheReply() async throws {
+        let success = try await component.reply(to: "disconnect", with: "{\"title\":\"Page-title\"}")
 
         XCTAssertFalse(success)
         XCTAssertFalse(delegate.replyWithMessageWasCalled)
@@ -92,11 +92,11 @@ class BridgeComponentTest: XCTestCase {
 
     // MARK: reply(with:)
    
-    func test_replyWithSucceedsWhenBridgeIsSet() async {
+    func test_replyWithSucceedsWhenBridgeIsSet() async throws {
         let newJsonData = "{\"title\":\"Page-title\"}"
         let newMessage = message.replacing(jsonData: newJsonData)
         
-        let success = await component.reply(with: newMessage)
+        let success = try await component.reply(with: newMessage)
 
         XCTAssertTrue(success)
         XCTAssertTrue(delegate.replyWithMessageWasCalled)

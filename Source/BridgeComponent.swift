@@ -50,8 +50,8 @@ open class BridgeComponent: BridgingComponent {
     ///
     /// - Parameter message: The message to be replied with.
     /// - Returns: `true` if the reply was successful, `false` if the bridge is not available.
-    public func reply(with message: Message) async -> Bool {
-        await delegate.reply(with: message)
+    public func reply(with message: Message) async throws -> Bool {
+        try await delegate.reply(with: message)
     }
     
     @discardableResult
@@ -61,13 +61,13 @@ open class BridgeComponent: BridgingComponent {
     ///
     /// - Parameter event: The `event` for which a reply should be sent.
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
-    public func reply(to event: String) async -> Bool {
+    public func reply(to event: String) async throws -> Bool {
         guard let message = receivedMessage(for: event) else {
             logger.warning("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
         }
         
-        return await reply(with: message)
+        return try await reply(with: message)
     }
     
     @discardableResult
@@ -79,15 +79,14 @@ open class BridgeComponent: BridgingComponent {
     ///   - event: The `event` for which a reply should be sent.
     ///   - jsonData: The `jsonData` to be included in the reply message.
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
-    public func reply(to event: String, with jsonData: String) async -> Bool {
+    public func reply(to event: String, with jsonData: String) async throws -> Bool {
         guard let message = receivedMessage(for: event) else {
             logger.warning("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
         }
         
         let messageReply = message.replacing(jsonData: jsonData)
-        
-        return await reply(with: messageReply)
+        return try await reply(with: messageReply)
     }
     
     @discardableResult
@@ -100,15 +99,14 @@ open class BridgeComponent: BridgingComponent {
     ///   - event: The `event` for which a reply should be sent.
     ///   - data: An instance conforming to `Encodable` to be included as `jsonData` in the reply message.
     /// - Returns: `true` if the reply was successful, `false` if the event message was not received.
-    public func reply<T: Encodable>(to event: String, with data: T) async -> Bool {
+    public func reply<T: Encodable>(to event: String, with data: T) async throws -> Bool {
         guard let message = receivedMessage(for: event) else {
             logger.warning("bridgeMessageFailedToReply: message for event \(event) was not received")
             return false
         }
         
         let messageReply = message.replacing(data: data)
-        
-        return await reply(with: messageReply)
+        return try await reply(with: messageReply)
     }
     
     /// Returns the last received message for a given `event`, if available.

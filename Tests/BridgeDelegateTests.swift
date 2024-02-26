@@ -22,8 +22,8 @@ class BridgeDelegateTests: XCTestCase {
         delegate.onViewDidLoad()
     }
     
-    func testBridgeDidInitialize() async {
-        await delegate.bridgeDidInitialize()
+    func testBridgeDidInitialize() async throws {
+        try await delegate.bridgeDidInitialize()
 
         XCTAssertTrue(bridge.registerComponentsWasCalled)
         XCTAssertEqual(bridge.registerComponentsArg, ["one", "two"])
@@ -143,20 +143,20 @@ class BridgeDelegateTests: XCTestCase {
     
     // MARK: reply(with:)
    
-    func test_replyWithSucceedsWhenBridgeIsSet() async {
+    func test_replyWithSucceedsWhenBridgeIsSet() async throws {
         let message = testMessage()
-        let success = await delegate.reply(with: message)
+        let success = try await delegate.reply(with: message)
 
         XCTAssertTrue(success)
         XCTAssertTrue(bridge.replyWithMessageWasCalled)
         XCTAssertEqual(bridge.replyWithMessageArg, message)
     }
     
-    func test_replyWithFailsWhenBridgeNotSet() async {
+    func test_replyWithFailsWhenBridgeNotSet() async throws {
         delegate.bridge = nil
 
         let message = testMessage()
-        let success = await delegate.reply(with: message)
+        let success = try await delegate.reply(with: message)
 
         XCTAssertFalse(success)
         XCTAssertFalse(bridge.replyWithMessageWasCalled)
