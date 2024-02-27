@@ -18,8 +18,6 @@ protocol Bridgable: AnyObject {
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
 public final class Bridge: Bridgable {
-    typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
-
     weak var delegate: BridgeDelegate?
     weak var webView: WKWebView?
 
