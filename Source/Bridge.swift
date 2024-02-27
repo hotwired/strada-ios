@@ -18,8 +18,6 @@ protocol Bridgable: AnyObject {
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
 public final class Bridge: Bridgable {
-    typealias CompletionHandler = (_ result: Any?, _ error: Error?) -> Void
-
     weak var delegate: BridgeDelegate?
     weak var webView: WKWebView?
 
@@ -76,8 +74,8 @@ public final class Bridge: Bridgable {
 //    }
     @MainActor
     @discardableResult
-    func evaluate(javaScript: String) async throws -> Any? {
-        guard let webView = webView else {
+    func evaluate(javaScript: String) async throws -> Any {
+        guard let webView else {
             throw BridgeError.missingWebView
         }
 
@@ -92,7 +90,7 @@ public final class Bridge: Bridgable {
     /// Evaluates a JavaScript function with optional arguments by encoding the arguments
     /// Function should not include the parens
     /// Usage: evaluate(function: "console.log", arguments: ["test"])
-    func evaluate(function: String, arguments: [Any] = []) async throws -> Any? {
+    func evaluate(function: String, arguments: [Any] = []) async throws -> Any {
         try await evaluate(javaScript: JavaScript(functionName: function, arguments: arguments).toString())
     }
 
@@ -153,7 +151,7 @@ public final class Bridge: Bridgable {
     // MARK: - JavaScript Evaluation
 
     @discardableResult
-    private func evaluate(javaScript: JavaScript) async throws -> Any? {
+    private func evaluate(javaScript: JavaScript) async throws -> Any {
         do {
             return try await evaluate(javaScript: javaScript.toString())
         } catch {

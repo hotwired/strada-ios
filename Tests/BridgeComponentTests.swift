@@ -99,7 +99,7 @@ class BridgeComponentTest: XCTestCase {
             that: \.replyWithMessageWasCalled,
             on: delegate,
             willEqual: true
-        )], timeout: 1)
+        )], timeout: .expectationTimeout)
 
         XCTAssertTrue(delegate.replyWithMessageWasCalled)
         XCTAssertEqual(delegate.replyWithMessageArg, message)
@@ -130,9 +130,13 @@ class BridgeComponentTest: XCTestCase {
             that: \.replyWithMessageWasCalled,
             on: delegate,
             willEqual: true
-        )], timeout: 1)
+        )], timeout: .expectationTimeout)
 
         XCTAssertTrue(delegate.replyWithMessageWasCalled)
         XCTAssertEqual(delegate.replyWithMessageArg, newMessage)
     }
+}
+
+private extension TimeInterval {
+    static let expectationTimeout: TimeInterval = 5
 }

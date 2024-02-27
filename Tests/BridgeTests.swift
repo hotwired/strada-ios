@@ -23,14 +23,17 @@ class BridgeTests: XCTestCase {
         Bridge.initialize(webView)
         XCTAssertEqual(userContentController.userScripts.count, 1)
     }
-    
+
+    /// NOTE: Each call to `webView.evaluateJavaScript(String)` will throw an error.
+    /// We intentionally disregard any thrown errors (`try? await bridge...`)
+    /// because we validate the evaluated JavaScript string ourselves.
     @MainActor
     func testRegisterComponentCallsJavaScriptFunction() async throws {
         let webView = TestWebView()
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        try await bridge.register(component: "test")
+        try? await bridge.register(component: "test")
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.register(\"test\")")
     }
     
@@ -40,7 +43,7 @@ class BridgeTests: XCTestCase {
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        try await bridge.register(components: ["one", "two"])
+        try? await bridge.register(components: ["one", "two"])
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.register([\"one\",\"two\"])")
     }
     
@@ -50,7 +53,7 @@ class BridgeTests: XCTestCase {
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        try await bridge.unregister(component: "test")
+        try? await bridge.unregister(component: "test")
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.unregister(\"test\")")
     }
     
@@ -71,7 +74,7 @@ class BridgeTests: XCTestCase {
                               jsonData: data)
 
         
-        try await bridge.reply(with: message)
+        try? await bridge.reply(with: message)
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.replyWith({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
     }
     
@@ -81,7 +84,7 @@ class BridgeTests: XCTestCase {
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        try await bridge.evaluate(javaScript: "test(1,2,3)")
+        _ = try? await bridge.evaluate(javaScript: "test(1,2,3)")
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "test(1,2,3)")
     }
     
@@ -104,16 +107,16 @@ class BridgeTests: XCTestCase {
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        _ = try await bridge.evaluate(function: "test", arguments: [1, 2, 3])
+        _ = try? await bridge.evaluate(function: "test", arguments: [1, 2, 3])
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "test(1,2,3)")
     }
 }
 
 private final class TestWebView: WKWebView {
     var lastEvaluatedJavaScript: String?
-    
-    override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
+
+    override func evaluateJavaScript(_ javaScriptString: String) async throws -> Any {
         lastEvaluatedJavaScript = javaScriptString
-        super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+        return try await super.evaluateJavaScript(javaScriptString)
     }
 }
