@@ -7,7 +7,7 @@ final class BridgeDelegateSpy: NSObject, BridgingDelegate {
     let destination: BridgeDestination = AppBridgeDestination()
     var webView: WKWebView? = nil
     
-    var replyWithMessageWasCalled = false
+    @objc dynamic var replyWithMessageWasCalled = false
     var replyWithMessageArg: Message?
     
     func webViewDidBecomeActive(_ webView: WKWebView) {

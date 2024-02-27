@@ -92,6 +92,7 @@ class BridgeComponentTest: XCTestCase {
 
     // MARK: reply(to:) non-async
 
+    @MainActor
     func test_replyToReceivedMessageSucceeds() {
         component.reply(to: "connect")
 
@@ -120,6 +121,7 @@ class BridgeComponentTest: XCTestCase {
 
     // MARK: reply(with:) non-async
 
+    @MainActor
     func test_replyWithSucceedsWhenBridgeIsSet() {
         let newJsonData = "{\"title\":\"Page-title\"}"
         let newMessage = message.replacing(jsonData: newJsonData)
