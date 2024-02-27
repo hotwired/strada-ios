@@ -2,12 +2,12 @@ import Foundation
 import WebKit
 import Strada
 
-final class BridgeDelegateSpy: NSObject, BridgingDelegate {
+final class BridgeDelegateSpy: BridgingDelegate {
     let location: String = ""
     let destination: BridgeDestination = AppBridgeDestination()
     var webView: WKWebView? = nil
     
-    @objc dynamic var replyWithMessageWasCalled = false
+    var replyWithMessageWasCalled = false
     var replyWithMessageArg: Message?
     
     func webViewDidBecomeActive(_ webView: WKWebView) {

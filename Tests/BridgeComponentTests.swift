@@ -92,18 +92,22 @@ class BridgeComponentTest: XCTestCase {
 
     // MARK: reply(to:) non-async
 
-    @MainActor
     func test_replyToReceivedMessageSucceeds() {
-        component.reply(to: "connect")
+        let expectation = expectation(description: "Wait for completion.")
 
-        wait(for: [expectation(
-            that: \.replyWithMessageWasCalled,
-            on: delegate,
-            willEqual: true
-        )], timeout: .expectationTimeout)
+        component.reply(to: "connect") { [unowned self] result in
+            switch result {
+            case .success(let success):
+                XCTAssert(success)
+                XCTAssertTrue(delegate.replyWithMessageWasCalled)
+                XCTAssertEqual(delegate.replyWithMessageArg, message)
+            case .failure(let error):
+                XCTFail("Failed with error: \(error)")
+            }
+            expectation.fulfill()
+        }
 
-        XCTAssertTrue(delegate.replyWithMessageWasCalled)
-        XCTAssertEqual(delegate.replyWithMessageArg, message)
+        wait(for: [expectation], timeout: .expectationTimeout)
     }
 
     // MARK: reply(with:)
@@ -121,21 +125,25 @@ class BridgeComponentTest: XCTestCase {
 
     // MARK: reply(with:) non-async
 
-    @MainActor
     func test_replyWithSucceedsWhenBridgeIsSet() {
+        let expectation = expectation(description: "Wait for completion.")
+
         let newJsonData = "{\"title\":\"Page-title\"}"
         let newMessage = message.replacing(jsonData: newJsonData)
 
-        component.reply(with: newMessage)
+        component.reply(with: newMessage) { [unowned self] result in
+            switch result {
+            case .success(let success):
+                XCTAssert(success)
+                XCTAssertTrue(delegate.replyWithMessageWasCalled)
+                XCTAssertEqual(delegate.replyWithMessageArg, newMessage)
+            case .failure(let error):
+                XCTFail("Failed with error: \(error)")
+            }
+            expectation.fulfill()
+        }
 
-        wait(for: [expectation(
-            that: \.replyWithMessageWasCalled,
-            on: delegate,
-            willEqual: true
-        )], timeout: .expectationTimeout)
-
-        XCTAssertTrue(delegate.replyWithMessageWasCalled)
-        XCTAssertEqual(delegate.replyWithMessageArg, newMessage)
+        wait(for: [expectation], timeout: .expectationTimeout)
     }
 }
 

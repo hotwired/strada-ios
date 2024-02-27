@@ -23,6 +23,8 @@ protocol BridgingComponent: AnyObject {
 }
 
 open class BridgeComponent: BridgingComponent {
+    public typealias ReplyCompletionHandler = (Result<Bool, Error>) -> Void
+
     /// A unique name representing the `BridgeComponent` type.
     ///
     /// Subclasses must provide their own implementation of this property.
@@ -57,8 +59,15 @@ open class BridgeComponent: BridgingComponent {
     /// Replies to the web with a received message, optionally replacing its `event` or `jsonData`.
     ///
     /// - Parameter message: The message to be replied with.
-    public func reply(with message: Message) {
-        Task { _ = try await delegate.reply(with: message) }
+    public func reply(with message: Message, completion: ReplyCompletionHandler? = nil) {
+        Task {
+            do {
+                let result = try await delegate.reply(with: message)
+                completion?(.success((result)))
+            } catch {
+                completion?(.failure(error))
+            }
+        }
     }
 
     @discardableResult
@@ -82,8 +91,15 @@ open class BridgeComponent: BridgingComponent {
     /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
     ///
     /// - Parameter event: The `event` for which a reply should be sent.
-    public func reply(to event: String) {
-        Task { _ = try await reply(to: event) }
+    public func reply(to event: String, completion: ReplyCompletionHandler? = nil) {
+        Task {
+            do {
+                let result = try await reply(to: event)
+                completion?(.success((result)))
+            } catch {
+                completion?(.failure(error))
+            }
+        }
     }
 
     @discardableResult
