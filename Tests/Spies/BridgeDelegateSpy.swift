@@ -18,7 +18,7 @@ final class BridgeDelegateSpy: NSObject, BridgingDelegate {
         
     }
     
-    func reply(with message: Message) -> Bool {
+    func reply(with message: Message) async throws -> Bool {
         replyWithMessageWasCalled = true
         replyWithMessageArg = message
         
@@ -49,7 +49,7 @@ final class BridgeDelegateSpy: NSObject, BridgingDelegate {
         return nil
     }
     
-    func bridgeDidInitialize() {
+    func bridgeDidInitialize() async throws {
         
     }
     
