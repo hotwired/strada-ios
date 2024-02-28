@@ -3,6 +3,7 @@ import XCTest
 import WebKit
 @testable import Strada
 
+@MainActor
 class BridgeDelegateTests: XCTestCase {
     private var delegate: BridgeDelegate!
     private var destination: AppBridgeDestination!

@@ -3,6 +3,7 @@ import XCTest
 import WebKit
 import Strada
 
+@MainActor
 class BridgeComponentTest: XCTestCase {
     private var delegate: BridgeDelegateSpy!
     private var destination: AppBridgeDestination!
@@ -223,6 +224,6 @@ class BridgeComponentTest: XCTestCase {
     }
 }
 
-private extension TimeInterval {
+extension TimeInterval {
     static let expectationTimeout: TimeInterval = 5
 }

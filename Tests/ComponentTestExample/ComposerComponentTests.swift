@@ -2,6 +2,7 @@ import XCTest
 import WebKit
 import Strada
 
+@MainActor
 final class ComposerComponentTests: XCTestCase {
     private var delegate: BridgeDelegateSpy!
     private var destination: AppBridgeDestination!
