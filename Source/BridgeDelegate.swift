@@ -3,6 +3,7 @@ import WebKit
 
 public protocol BridgeDestination: AnyObject {}
 
+@MainActor
 public protocol BridgingDelegate: AnyObject {
     var location: String { get }
     var destination: BridgeDestination { get }
@@ -24,6 +25,7 @@ public protocol BridgingDelegate: AnyObject {
     func bridgeDidReceiveMessage(_ message: Message) -> Bool
 }
 
+@MainActor
 public final class BridgeDelegate: BridgingDelegate {
     public let location: String
     public unowned let destination: BridgeDestination
@@ -153,4 +155,3 @@ public final class BridgeDelegate: BridgingDelegate {
         return component
     }
 }
-
