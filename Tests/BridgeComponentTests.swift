@@ -109,6 +109,82 @@ class BridgeComponentTest: XCTestCase {
 
         wait(for: [expectation], timeout: .expectationTimeout)
     }
+    
+    func test_replyToReceivedMessageWithACodableObjectSucceeds() {
+        let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
+        let newJsonData = "{\"title\":\"hey\",\"subtitle\":\"\",\"actionName\":\"tap\"}"
+        let newMessage = message.replacing(jsonData: newJsonData)
+        let expectation = expectation(description: "Wait for completion.")
+
+        component.reply(to: "connect", with: messageData) { [unowned self] result in
+            switch result {
+            case .success(let success):
+                XCTAssertTrue(success)
+                XCTAssertTrue(delegate.replyWithMessageWasCalled)
+                XCTAssertEqual(delegate.replyWithMessageArg, newMessage)
+            case .failure(let error):
+                XCTFail("Failed with error: \(error)")
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: .expectationTimeout)
+    }
+    
+    func test_replyToMessageNotReceivedWithACodableObjectIgnoresTheReply() {
+        let messageData = MessageData(title: "hey", subtitle: "", actionName: "tap")
+        let expectation = expectation(description: "Wait for completion.")
+
+        component.reply(to: "disconnect", with: messageData) { [unowned self] result in
+            switch result {
+            case .success(let success):
+                XCTAssertFalse(success)
+                XCTAssertFalse(delegate.replyWithMessageWasCalled)
+                XCTAssertNil(delegate.replyWithMessageArg)
+            case .failure(let error):
+                XCTFail("Failed with error: \(error)")
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: .expectationTimeout)
+    }
+    
+    func test_replyToMessageNotReceivedIgnoresTheReply() {
+        let expectation = expectation(description: "Wait for completion.")
+
+        component.reply(to: "disconnect") { [unowned self] result in
+            switch result {
+            case .success(let success):
+                XCTAssertFalse(success)
+                XCTAssertFalse(delegate.replyWithMessageWasCalled)
+                XCTAssertNil(delegate.replyWithMessageArg)
+            case .failure(let error):
+                XCTFail("Failed with error: \(error)")
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: .expectationTimeout)
+    }
+    
+    func test_replyToMessageNotReceivedWithJsonDataIgnoresTheReply() {
+        let expectation = expectation(description: "Wait for completion.")
+
+        component.reply(to: "disconnect", with: "{\"title\":\"Page-title\"}") { [unowned self] result in
+            switch result {
+            case .success(let success):
+                XCTAssertFalse(success)
+                XCTAssertFalse(delegate.replyWithMessageWasCalled)
+                XCTAssertNil(delegate.replyWithMessageArg)
+            case .failure(let error):
+                XCTFail("Failed with error: \(error)")
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: .expectationTimeout)
+    }
 
     // MARK: reply(with:)
    
