@@ -58,7 +58,10 @@ open class BridgeComponent: BridgingComponent {
 
     /// Replies to the web with a received message, optionally replacing its `event` or `jsonData`.
     ///
-    /// - Parameter message: The message to be replied with.
+    /// - Parameters:
+    ///     - message: The message to be replied with.
+    ///     - completion: An optional completion handler to be called when the reply attempt completes.
+    ///                   It includes a result indicating whether the reply was successful or not.
     public func reply(with message: Message, completion: ReplyCompletionHandler? = nil) {
         Task {
             do {
@@ -90,7 +93,10 @@ open class BridgeComponent: BridgingComponent {
     ///
     /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
     ///
-    /// - Parameter event: The `event` for which a reply should be sent.
+    /// - Parameters:
+    ///     - event: The `event` for which a reply should be sent.
+    ///     - completion: An optional completion handler to be called when the reply attempt completes.
+    ///                   It includes a result indicating whether the reply was successful or not.
     public func reply(to event: String, completion: ReplyCompletionHandler? = nil) {
         Task {
             do {
@@ -121,6 +127,26 @@ open class BridgeComponent: BridgingComponent {
         return try await reply(with: messageReply)
     }
     
+    /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`.
+    ///
+    /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
+    ///
+    /// - Parameters:
+    ///   - event: The `event` for which a reply should be sent.
+    ///   - jsonData: The `jsonData` to be included in the reply message.
+    ///   - completion: An optional completion handler to be called when the reply attempt completes.
+    ///                 It includes a result indicating whether the reply was successful or not.
+    public func reply(to event: String, with jsonData: String, completion: ReplyCompletionHandler? = nil) {
+        Task {
+            do {
+                let result = try await reply(to: event, with: jsonData)
+                completion?(.success((result)))
+            } catch {
+                completion?(.failure(error))
+            }
+        }
+    }
+    
     @discardableResult
     /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`
     /// with the provided `Encodable` object. 
@@ -139,6 +165,27 @@ open class BridgeComponent: BridgingComponent {
         
         let messageReply = message.replacing(data: data)
         return try await reply(with: messageReply)
+    }
+    
+    /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`
+    /// with the provided `Encodable` object.
+    ///
+    /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
+    ///
+    /// - Parameters:
+    ///   - event: The `event` for which a reply should be sent.
+    ///   - data: An instance conforming to `Encodable` to be included as `jsonData` in the reply message.
+    ///   - completion: An optional completion handler to be called when the reply attempt completes.
+    ///                 It includes a result indicating whether the reply was successful or not.
+    public func reply<T: Encodable>(to event: String, with data: T, completion: ReplyCompletionHandler? = nil) {
+        Task {
+            do {
+                let result = try await reply(to: event, with: data)
+                completion?(.success((result)))
+            } catch {
+                completion?(.failure(error))
+            }
+        }
     }
     
     /// Returns the last received message for a given `event`, if available.
