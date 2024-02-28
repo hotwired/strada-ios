@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 protocol BridgingComponent: AnyObject {
     static var name: String { get }
     var delegate: BridgingDelegate { get }
@@ -22,6 +23,7 @@ protocol BridgingComponent: AnyObject {
     func viewDidDisappear()
 }
 
+@MainActor
 open class BridgeComponent: BridgingComponent {
     public typealias ReplyCompletionHandler = (Result<Bool, Error>) -> Void
 
@@ -30,7 +32,7 @@ open class BridgeComponent: BridgingComponent {
     /// Subclasses must provide their own implementation of this property.
     ///
     /// - Note: This property is used for identifying the component.
-    open class var name: String {
+    nonisolated open class var name: String {
         fatalError("BridgeComponent subclass must provide a unique 'name'")
     }
     
@@ -149,7 +151,7 @@ open class BridgeComponent: BridgingComponent {
     
     @discardableResult
     /// Replies to the web with the last received message for a given `event`, replacing its `jsonData`
-    /// with the provided `Encodable` object. 
+    /// with the provided `Encodable` object.
     ///
     /// NOTE: If a message has not been received for the given `event`, the reply will be ignored.
     ///
@@ -275,3 +277,4 @@ open class BridgeComponent: BridgingComponent {
     
     private var receivedMessages = [String: Message]()
 }
+
