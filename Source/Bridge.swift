@@ -5,6 +5,7 @@ public enum BridgeError: Error {
     case missingWebView
 }
 
+@MainActor
 protocol Bridgable: AnyObject {
     var delegate: BridgeDelegate? { get set }
     var webView: WKWebView? { get }
@@ -17,23 +18,28 @@ protocol Bridgable: AnyObject {
 
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
+@MainActor
 public final class Bridge: Bridgable {
+    public typealias InitializationCompletionHandler = () -> Void
     weak var delegate: BridgeDelegate?
     weak var webView: WKWebView?
 
-    public static func initialize(_ webView: WKWebView) {
+    nonisolated public static func initialize(_ webView: WKWebView, completion: InitializationCompletionHandler?) {
+        Task { @MainActor in
+            await initialize(webView)
+            completion?()
+        }
+    }
+    
+    public static func initialize(_ webView: WKWebView) async {
         if getBridgeFor(webView) == nil {
             initialize(Bridge(webView: webView))
         }
     }
-
+    
     init(webView: WKWebView) {
         self.webView = webView
         loadIntoWebView()
-    }
-
-    deinit {
-        webView?.configuration.userContentController.removeScriptMessageHandler(forName: scriptHandlerName)
     }
 
     // MARK: - Internal API
@@ -72,15 +78,14 @@ public final class Bridge: Bridgable {
 //        let replyMessage = message.replacing(data: data)
 //        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
 //    }
-    @MainActor
     @discardableResult
-    func evaluate(javaScript: String) async throws -> Any {
+    func evaluate(javaScript: String) async throws -> Any? {
         guard let webView else {
             throw BridgeError.missingWebView
         }
 
         do {
-            return try await webView.evaluateJavaScript(javaScript)
+            return try await webView.evaluateJavaScriptAsync(javaScript)
         } catch {
             logger.error("Error evaluating JavaScript: \(error)")
             throw error
@@ -90,7 +95,7 @@ public final class Bridge: Bridgable {
     /// Evaluates a JavaScript function with optional arguments by encoding the arguments
     /// Function should not include the parens
     /// Usage: evaluate(function: "console.log", arguments: ["test"])
-    func evaluate(function: String, arguments: [Any] = []) async throws -> Any {
+    func evaluate(function: String, arguments: [Any] = []) async throws -> Any? {
         try await evaluate(javaScript: JavaScript(functionName: function, arguments: arguments).toString())
     }
 
@@ -151,7 +156,7 @@ public final class Bridge: Bridgable {
     // MARK: - JavaScript Evaluation
 
     @discardableResult
-    private func evaluate(javaScript: JavaScript) async throws -> Any {
+    private func evaluate(javaScript: JavaScript) async throws -> Any? {
         do {
             return try await evaluate(javaScript: javaScript.toString())
         } catch {
@@ -168,7 +173,6 @@ public final class Bridge: Bridgable {
 }
 
 extension Bridge: ScriptMessageHandlerDelegate {
-    @MainActor
     func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) async throws {
         if let event = scriptMessage.body as? String, event == "ready" {
             try await delegate?.bridgeDidInitialize()
@@ -181,5 +185,25 @@ extension Bridge: ScriptMessageHandlerDelegate {
         }
 
         logger.warning("Unhandled message received: \(String(describing: scriptMessage.body))")
+    }
+}
+
+private extension WKWebView {
+    /// NOTE: The async version crashes the app with `Fatal error: Unexpectedly found nil while implicitly unwrapping an Optional value`
+    /// in case the function doesn't return anything.
+    /// This is a workaround. See https://forums.developer.apple.com/forums/thread/701553 for more details.
+    @discardableResult
+    func evaluateJavaScriptAsync(_ str: String) async throws -> Any? {
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Any?, Error>) in
+            DispatchQueue.main.async {
+                self.evaluateJavaScript(str) { data, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: data)
+                    }
+                }
+            }
+        }
     }
 }
