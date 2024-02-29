@@ -1,7 +1,7 @@
 import WebKit
 
 protocol ScriptMessageHandlerDelegate: AnyObject {
-    func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) async throws
+    func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage)
 }
 
 // Avoids retain cycle caused by WKUserContentController
@@ -13,6 +13,6 @@ final class ScriptMessageHandler: NSObject, WKScriptMessageHandler {
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive scriptMessage: WKScriptMessage) {
-        Task { try await delegate?.scriptMessageHandlerDidReceiveMessage(scriptMessage) }
+        delegate?.scriptMessageHandlerDidReceiveMessage(scriptMessage)
     }
 }

@@ -24,8 +24,11 @@ class BridgeDelegateTests: XCTestCase {
     }
     
     func testBridgeDidInitialize() async throws {
-        try await delegate.bridgeDidInitialize()
-
+        await withCheckedContinuation { continuation in
+            bridge.registerComponentsContinuation = continuation
+            delegate.bridgeDidInitialize()
+        }
+        
         XCTAssertTrue(bridge.registerComponentsWasCalled)
         XCTAssertEqual(bridge.registerComponentsArg, ["one", "two"])
      

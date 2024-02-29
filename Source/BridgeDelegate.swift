@@ -21,7 +21,7 @@ public protocol BridgingDelegate: AnyObject {
     
     func component<C: BridgeComponent>() -> C?
     
-    func bridgeDidInitialize() async throws
+    func bridgeDidInitialize()
     func bridgeDidReceiveMessage(_ message: Message) -> Bool
 }
 
@@ -111,9 +111,15 @@ public final class BridgeDelegate: BridgingDelegate {
     
     // MARK: Internal use
     
-    public func bridgeDidInitialize() async throws {
+    public func bridgeDidInitialize() {
         let componentNames = componentTypes.map { $0.name }
-        try await bridge?.register(components: componentNames)
+        Task {
+            do {
+                try await bridge?.register(components: componentNames)
+            } catch {
+                logger.error("bridgeDidFailToRegisterComponents: \(error)")
+            }
+        }
     }
     
     @discardableResult

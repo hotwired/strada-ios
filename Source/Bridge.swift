@@ -173,9 +173,9 @@ public final class Bridge: Bridgable {
 }
 
 extension Bridge: ScriptMessageHandlerDelegate {
-    func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) async throws {
+    func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) {
         if let event = scriptMessage.body as? String, event == "ready" {
-            try await delegate?.bridgeDidInitialize()
+            delegate?.bridgeDidInitialize()
             return
         }
 
@@ -193,15 +193,14 @@ private extension WKWebView {
     /// in case the function doesn't return anything.
     /// This is a workaround. See https://forums.developer.apple.com/forums/thread/701553 for more details.
     @discardableResult
-    func evaluateJavaScriptAsync(_ str: String) async throws -> Any? {
+    @MainActor
+    func evaluateJavaScriptAsync(_ javaScriptString: String) async throws -> Any? {
         return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Any?, Error>) in
-            DispatchQueue.main.async {
-                self.evaluateJavaScript(str) { data, error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(returning: data)
-                    }
+            evaluateJavaScript(javaScriptString) { data, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: data)
                 }
             }
         }

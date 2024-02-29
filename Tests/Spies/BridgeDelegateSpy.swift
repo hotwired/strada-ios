@@ -49,7 +49,7 @@ final class BridgeDelegateSpy: BridgingDelegate {
         return nil
     }
     
-    func bridgeDidInitialize() async throws {
+    func bridgeDidInitialize() {
         
     }
     
