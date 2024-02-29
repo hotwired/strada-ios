@@ -223,7 +223,3 @@ class BridgeComponentTest: XCTestCase {
         wait(for: [expectation], timeout: .expectationTimeout)
     }
 }
-
-extension TimeInterval {
-    static let expectationTimeout: TimeInterval = 5
-}
