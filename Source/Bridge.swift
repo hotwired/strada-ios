@@ -5,7 +5,6 @@ public enum BridgeError: Error {
     case missingWebView
 }
 
-@MainActor
 protocol Bridgable: AnyObject {
     var delegate: BridgeDelegate? { get set }
     var webView: WKWebView? { get }
@@ -18,20 +17,12 @@ protocol Bridgable: AnyObject {
 
 /// `Bridge` is the object for configuring a web view and
 /// the channel for sending/receiving messages
-@MainActor
 public final class Bridge: Bridgable {
     public typealias InitializationCompletionHandler = () -> Void
     weak var delegate: BridgeDelegate?
     weak var webView: WKWebView?
 
-    nonisolated public static func initialize(_ webView: WKWebView, completion: InitializationCompletionHandler?) {
-        Task { @MainActor in
-            await initialize(webView)
-            completion?()
-        }
-    }
-    
-    public static func initialize(_ webView: WKWebView) async {
+    public static func initialize(_ webView: WKWebView) {
         if getBridgeFor(webView) == nil {
             initialize(Bridge(webView: webView))
         }
@@ -46,24 +37,28 @@ public final class Bridge: Bridgable {
 
     /// Register a single component
     /// - Parameter component: Name of a component to register support for
+    @MainActor 
     func register(component: String) async throws {
         try await callBridgeFunction(.register, arguments: [component])
     }
 
     /// Register multiple components
     /// - Parameter components: Array of component names to register
+    @MainActor 
     func register(components: [String]) async throws {
         try await callBridgeFunction(.register, arguments: [components])
     }
 
     /// Unregister support for a single component
     /// - Parameter component: Component name
+    @MainActor 
     func unregister(component: String) async throws {
         try await callBridgeFunction(.unregister, arguments: [component])
     }
 
     /// Send a message through the bridge to the web application
     /// - Parameter message: Message to send
+    @MainActor
     func reply(with message: Message) async throws {
         logger.debug("bridgeWillReplyWithMessage: \(String(describing: message))")
         let internalMessage = InternalMessage(from: message)
@@ -79,6 +74,7 @@ public final class Bridge: Bridgable {
 //        callBridgeFunction("send", arguments: [replyMessage.toJSON()])
 //    }
     @discardableResult
+    @MainActor
     func evaluate(javaScript: String) async throws -> Any? {
         guard let webView else {
             throw BridgeError.missingWebView
@@ -95,6 +91,7 @@ public final class Bridge: Bridgable {
     /// Evaluates a JavaScript function with optional arguments by encoding the arguments
     /// Function should not include the parens
     /// Usage: evaluate(function: "console.log", arguments: ["test"])
+    @MainActor
     func evaluate(function: String, arguments: [Any] = []) async throws -> Any? {
         try await evaluate(javaScript: JavaScript(functionName: function, arguments: arguments).toString())
     }
@@ -117,6 +114,7 @@ public final class Bridge: Bridgable {
     /// The webkit.messageHandlers name
     private let scriptHandlerName = "strada"
 
+    @MainActor
     private func callBridgeFunction(_ function: JavaScriptBridgeFunction, arguments: [Any]) async throws {
         let js = JavaScript(object: bridgeGlobal, functionName: function.rawValue, arguments: arguments)
         try await evaluate(javaScript: js)
@@ -156,6 +154,7 @@ public final class Bridge: Bridgable {
     // MARK: - JavaScript Evaluation
 
     @discardableResult
+    @MainActor
     private func evaluate(javaScript: JavaScript) async throws -> Any? {
         do {
             return try await evaluate(javaScript: javaScript.toString())
@@ -173,6 +172,7 @@ public final class Bridge: Bridgable {
 }
 
 extension Bridge: ScriptMessageHandlerDelegate {
+    @MainActor
     func scriptMessageHandlerDidReceiveMessage(_ scriptMessage: WKScriptMessage) {
         if let event = scriptMessage.body as? String, event == "ready" {
             delegate?.bridgeDidInitialize()

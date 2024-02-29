@@ -4,60 +4,25 @@ import WebKit
 
 @MainActor
 class BridgeTests: XCTestCase {
-    func testInitWithANewWebViewAutomaticallyLoadsIntoWebView() async {
-        let webView = WKWebView()
-        let userContentController = webView.configuration.userContentController
-        XCTAssertTrue(userContentController.userScripts.isEmpty)
-        
-        await Bridge.initialize(webView)
-        XCTAssertEqual(userContentController.userScripts.count, 1)
-    }
-    
-    func testInitWithTheSameWebViewDoesNotLoadTwice() async {
-        let webView = WKWebView()
-        let userContentController = webView.configuration.userContentController
-        XCTAssertTrue(userContentController.userScripts.isEmpty)
-        
-        await Bridge.initialize(webView)
-        XCTAssertEqual(userContentController.userScripts.count, 1)
-        
-        await Bridge.initialize(webView)
-        XCTAssertEqual(userContentController.userScripts.count, 1)
-    }
-    
     func testInitWithANewWebViewAutomaticallyLoadsIntoWebView() {
         let webView = WKWebView()
         let userContentController = webView.configuration.userContentController
         XCTAssertTrue(userContentController.userScripts.isEmpty)
-
-        let expectation = expectation(description: "Wait for completion.")
-        Bridge.initialize(webView) {
-            XCTAssertEqual(userContentController.userScripts.count, 1)
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: .expectationTimeout)
+        
+        Bridge.initialize(webView)
+        XCTAssertEqual(userContentController.userScripts.count, 1)
     }
     
     func testInitWithTheSameWebViewDoesNotLoadTwice() {
         let webView = WKWebView()
         let userContentController = webView.configuration.userContentController
         XCTAssertTrue(userContentController.userScripts.isEmpty)
-
-        let expectation1 = expectation(description: "Wait for completion.")
-        Bridge.initialize(webView) {
-            XCTAssertEqual(userContentController.userScripts.count, 1)
-            expectation1.fulfill()
-        }
         
-        let expectation2 = expectation(description: "Wait for completion.")
+        Bridge.initialize(webView)
+        XCTAssertEqual(userContentController.userScripts.count, 1)
         
-        Bridge.initialize(webView) {
-            XCTAssertEqual(userContentController.userScripts.count, 1)
-            expectation2.fulfill()
-        }
-
-        wait(for: [expectation1, expectation2], timeout: .expectationTimeout)
+        Bridge.initialize(webView)
+        XCTAssertEqual(userContentController.userScripts.count, 1)
     }
 
     /// NOTE: Each call to `webView.evaluateJavaScript(String)` will throw an error.
