@@ -2,6 +2,7 @@ import XCTest
 import WebKit
 @testable import Strada
 
+@MainActor
 class BridgeTests: XCTestCase {
     func testInitWithANewWebViewAutomaticallyLoadsIntoWebView() {
         let webView = WKWebView()
@@ -23,35 +24,38 @@ class BridgeTests: XCTestCase {
         Bridge.initialize(webView)
         XCTAssertEqual(userContentController.userScripts.count, 1)
     }
-    
-    func testRegisterComponentCallsJavaScriptFunction() {
+
+    /// NOTE: Each call to `webView.evaluateJavaScript(String)` will throw an error.
+    /// We intentionally disregard any thrown errors (`try? await bridge...`)
+    /// because we validate the evaluated JavaScript string ourselves.
+    func testRegisterComponentCallsJavaScriptFunction() async throws {
         let webView = TestWebView()
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        bridge.register(component: "test")
+        try? await bridge.register(component: "test")
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.register(\"test\")")
     }
     
-    func testRegisterComponentsCallsJavaScriptFunction() {
+    func testRegisterComponentsCallsJavaScriptFunction() async throws {
         let webView = TestWebView()
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        bridge.register(components: ["one", "two"])
+        try? await bridge.register(components: ["one", "two"])
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.register([\"one\",\"two\"])")
     }
     
-    func testUnregisterComponentCallsJavaScriptFunction() {
+    func testUnregisterComponentCallsJavaScriptFunction() async throws {
         let webView = TestWebView()
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        bridge.unregister(component: "test")
+        try? await bridge.unregister(component: "test")
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.unregister(\"test\")")
     }
     
-    func testSendCallsJavaScriptFunction() {
+    func testSendCallsJavaScriptFunction() async throws {
         let webView = TestWebView()
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
@@ -67,60 +71,46 @@ class BridgeTests: XCTestCase {
                               jsonData: data)
 
         
-        bridge.reply(with: message)
+        try? await bridge.reply(with: message)
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "window.nativeBridge.replyWith({\"component\":\"page\",\"event\":\"connect\",\"data\":{\"title\":\"Page-title\"},\"id\":\"1\"})")
     }
     
-    func testEvaluateJavaScript() {
+    func testEvaluateJavaScript() async throws {
         let webView = TestWebView()
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        bridge.evaluate(javaScript: "test(1,2,3)")
+        _ = try? await bridge.evaluate(javaScript: "test(1,2,3)")
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "test(1,2,3)")
     }
     
-    func testEvaluateJavaScriptReturnsErrorForNoWebView() {
+    func testEvaluateJavaScriptReturnsErrorForNoWebView() async throws {
         let bridge = Bridge(webView: WKWebView())
         bridge.webView = nil
-        let expectation = self.expectation(description: "error handler")
         
-        bridge.evaluate(function: "test", arguments: []) { (result, error) in
-            XCTAssertEqual(error! as! BridgeError, BridgeError.missingWebView)
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 2)
+        var didFailWithError: Error?
+        do { _ = try await bridge.evaluate(function: "test", arguments: []) }
+        catch { didFailWithError = error }
+
+        let bridgeError = try XCTUnwrap(didFailWithError as? BridgeError)
+        XCTAssertEqual(bridgeError, BridgeError.missingWebView)
     }
     
-    func testEvaluateFunction() {
+    func testEvaluateFunction() async throws {
         let webView = TestWebView()
         let bridge = Bridge(webView: webView)
         XCTAssertNil(webView.lastEvaluatedJavaScript)
         
-        bridge.evaluate(function: "test", arguments: [1, 2, 3])
+        _ = try? await bridge.evaluate(function: "test", arguments: [1, 2, 3])
         XCTAssertEqual(webView.lastEvaluatedJavaScript, "test(1,2,3)")
-    }
-    
-    func testEvaluateFunctionCallsCompletionHandler() {
-        let webView = TestWebView()
-        let bridge = Bridge(webView: webView)
-        
-        let expectation = self.expectation(description: "completion handler")
-        
-        bridge.evaluate(function: "test", arguments: []) { (result, error) in
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 2)
     }
 }
 
 private final class TestWebView: WKWebView {
     var lastEvaluatedJavaScript: String?
-    
-    override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
+
+    override func evaluateJavaScript(_ javaScriptString: String) async throws -> Any {
         lastEvaluatedJavaScript = javaScriptString
-        super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+        return try await super.evaluateJavaScript(javaScriptString)
     }
 }

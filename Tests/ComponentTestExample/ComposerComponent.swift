@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import Strada
+import Strada
 
 final class ComposerComponent: BridgeComponent {
     static override var name: String { "composer" }
@@ -17,7 +17,7 @@ final class ComposerComponent: BridgeComponent {
         }
     }
     
-    func selectSender(emailAddress: String) {
+    func selectSender(emailAddress: String) async throws {
         guard let message = receivedMessage(for: InboundEvent.connect.rawValue),
               let senders: [Sender] = message.data() else {
             return
@@ -29,7 +29,7 @@ final class ComposerComponent: BridgeComponent {
         
         let newMessage = message.replacing(event: OutboundEvent.selectSender.rawValue,
                                            data: SelectSenderMessageData(selectedIndex: sender.index))
-        reply(with: newMessage)
+        try await reply(with: newMessage)
     }
     
     func selectedSender() -> String? {

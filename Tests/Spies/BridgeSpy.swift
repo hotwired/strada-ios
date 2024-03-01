@@ -9,7 +9,15 @@ final class BridgeSpy: Bridgable {
     var registerComponentWasCalled = false
     var registerComponentArg: String? = nil
     
-    var registerComponentsWasCalled = false
+    var registerComponentsWasCalled = false {
+        didSet {
+            if registerComponentsWasCalled {
+                registerComponentsContinuation?.resume()
+                registerComponentsContinuation = nil
+            }
+        }
+    }
+    var registerComponentsContinuation: CheckedContinuation<Void, Never>?
     var registerComponentsArg: [String]? = nil
     
     var unregisterComponentWasCalled = false
