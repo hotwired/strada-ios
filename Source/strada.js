@@ -5,7 +5,15 @@
   class NativeBridge {
     constructor() {
       this.supportedComponents = []
-      document.addEventListener("web-bridge:ready", () => this.webBridge.setAdapter(this))
+      this.registerCalled = new Promise(resolve => this.registerResolver = resolve)
+      document.addEventListener("web-bridge:ready", async () => {
+        await this.setAdapter()
+      })
+    }
+    
+    async setAdapter() {
+      await this.registerCalled
+      this.webBridge.setAdapter(this)
     }
 
     register(component) {
@@ -15,6 +23,7 @@
         this.supportedComponents.push(component)
       }
 
+      this.registerResolver()
       this.notifyBridgeOfSupportedComponentsUpdate()
     }
 
