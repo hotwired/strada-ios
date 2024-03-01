@@ -1,5 +1,5 @@
 import XCTest
-import Strada
+@testable import Strada
 
 class MessageTests: XCTestCase {
     
