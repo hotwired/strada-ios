@@ -1,6 +1,6 @@
 import Foundation
 import WebKit
-@testable import Strada
+import Strada
 
 final class BridgeDelegateSpy: BridgingDelegate {
     let location: String = ""
@@ -18,7 +18,7 @@ final class BridgeDelegateSpy: BridgingDelegate {
         
     }
     
-    func reply(with message: Message) -> Bool {
+    func reply(with message: Message) async throws -> Bool {
         replyWithMessageWasCalled = true
         replyWithMessageArg = message
         

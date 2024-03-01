@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -33,6 +33,7 @@
 		E2DB15912A7163B0001EE08C /* BridgeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */; };
 		E2DB15932A7282CF001EE08C /* BridgeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15922A7282CF001EE08C /* BridgeComponent.swift */; };
 		E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */; };
+		E2F4E06B2B9095BC000A3A24 /* TimeInterval+ExpectationTimeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F4E06A2B9095BC000A3A24 /* TimeInterval+ExpectationTimeout.swift */; };
 		E2FDCF982A8297DA003D27AE /* BridgeComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */; };
 		E2FDCF9B2A829AEE003D27AE /* BridgeSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */; };
 		E2FDCF9D2A829C6F003D27AE /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDCF9C2A829C6F003D27AE /* TestData.swift */; };
@@ -79,6 +80,7 @@
 		E2DB15902A7163B0001EE08C /* BridgeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegate.swift; sourceTree = "<group>"; };
 		E2DB15922A7282CF001EE08C /* BridgeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponent.swift; sourceTree = "<group>"; };
 		E2DB15942A72B0A8001EE08C /* BridgeDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDelegateTests.swift; sourceTree = "<group>"; };
+		E2F4E06A2B9095BC000A3A24 /* TimeInterval+ExpectationTimeout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+ExpectationTimeout.swift"; sourceTree = "<group>"; };
 		E2FDCF972A8297DA003D27AE /* BridgeComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeComponentTests.swift; sourceTree = "<group>"; };
 		E2FDCF9A2A829AEE003D27AE /* BridgeSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeSpy.swift; sourceTree = "<group>"; };
 		E2FDCF9C2A829C6F003D27AE /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 		9274F1F22229963B003E85F4 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E2F4E0692B9095A5000A3A24 /* Extensions */,
 				E227FAF12A94D48C00A645E4 /* ComponentTestExample */,
 				E2FDCF9C2A829C6F003D27AE /* TestData.swift */,
 				E2FDCF992A829AD5003D27AE /* Spies */,
@@ -179,6 +182,14 @@
 				E227FAF22A94D57300A645E4 /* ComposerComponentTests.swift */,
 			);
 			path = ComponentTestExample;
+			sourceTree = "<group>";
+		};
+		E2F4E0692B9095A5000A3A24 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E2F4E06A2B9095BC000A3A24 /* TimeInterval+ExpectationTimeout.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		E2FDCF992A829AD5003D27AE /* Spies */ = {
@@ -248,7 +259,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = Basecamp;
 				TargetAttributes = {
 					9274F1E42229963B003E85F4 = {
@@ -327,6 +338,7 @@
 			files = (
 				E2DB15952A72B0A8001EE08C /* BridgeDelegateTests.swift in Sources */,
 				E227FAF02A94D34E00A645E4 /* ComposerComponent.swift in Sources */,
+				E2F4E06B2B9095BC000A3A24 /* TimeInterval+ExpectationTimeout.swift in Sources */,
 				E227FAEE2A94B35900A645E4 /* BridgeDelegateSpy.swift in Sources */,
 				C11349C2258801F6000A6E56 /* JavaScriptTests.swift in Sources */,
 				E227FAF32A94D57300A645E4 /* ComposerComponentTests.swift in Sources */,
@@ -356,6 +368,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -391,6 +404,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -421,6 +435,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -456,6 +471,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -539,8 +555,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2WNYUYRS7G;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -549,6 +565,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.hotwire.strada.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -558,8 +575,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2WNYUYRS7G;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -568,6 +585,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.hotwire.strada.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
