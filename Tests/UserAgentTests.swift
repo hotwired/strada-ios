@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import Strada
+import Strada
 
 class UserAgentTests: XCTestCase {
     func testUserAgentSubstringWithTwoComponents() {

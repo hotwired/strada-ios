@@ -94,3 +94,28 @@ extension Message {
         }
     }
 }
+
+extension Message {
+    /// Using `Equatable`'s default implementation is bound to give us false positives
+    /// since two `Message`s may have semantically equal, but textually different, `jsonData`.
+    ///
+    /// For example, the following `jsonData` should be considered equal.
+    ///
+    /// ```
+    /// lhs.jsonData = "{\"title\":\"Page-title\",\"subtitle\":\"Page-subtitle\",\"action_name\":\"go\"}")"
+    ///
+    /// rhs.jsonData = "{\"action_name\":\"go\",\"title\":\"Page-title\",\"subtitle\":\"Page-subtitle\"}")"
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - lhs: a message
+    ///   - rhs: another message
+    /// - Returns: true if they're semantically equal
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.id == rhs.id &&
+        lhs.component == rhs.component &&
+        lhs.event == rhs.event &&
+        lhs.metadata == rhs.metadata &&
+        lhs.jsonData.jsonObject() as? [String: AnyHashable] == rhs.jsonData.jsonObject() as? [String: AnyHashable]
+    }
+}

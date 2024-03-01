@@ -1,7 +1,7 @@
 build
 node_modules
 *.log
-
 *.xcuserstate
-
 *.xcbkptlist
+.swiftpm
+xcuserdata

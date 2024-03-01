@@ -3,6 +3,7 @@ import WebKit
 
 public protocol BridgeDestination: AnyObject {}
 
+@MainActor
 public protocol BridgingDelegate: AnyObject {
     var location: String { get }
     var destination: BridgeDestination { get }
@@ -10,8 +11,8 @@ public protocol BridgingDelegate: AnyObject {
     
     func webViewDidBecomeActive(_ webView: WKWebView)
     func webViewDidBecomeDeactivated()
-    func reply(with message: Message) -> Bool
-    
+    func reply(with message: Message) async throws -> Bool
+
     func onViewDidLoad()
     func onViewWillAppear()
     func onViewDidAppear()
@@ -24,6 +25,7 @@ public protocol BridgingDelegate: AnyObject {
     func bridgeDidReceiveMessage(_ message: Message) -> Bool
 }
 
+@MainActor
 public final class BridgeDelegate: BridgingDelegate {
     public let location: String
     public unowned let destination: BridgeDestination
@@ -60,13 +62,13 @@ public final class BridgeDelegate: BridgingDelegate {
     ///
     /// - Parameter message: The message to be replied with.
     /// - Returns: `true` if the reply was successful, `false` if the bridge is not available.
-    public func reply(with message: Message) -> Bool {
+    public func reply(with message: Message) async throws -> Bool {
         guard let bridge else {
             logger.warning("bridgeMessageFailedToReply: bridge is not available")
             return false
         }
         
-        bridge.reply(with: message)
+        try await bridge.reply(with: message)
         return true
     }
     
@@ -111,7 +113,13 @@ public final class BridgeDelegate: BridgingDelegate {
     
     public func bridgeDidInitialize() {
         let componentNames = componentTypes.map { $0.name }
-        bridge?.register(components: componentNames)
+        Task {
+            do {
+                try await bridge?.register(components: componentNames)
+            } catch {
+                logger.error("bridgeDidFailToRegisterComponents: \(error)")
+            }
+        }
     }
     
     @discardableResult
@@ -156,4 +164,3 @@ public final class BridgeDelegate: BridgingDelegate {
         return component
     }
 }
-
