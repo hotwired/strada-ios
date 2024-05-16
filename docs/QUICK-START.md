@@ -11,7 +11,7 @@ For now, create an empty (global) list of registered component factories, so we 
 **`BridgeComponent+App.swift`**
 ```swift
 extension BridgeComponent {
-    static var allTypes: [BridgeComponent.Type] {
+    nonisolated static var allTypes: [BridgeComponent.Type] {
         [
             // Add registered components here later
         ]
