@@ -124,8 +124,13 @@ public final class BridgeDelegate: BridgingDelegate {
     
     @discardableResult
     public func bridgeDidReceiveMessage(_ message: Message) -> Bool {
-        guard destinationIsActive,
-              resolvedLocation == message.metadata?.url else {
+        if message.event != "connect" {
+            guard destinationIsActive else {
+                logger.warning("bridgeDidIgnoreMessage because destination was inactive: \(String(describing: message))")
+                return false
+            }
+        }
+        guard resolvedLocation == message.metadata?.url else {
             logger.warning("bridgeDidIgnoreMessage: \(String(describing: message))")
             return false
         }
